@@ -448,58 +448,73 @@ Qed.
 
 (** Lucky Luciano - Founded the Commission, first boss of Genovese family *)
 Definition luciano : Member := mkMember
+  1
   "Charles Luciano"
   (Some "Lucky")
   Genovese
   Boss
   (Some ActualBoss)
-  (mkTenure 1931 (Some 1947))  (* Deported 1946; half-open [1931,1947) *)
+  (mkTenure 1931 (Some 1947))
   (Some 1897)
-  (Some 1962).
+  (Some 1962)
+  (Some raab_source)
+  High.
 
 (** Vincent Mangano - First boss of what became Gambino family *)
 Definition mangano : Member := mkMember
+  2
   "Vincent Mangano"
   None
   Gambino
   Boss
   (Some ActualBoss)
-  (mkTenure 1931 (Some 1952))  (* Murdered 1951; half-open [1931,1952) *)
+  (mkTenure 1931 (Some 1952))
   (Some 1888)
-  (Some 1951).
+  (Some 1951)
+  (Some raab_source)
+  High.
 
 (** Tom Gagliano - First boss of what became Lucchese family *)
 Definition gagliano : Member := mkMember
+  3
   "Gaetano Gagliano"
   (Some "Tom")
   Lucchese
   Boss
   (Some ActualBoss)
-  (mkTenure 1931 (Some 1952))  (* Died 1951; half-open [1931,1952) *)
+  (mkTenure 1931 (Some 1952))
   (Some 1884)
-  (Some 1951).
+  (Some 1951)
+  (Some raab_source)
+  High.
 
 (** Joseph Bonanno - Youngest founding boss *)
 Definition bonanno : Member := mkMember
+  4
   "Joseph Bonanno"
   (Some "Joe Bananas")
   Bonanno
   Boss
   (Some ActualBoss)
-  (mkTenure 1931 (Some 1969))  (* Forced out 1968; half-open [1931,1969) *)
+  (mkTenure 1931 (Some 1969))
   (Some 1905)
-  (Some 2002).
+  (Some 2002)
+  (Some raab_source)
+  High.
 
 (** Joseph Profaci - First boss of what became Colombo family *)
 Definition profaci : Member := mkMember
+  5
   "Joseph Profaci"
   None
   Colombo
   Boss
   (Some ActualBoss)
-  (mkTenure 1931 (Some 1963))  (* Died 1962; half-open [1931,1963) *)
+  (mkTenure 1931 (Some 1963))
   (Some 1897)
-  (Some 1962).
+  (Some 1962)
+  (Some raab_source)
+  High.
 
 Definition founding_bosses : list Member :=
   [luciano; mangano; gagliano; bonanno; profaci].
@@ -532,61 +547,77 @@ Qed.
 
 (** Frank Costello - Boss 1946-1957 *)
 Definition costello : Member := mkMember
+  6
   "Frank Costello"
   (Some "The Prime Minister")
   Genovese
   Boss
   (Some ActualBoss)
-  (mkTenure 1946 (Some 1958))  (* Half-open [1946,1958) *)
+  (mkTenure 1946 (Some 1958))
   (Some 1891)
-  (Some 1973).
+  (Some 1973)
+  (Some raab_source)
+  High.
 
 (** Vito Genovese - Boss 1957-1969 (imprisoned 1959) *)
 Definition vito_genovese : Member := mkMember
+  7
   "Vito Genovese"
   (Some "Don Vito")
   Genovese
   Boss
   (Some ActualBoss)
-  (mkTenure 1957 (Some 1970))  (* Half-open [1957,1970) *)
+  (mkTenure 1957 (Some 1970))
   (Some 1897)
-  (Some 1969).
+  (Some 1969)
+  (Some raab_source)
+  High.
 
 (** Philip Lombardo - Front boss 1969-1981 *)
 Definition lombardo : Member := mkMember
+  8
   "Philip Lombardo"
   None
   Genovese
   Boss
-  (Some FrontBoss)  (* Front boss, not actual power *)
-  (mkTenure 1969 (Some 1982))  (* Half-open [1969,1982) *)
+  (Some FrontBoss)
+  (mkTenure 1969 (Some 1982))
   (Some 1910)
-  (Some 1987).
+  (Some 1987)
+  (Some raab_source)
+  Medium.
 
 (** Anthony Salerno - Front boss 1981-1986 *)
 Definition salerno : Member := mkMember
+  9
   "Anthony Salerno"
   (Some "Fat Tony")
   Genovese
   Boss
-  (Some FrontBoss)  (* Front boss; Gigante held actual power *)
-  (mkTenure 1981 (Some 1987))  (* Half-open [1981,1987) *)
+  (Some FrontBoss)
+  (mkTenure 1981 (Some 1987))
   (Some 1911)
-  (Some 1992).
+  (Some 1992)
+  (Some doj_source)
+  High.
 
-(** Vincent Gigante - Boss 1981-2005 (real power behind front bosses) *)
+(** Vincent Gigante - Boss 1981-2005 *)
 Definition gigante : Member := mkMember
+  10
   "Vincent Gigante"
   (Some "The Chin")
   Genovese
   Boss
-  (Some ActualBoss)  (* Actual power while Salerno was front *)
-  (mkTenure 1981 (Some 2006))  (* Half-open [1981,2006) *)
+  (Some ActualBoss)
+  (mkTenure 1981 (Some 2006))
   (Some 1928)
-  (Some 2005).
+  (Some 2005)
+  (Some doj_source)
+  High.
 
 (** Liborio Bellomo - Street Boss/Boss 2005-present (DOJ EDNY 2005) *)
 Definition bellomo : Member := mkMember
+  11
   "Liborio Bellomo"
   (Some "Barney")
   Genovese
@@ -594,10 +625,13 @@ Definition bellomo : Member := mkMember
   (Some StreetBoss)
   (mkTenure 2005 None)
   (Some 1957)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Daniel Leo - Front Boss 2005-2010s *)
 Definition daniel_leo : Member := mkMember
+  12
   "Daniel Leo"
   None
   Genovese
@@ -605,7 +639,9 @@ Definition daniel_leo : Member := mkMember
   (Some FrontBoss)
   (mkTenure 2005 (Some 2011))
   (Some 1935)
-  (Some 2010).
+  (Some 2010)
+  (Some doj_source)
+  Medium.
 
 Definition genovese_bosses : list Member :=
   [luciano; costello; vito_genovese; lombardo; salerno; gigante; bellomo; daniel_leo].
@@ -613,6 +649,7 @@ Definition genovese_bosses : list Member :=
 (** Genovese Underbosses *)
 
 Definition moretti : Member := mkMember
+  13
   "Willie Moretti"
   (Some "Willie Moore")
   Genovese
@@ -620,9 +657,12 @@ Definition moretti : Member := mkMember
   None
   (mkTenure 1946 (Some 1952))
   (Some 1894)
-  (Some 1951).
+  (Some 1951)
+  (Some raab_source)
+  High.
 
 Definition catena : Member := mkMember
+  14
   "Gerardo Catena"
   (Some "Jerry")
   Genovese
@@ -630,9 +670,12 @@ Definition catena : Member := mkMember
   None
   (mkTenure 1957 (Some 1973))
   (Some 1902)
-  (Some 2000).
+  (Some 2000)
+  (Some raab_source)
+  High.
 
 Definition eboli : Member := mkMember
+  15
   "Thomas Eboli"
   (Some "Tommy Ryan")
   Genovese
@@ -640,9 +683,12 @@ Definition eboli : Member := mkMember
   None
   (mkTenure 1969 (Some 1973))
   (Some 1911)
-  (Some 1972).
+  (Some 1972)
+  (Some raab_source)
+  High.
 
 Definition venero_mangano : Member := mkMember
+  16
   "Venero Mangano"
   (Some "Benny Eggs")
   Genovese
@@ -650,10 +696,13 @@ Definition venero_mangano : Member := mkMember
   None
   (mkTenure 1981 (Some 2006))
   (Some 1921)
-  (Some 2015).
+  (Some 2015)
+  (Some doj_source)
+  High.
 
 (** Dominick Cirillo - Acting Boss/Underboss 1997-2005 *)
 Definition cirillo : Member := mkMember
+  17
   "Dominick Cirillo"
   (Some "Quiet Dom")
   Genovese
@@ -661,10 +710,13 @@ Definition cirillo : Member := mkMember
   None
   (mkTenure 1997 (Some 2006))
   (Some 1930)
-  (Some 2022).
+  (Some 2022)
+  (Some doj_source)
+  High.
 
 (** Frank Costello - Underboss under Luciano before becoming boss *)
 Definition costello_underboss : Member := mkMember
+  6
   "Frank Costello"
   (Some "The Prime Minister")
   Genovese
@@ -672,10 +724,13 @@ Definition costello_underboss : Member := mkMember
   None
   (mkTenure 1931 (Some 1937))
   (Some 1891)
-  (Some 1973).
+  (Some 1973)
+  (Some raab_source)
+  High.
 
 (** Michael Generoso - Underboss 2000s-2010s *)
 Definition generoso : Member := mkMember
+  18
   "Michael Generoso"
   None
   Genovese
@@ -683,7 +738,9 @@ Definition generoso : Member := mkMember
   None
   (mkTenure 2006 (Some 2015))
   (Some 1950)
-  None.
+  None
+  (Some doj_source)
+  Medium.
 
 Definition genovese_underbosses : list Member :=
   [costello_underboss; moretti; catena; eboli; venero_mangano; cirillo; generoso].
@@ -691,6 +748,7 @@ Definition genovese_underbosses : list Member :=
 (** Genovese Consiglieres *)
 
 Definition strollo : Member := mkMember
+  19
   "Anthony Strollo"
   (Some "Tony Bender")
   Genovese
@@ -698,9 +756,12 @@ Definition strollo : Member := mkMember
   None
   (mkTenure 1951 (Some 1963))
   (Some 1899)
-  (Some 1962).
+  (Some 1962)
+  (Some raab_source)
+  High.
 
 Definition louis_gigante : Member := mkMember
+  20
   "Louis Gigante"
   None
   Genovese
@@ -708,10 +769,13 @@ Definition louis_gigante : Member := mkMember
   None
   (mkTenure 1981 (Some 2006))
   (Some 1931)
-  (Some 2022).
+  (Some 2022)
+  (Some doj_source)
+  High.
 
 (** Michele Miranda - Consigliere 1960s-1970s *)
 Definition miranda : Member := mkMember
+  21
   "Michele Miranda"
   (Some "Mike")
   Genovese
@@ -719,10 +783,13 @@ Definition miranda : Member := mkMember
   None
   (mkTenure 1963 (Some 1976))
   (Some 1896)
-  (Some 1973).
+  (Some 1973)
+  (Some raab_source)
+  High.
 
 (** Vincent DiNapoli - Consigliere 2000s *)
 Definition vincent_dinapoli : Member := mkMember
+  22
   "Vincent DiNapoli"
   (Some "Vinny")
   Genovese
@@ -730,7 +797,9 @@ Definition vincent_dinapoli : Member := mkMember
   None
   (mkTenure 2006 None)
   (Some 1938)
-  None.
+  None
+  (Some doj_source)
+  Medium.
 
 Definition genovese_consiglieres : list Member :=
   [strollo; miranda; louis_gigante; vincent_dinapoli].
@@ -741,61 +810,77 @@ Definition genovese_consiglieres : list Member :=
 
 (** Albert Anastasia - Boss 1951-1957 (murdered in barbershop) *)
 Definition anastasia : Member := mkMember
+  23
   "Albert Anastasia"
   (Some "The Mad Hatter")
   Gambino
   Boss
   (Some ActualBoss)
-  (mkTenure 1951 (Some 1958))  (* Half-open [1951,1958) *)
+  (mkTenure 1951 (Some 1958))
   (Some 1902)
-  (Some 1957).
+  (Some 1957)
+  (Some raab_source)
+  High.
 
 (** Carlo Gambino - Boss 1957-1976, family renamed after him *)
 Definition carlo_gambino : Member := mkMember
+  24
   "Carlo Gambino"
   (Some "Don Carlo")
   Gambino
   Boss
   (Some ActualBoss)
-  (mkTenure 1957 (Some 1977))  (* Half-open [1957,1977) *)
+  (mkTenure 1957 (Some 1977))
   (Some 1902)
-  (Some 1976).
+  (Some 1976)
+  (Some raab_source)
+  High.
 
 (** Paul Castellano - Boss 1976-1985 (murdered outside Sparks) *)
 Definition castellano : Member := mkMember
+  25
   "Paul Castellano"
   (Some "Big Paul")
   Gambino
   Boss
   (Some ActualBoss)
-  (mkTenure 1976 (Some 1986))  (* Half-open [1976,1986) *)
+  (mkTenure 1976 (Some 1986))
   (Some 1915)
-  (Some 1985).
+  (Some 1985)
+  (Some raab_source)
+  High.
 
 (** John Gotti - Boss 1985-2002 *)
 Definition gotti : Member := mkMember
+  26
   "John Gotti"
   (Some "The Teflon Don")
   Gambino
   Boss
   (Some ActualBoss)
-  (mkTenure 1985 (Some 2003))  (* Half-open [1985,2003) *)
+  (mkTenure 1985 (Some 2003))
   (Some 1940)
-  (Some 2002).
+  (Some 2002)
+  (Some doj_source)
+  High.
 
 (** Peter Gotti - Boss 2002-2016 *)
 Definition peter_gotti : Member := mkMember
+  27
   "Peter Gotti"
   None
   Gambino
   Boss
   (Some ActualBoss)
-  (mkTenure 2002 (Some 2017))  (* Half-open [2002,2017) *)
+  (mkTenure 2002 (Some 2017))
   (Some 1939)
-  (Some 2021).
+  (Some 2021)
+  (Some doj_source)
+  High.
 
 (** Domenico Cefalu - Acting Boss 2011-2015 (FBI 2008: acting underboss) *)
 Definition cefalu : Member := mkMember
+  28
   "Domenico Cefalu"
   (Some "Italian Dom")
   Gambino
@@ -803,10 +888,13 @@ Definition cefalu : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2011 (Some 2016))
   (Some 1947)
-  None.
+  None
+  (Some fbi_source)
+  Medium.
 
 (** Frank Cali - Acting Boss 2015-2019 (murdered; role contested) *)
 Definition cali : Member := mkMember
+  29
   "Frank Cali"
   (Some "Franky Boy")
   Gambino
@@ -814,10 +902,13 @@ Definition cali : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2015 (Some 2020))
   (Some 1965)
-  (Some 2019).
+  (Some 2019)
+  (Some fbi_source)
+  Low.
 
 (** Lorenzo Mannino - Acting Boss 2019-present (acting for Cefalu per reports) *)
 Definition mannino : Member := mkMember
+  30
   "Lorenzo Mannino"
   None
   Gambino
@@ -825,7 +916,9 @@ Definition mannino : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2019 None)
   (Some 1954)
-  None.
+  None
+  (Some fbi_source)
+  Low.
 
 Definition gambino_bosses : list Member :=
   [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti; cefalu; cali; mannino].
@@ -833,6 +926,7 @@ Definition gambino_bosses : list Member :=
 (** Gambino Underbosses *)
 
 Definition anastasia_underboss : Member := mkMember
+  23
   "Albert Anastasia"
   (Some "The Mad Hatter")
   Gambino
@@ -840,9 +934,12 @@ Definition anastasia_underboss : Member := mkMember
   None
   (mkTenure 1931 (Some 1952))
   (Some 1902)
-  (Some 1957).
+  (Some 1957)
+  (Some raab_source)
+  High.
 
 Definition dellacroce : Member := mkMember
+  31
   "Aniello Dellacroce"
   (Some "Neil")
   Gambino
@@ -850,9 +947,12 @@ Definition dellacroce : Member := mkMember
   None
   (mkTenure 1965 (Some 1986))
   (Some 1914)
-  (Some 1985).
+  (Some 1985)
+  (Some raab_source)
+  High.
 
 Definition decicco : Member := mkMember
+  32
   "Frank DeCicco"
   (Some "Frankie")
   Gambino
@@ -860,9 +960,12 @@ Definition decicco : Member := mkMember
   None
   (mkTenure 1985 (Some 1987))
   (Some 1935)
-  (Some 1986).
+  (Some 1986)
+  (Some raab_source)
+  High.
 
 Definition gravano : Member := mkMember
+  33
   "Salvatore Gravano"
   (Some "Sammy the Bull")
   Gambino
@@ -870,10 +973,13 @@ Definition gravano : Member := mkMember
   None
   (mkTenure 1986 (Some 1992))
   (Some 1945)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Joseph Biondo - Underboss under Carlo Gambino 1957-1966 *)
 Definition biondo : Member := mkMember
+  34
   "Joseph Biondo"
   (Some "Joe the Blonde")
   Gambino
@@ -881,10 +987,13 @@ Definition biondo : Member := mkMember
   None
   (mkTenure 1957 (Some 1967))
   (Some 1897)
-  (Some 1966).
+  (Some 1966)
+  (Some raab_source)
+  High.
 
 (** Nicholas Corozzo - Underboss 2000s *)
 Definition corozzo : Member := mkMember
+  35
   "Nicholas Corozzo"
   (Some "Little Nick")
   Gambino
@@ -892,10 +1001,13 @@ Definition corozzo : Member := mkMember
   None
   (mkTenure 2005 (Some 2011))
   (Some 1940)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Joseph Armone - Acting Underboss 1986-1990 *)
 Definition armone : Member := mkMember
+  36
   "Joseph Armone"
   (Some "Piney")
   Gambino
@@ -903,7 +1015,9 @@ Definition armone : Member := mkMember
   None
   (mkTenure 1986 (Some 1991))
   (Some 1917)
-  (Some 1992).
+  (Some 1992)
+  (Some doj_source)
+  High.
 
 Definition gambino_underbosses : list Member :=
   [anastasia_underboss; biondo; dellacroce; decicco; gravano; armone; corozzo].
@@ -911,6 +1025,7 @@ Definition gambino_underbosses : list Member :=
 (** Gambino Consiglieres *)
 
 Definition joseph_n_gallo : Member := mkMember
+  37
   "Joseph N. Gallo"
   None
   Gambino
@@ -918,10 +1033,13 @@ Definition joseph_n_gallo : Member := mkMember
   None
   (mkTenure 1957 (Some 1977))
   (Some 1912)
-  (Some 1995).
+  (Some 1995)
+  (Some raab_source)
+  High.
 
 (** Joseph Corozzo - Consigliere 1990s-2000s *)
 Definition joseph_corozzo : Member := mkMember
+  38
   "Joseph Corozzo"
   (Some "Jo Jo")
   Gambino
@@ -929,10 +1047,13 @@ Definition joseph_corozzo : Member := mkMember
   None
   (mkTenure 1993 (Some 2008))
   (Some 1941)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Joseph Arcuri - Consigliere 1980s *)
 Definition arcuri : Member := mkMember
+  39
   "Joseph Arcuri"
   None
   Gambino
@@ -940,10 +1061,13 @@ Definition arcuri : Member := mkMember
   None
   (mkTenure 1977 (Some 1990))
   (Some 1907)
-  (Some 1989).
+  (Some 1989)
+  (Some raab_source)
+  Medium.
 
 (** Samuel Moncada - Consigliere 2010s *)
 Definition moncada : Member := mkMember
+  40
   "Samuel Moncada"
   None
   Gambino
@@ -951,7 +1075,9 @@ Definition moncada : Member := mkMember
   None
   (mkTenure 2015 None)
   (Some 1945)
-  None.
+  None
+  (Some fbi_source)
+  Low.
 
 Definition gambino_consiglieres : list Member :=
   [joseph_n_gallo; arcuri; joseph_corozzo; moncada].
