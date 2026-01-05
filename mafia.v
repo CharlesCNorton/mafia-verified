@@ -32,13 +32,13 @@
 - [ ] 9. Define CrewMembership record (person_id, capo_id, crew_name, tenure)
 - [ ] 10. Define Territory record (family, geographic_area, primary_rackets)
 - [ ] 11. Define War record (name, families_involved, start_year, end_year, casualties, outcome)
-- [ ] 12. Add month/day optional granularity to Tenure type
+- [x] 12. Add month/day optional granularity to Tenure type
 - [ ] 13. Add initiation_year field to Member record
 - [ ] 14. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
-- [ ] 15. Fix Anthony Graziano: change Underboss to Consigliere
-- [ ] 16. Fix Nicholas Corozzo: change Underboss to Caporegime
-- [ ] 17. Fix Victor Orena: change Underboss to Acting Boss
-- [ ] 18. Fix Gigante tenure_end: change 2006 to 2005
+- [x] 15. Fix Anthony Graziano: change Underboss to Consigliere
+- [x] 16. Fix Nicholas Corozzo: change Underboss to Caporegime
+- [x] 17. Fix Victor Orena: change Underboss to Acting Boss
+- [x] 18. Fix Gigante tenure_end: change 2006 to 2005
 - [ ] 19. Add constraint/proof that tenure_end <= death_year for all members
 - [ ] 20. Add exists_actual_boss_at_time predicate
 - [ ] 21. Add exactly_one_actual_boss_at_time predicate
@@ -430,6 +430,32 @@ Definition active_in_year (t : Tenure) (y : year) : bool :=
   | Some end_y => Nat.ltb y end_y  (* y < end, not y <= end *)
   end.
 
+(** Precise date with optional month/day for finer granularity.
+    Month: 1-12, Day: 1-31. Used when year-only is insufficient
+    (e.g., Anastasia murdered Oct 25, 1957; Apalachin was Nov 14, 1957). *)
+Record PreciseDate := mkPreciseDate {
+  pd_year : nat;
+  pd_month : option nat;
+  pd_day : option nat
+}.
+
+Definition year_only (y : nat) : PreciseDate := mkPreciseDate y None None.
+Definition month_day (y m d : nat) : PreciseDate := mkPreciseDate y (Some m) (Some d).
+
+(** Tenure with optional precise dates for start/end events. *)
+Record TenurePrecise := mkTenurePrecise {
+  tp_start : PreciseDate;
+  tp_end : option PreciseDate
+}.
+
+Definition tenure_to_precise (t : Tenure) : TenurePrecise :=
+  mkTenurePrecise
+    (year_only (tenure_start t))
+    (match tenure_end t with
+     | None => None
+     | Some y => Some (year_only y)
+     end).
+
 (** -------------------------------------------------------------------------- *)
 (** Member Records                                                             *)
 (** -------------------------------------------------------------------------- *)
@@ -805,7 +831,7 @@ Definition gigante : Member := mkMember
   Genovese
   Boss
   (Some ActualBoss)
-  (mkTenure 1981 (Some 2006))
+  (mkTenure 1981 (Some 2005))
   (Some 1928)
   (Some 2005)
   (Some (DOJPress "DOJ" 2005)).
@@ -1160,15 +1186,15 @@ Definition biondo : Member := mkMember
   (Some 1966)
   (Some (Journalism ["Five Families (2005)"])).
 
-(** Nicholas Corozzo - Underboss 2000s *)
+(** Nicholas Corozzo - Caporegime 1990s-2008 (indicted 2008 as capo) *)
 Definition corozzo : Member := mkMember
   35
   "Nicholas Corozzo"
   (Some "Little Nick")
   Gambino
-  Underboss
+  Capo
   None
-  (mkTenure 2005 (Some 2011))
+  (mkTenure 1990 (Some 2008))
   (Some 1940)
   None
   (Some (DOJPress "DOJ" 2005)).
@@ -1187,7 +1213,7 @@ Definition armone : Member := mkMember
   (Some (DOJPress "DOJ" 2005)).
 
 Definition gambino_underbosses : list Member :=
-  [anastasia_underboss; biondo; dellacroce; decicco; gravano; armone; corozzo].
+  [anastasia_underboss; biondo; dellacroce; decicco; gravano; armone].
 
 (** Gambino Consiglieres *)
 
@@ -1622,21 +1648,21 @@ Definition bonventre : Member := mkMember
   (Some 1984)
   (Some (Journalism ["Five Families (2005)"])).
 
-(** Anthony Graziano - Underboss 2000s *)
+(** Anthony Graziano - Consigliere 2002-2019 (indicted 2002 as consigliere) *)
 Definition graziano : Member := mkMember
   66
   "Anthony Graziano"
   (Some "TG")
   Bonanno
-  Underboss
+  Consigliere
   None
-  (mkTenure 2007 (Some 2015))
+  (mkTenure 2002 (Some 2019))
   (Some 1951)
   (Some 2019)
   (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_underbosses : list Member :=
-  [galante; marangello; bonventre; vitale; graziano].
+  [galante; marangello; bonventre; vitale].
 
 (** Bonanno Consiglieres *)
 
@@ -1667,7 +1693,7 @@ Definition spero : Member := mkMember
   (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_consiglieres : list Member :=
-  [cannone; spero].
+  [cannone; spero; graziano].
 
 (** -------------------------------------------------------------------------- *)
 (** Colombo Family Succession                                                  *)
@@ -1753,6 +1779,7 @@ Definition alphonse_persico_boss : Member := mkMember
 
 Definition colombo_bosses : list Member :=
   [profaci; magliocco; joseph_colombo; persico; alphonse_persico_boss; gioeli; russo].
+(* orena added to colombo_bosses after definition below *)
 
 (** Colombo Underbosses *)
 
@@ -1769,14 +1796,14 @@ Definition langella : Member := mkMember
   (Some 2013)
   (Some (DOJPress "DOJ" 2005)).
 
-(** Victor Orena - Underboss/Acting Boss 1988-1991 *)
+(** Victor Orena - Acting Boss 1988-1992 (led faction in Colombo War) *)
 Definition orena : Member := mkMember
   76
   "Victor Orena"
   (Some "Little Vic")
   Colombo
-  Underboss
-  None
+  Boss
+  (Some ActingBoss)
   (mkTenure 1988 (Some 1992))
   (Some 1934)
   None
@@ -1835,7 +1862,11 @@ Definition castellazzo : Member := mkMember
   (Some (DOJPress "DOJ" 2005)).
 
 Definition colombo_underbosses : list Member :=
-  [langella; orena; cutolo; franzese; deross; castellazzo].
+  [langella; cutolo; franzese; deross; castellazzo].
+
+(** Complete list of Colombo bosses including Orena *)
+Definition colombo_bosses_complete : list Member :=
+  colombo_bosses ++ [orena].
 
 (** Colombo Consiglieres *)
 
