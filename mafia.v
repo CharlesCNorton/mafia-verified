@@ -157,17 +157,21 @@ Qed.
 (** Year for dating membership, succession, and events. *)
 Definition year := nat.
 
-(** A time span: from year to year (None = ongoing/unknown). *)
+(** A time span using half-open interval semantics [start, end).
+    - tenure_start: first year active (inclusive)
+    - tenure_end: first year NOT active (exclusive), or None if ongoing
+    Example: mkTenure 1931 (Some 1947) means active 1931-1946 inclusive. *)
 Record Tenure := mkTenure {
   tenure_start : year;
   tenure_end : option year
 }.
 
+(** Active in year y iff start <= y < end (half-open interval). *)
 Definition active_in_year (t : Tenure) (y : year) : bool :=
   Nat.leb (tenure_start t) y &&
   match tenure_end t with
   | None => true
-  | Some end_y => Nat.leb y end_y
+  | Some end_y => Nat.ltb y end_y  (* y < end, not y <= end *)
   end.
 
 (** -------------------------------------------------------------------------- *)
