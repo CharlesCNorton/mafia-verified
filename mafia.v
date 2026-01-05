@@ -379,6 +379,76 @@ Definition gigante : Member := mkMember
 Definition genovese_bosses : list Member :=
   [luciano; costello; vito_genovese; lombardo; salerno; gigante].
 
+(** Genovese Underbosses *)
+
+Definition moretti : Member := mkMember
+  "Willie Moretti"
+  (Some "Willie Moore")
+  Genovese
+  Underboss
+  None
+  (mkTenure 1946 (Some 1952))
+  (Some 1894)
+  (Some 1951).
+
+Definition catena : Member := mkMember
+  "Gerardo Catena"
+  (Some "Jerry")
+  Genovese
+  Underboss
+  None
+  (mkTenure 1957 (Some 1973))
+  (Some 1902)
+  (Some 2000).
+
+Definition eboli : Member := mkMember
+  "Thomas Eboli"
+  (Some "Tommy Ryan")
+  Genovese
+  Underboss
+  None
+  (mkTenure 1969 (Some 1973))
+  (Some 1911)
+  (Some 1972).
+
+Definition venero_mangano : Member := mkMember
+  "Venero Mangano"
+  (Some "Benny Eggs")
+  Genovese
+  Underboss
+  None
+  (mkTenure 1981 (Some 2006))
+  (Some 1921)
+  (Some 2015).
+
+Definition genovese_underbosses : list Member :=
+  [moretti; catena; eboli; venero_mangano].
+
+(** Genovese Consiglieres *)
+
+Definition strollo : Member := mkMember
+  "Anthony Strollo"
+  (Some "Tony Bender")
+  Genovese
+  Consigliere
+  None
+  (mkTenure 1951 (Some 1963))
+  (Some 1899)
+  (Some 1962).
+
+Definition louis_gigante : Member := mkMember
+  "Louis Gigante"
+  None
+  Genovese
+  Consigliere
+  None
+  (mkTenure 1981 (Some 2006))
+  (Some 1931)
+  (Some 2022).
+
+Definition genovese_consiglieres : list Member :=
+  [strollo; louis_gigante].
+
 (** -------------------------------------------------------------------------- *)
 (** Gambino Family Succession                                                  *)
 (** -------------------------------------------------------------------------- *)
@@ -440,6 +510,66 @@ Definition peter_gotti : Member := mkMember
 
 Definition gambino_bosses : list Member :=
   [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti].
+
+(** Gambino Underbosses *)
+
+Definition anastasia_underboss : Member := mkMember
+  "Albert Anastasia"
+  (Some "The Mad Hatter")
+  Gambino
+  Underboss
+  None
+  (mkTenure 1931 (Some 1952))
+  (Some 1902)
+  (Some 1957).
+
+Definition dellacroce : Member := mkMember
+  "Aniello Dellacroce"
+  (Some "Neil")
+  Gambino
+  Underboss
+  None
+  (mkTenure 1965 (Some 1986))
+  (Some 1914)
+  (Some 1985).
+
+Definition decicco : Member := mkMember
+  "Frank DeCicco"
+  (Some "Frankie")
+  Gambino
+  Underboss
+  None
+  (mkTenure 1985 (Some 1987))
+  (Some 1935)
+  (Some 1986).
+
+Definition gravano : Member := mkMember
+  "Salvatore Gravano"
+  (Some "Sammy the Bull")
+  Gambino
+  Underboss
+  None
+  (mkTenure 1986 (Some 1992))
+  (Some 1945)
+  None.
+
+Definition gambino_underbosses : list Member :=
+  [anastasia_underboss; dellacroce; decicco; gravano].
+
+(** Gambino Consiglieres *)
+
+Definition joseph_n_gallo : Member := mkMember
+  "Joseph N. Gallo"
+  None
+  Gambino
+  Consigliere
+  None
+  (mkTenure 1957 (Some 1977))
+  (Some 1912)
+  (Some 1995).
+
+Definition gambino_consiglieres : list Member :=
+  [joseph_n_gallo].
 
 (** -------------------------------------------------------------------------- *)
 (** Lucchese Family Succession                                                 *)
