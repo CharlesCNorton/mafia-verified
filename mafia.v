@@ -83,6 +83,46 @@ Inductive Rank : Type :=
   | Soldier
   | Associate.
 
+(** Rank equality is decidable. *)
+Definition rank_eqb (r1 r2 : Rank) : bool :=
+  match r1, r2 with
+  | Boss, Boss => true
+  | Underboss, Underboss => true
+  | Consigliere, Consigliere => true
+  | Capo, Capo => true
+  | Soldier, Soldier => true
+  | Associate, Associate => true
+  | _, _ => false
+  end.
+
+Lemma rank_eqb_refl : forall r, rank_eqb r r = true.
+Proof. destruct r; reflexivity. Qed.
+
+Lemma rank_eqb_eq : forall r1 r2, rank_eqb r1 r2 = true <-> r1 = r2.
+Proof.
+  intros r1 r2. split.
+  - destruct r1, r2; simpl; intros H; try discriminate; reflexivity.
+  - intros ->. apply rank_eqb_refl.
+Qed.
+
+(** BossKind distinguishes types of boss leadership.
+    This resolves the "front boss" vs "actual boss" overlap issue
+    (e.g., Salerno as FrontBoss while Gigante held ActualBoss power). *)
+Inductive BossKind : Type :=
+  | ActualBoss    (* Real decision-making power *)
+  | FrontBoss     (* Public-facing figurehead, shields actual boss *)
+  | ActingBoss    (* Temporary authority during boss incapacity *)
+  | StreetBoss.   (* Day-to-day operations, reports to actual boss *)
+
+Definition boss_kind_eqb (k1 k2 : BossKind) : bool :=
+  match k1, k2 with
+  | ActualBoss, ActualBoss => true
+  | FrontBoss, FrontBoss => true
+  | ActingBoss, ActingBoss => true
+  | StreetBoss, StreetBoss => true
+  | _, _ => false
+  end.
+
 (** Rank ordering: Boss > Underboss > Consigliere > Capo > Soldier > Associate *)
 Definition rank_level (r : Rank) : nat :=
   match r with
@@ -140,6 +180,7 @@ Record Member := mkMember {
   member_alias : option string;    (* Nickname, e.g., "Lucky", "The Chin" *)
   member_family : Family;
   member_rank : Rank;
+  member_boss_kind : option BossKind;  (* None for non-bosses, Some k for bosses *)
   member_tenure : Tenure;
   member_birth_year : option year;
   member_death_year : option year
@@ -147,14 +188,17 @@ Record Member := mkMember {
 
 (** Check if a member held a specific rank during a given year. *)
 Definition held_rank_in_year (m : Member) (r : Rank) (y : year) : bool :=
-  (match member_rank m with
-   | Boss => match r with Boss => true | _ => false end
-   | Underboss => match r with Underboss => true | _ => false end
-   | Consigliere => match r with Consigliere => true | _ => false end
-   | Capo => match r with Capo => true | _ => false end
-   | Soldier => match r with Soldier => true | _ => false end
-   | Associate => match r with Associate => true | _ => false end
-   end) && active_in_year (member_tenure m) y.
+  rank_eqb (member_rank m) r && active_in_year (member_tenure m) y.
+
+(** Check if member is the actual boss (not front/acting) in a given year. *)
+Definition is_actual_boss_in_year (m : Member) (y : year) : bool :=
+  rank_eqb (member_rank m) Boss &&
+  match member_boss_kind m with
+  | Some ActualBoss => true
+  | None => true  (* Pre-modern era bosses without explicit kind = actual *)
+  | _ => false
+  end &&
+  active_in_year (member_tenure m) y.
 
 (** -------------------------------------------------------------------------- *)
 (** The Commission (1931)                                                      *)
@@ -195,7 +239,8 @@ Definition luciano : Member := mkMember
   (Some "Lucky")
   Genovese
   Boss
-  (mkTenure 1931 (Some 1946))  (* Deported 1946 *)
+  (Some ActualBoss)
+  (mkTenure 1931 (Some 1947))  (* Deported 1946; half-open [1931,1947) *)
   (Some 1897)
   (Some 1962).
 
@@ -205,7 +250,8 @@ Definition mangano : Member := mkMember
   None
   Gambino
   Boss
-  (mkTenure 1931 (Some 1951))  (* Murdered 1951 *)
+  (Some ActualBoss)
+  (mkTenure 1931 (Some 1952))  (* Murdered 1951; half-open [1931,1952) *)
   (Some 1888)
   (Some 1951).
 
@@ -215,7 +261,8 @@ Definition gagliano : Member := mkMember
   (Some "Tom")
   Lucchese
   Boss
-  (mkTenure 1931 (Some 1951))  (* Died of natural causes *)
+  (Some ActualBoss)
+  (mkTenure 1931 (Some 1952))  (* Died 1951; half-open [1931,1952) *)
   (Some 1884)
   (Some 1951).
 
@@ -225,7 +272,8 @@ Definition bonanno : Member := mkMember
   (Some "Joe Bananas")
   Bonanno
   Boss
-  (mkTenure 1931 (Some 1968))  (* Forced out by Commission *)
+  (Some ActualBoss)
+  (mkTenure 1931 (Some 1969))  (* Forced out 1968; half-open [1931,1969) *)
   (Some 1905)
   (Some 2002).
 
@@ -235,7 +283,8 @@ Definition profaci : Member := mkMember
   None
   Colombo
   Boss
-  (mkTenure 1931 (Some 1962))  (* Died of cancer *)
+  (Some ActualBoss)
+  (mkTenure 1931 (Some 1963))  (* Died 1962; half-open [1931,1963) *)
   (Some 1897)
   (Some 1962).
 
@@ -274,7 +323,8 @@ Definition costello : Member := mkMember
   (Some "The Prime Minister")
   Genovese
   Boss
-  (mkTenure 1946 (Some 1957))
+  (Some ActualBoss)
+  (mkTenure 1946 (Some 1958))  (* Half-open [1946,1958) *)
   (Some 1891)
   (Some 1973).
 
@@ -284,7 +334,8 @@ Definition vito_genovese : Member := mkMember
   (Some "Don Vito")
   Genovese
   Boss
-  (mkTenure 1957 (Some 1969))
+  (Some ActualBoss)
+  (mkTenure 1957 (Some 1970))  (* Half-open [1957,1970) *)
   (Some 1897)
   (Some 1969).
 
@@ -294,7 +345,8 @@ Definition lombardo : Member := mkMember
   None
   Genovese
   Boss
-  (mkTenure 1969 (Some 1981))
+  (Some FrontBoss)  (* Front boss, not actual power *)
+  (mkTenure 1969 (Some 1982))  (* Half-open [1969,1982) *)
   (Some 1910)
   (Some 1987).
 
@@ -304,7 +356,8 @@ Definition salerno : Member := mkMember
   (Some "Fat Tony")
   Genovese
   Boss
-  (mkTenure 1981 (Some 1986))
+  (Some FrontBoss)  (* Front boss; Gigante held actual power *)
+  (mkTenure 1981 (Some 1987))  (* Half-open [1981,1987) *)
   (Some 1911)
   (Some 1992).
 
@@ -314,7 +367,8 @@ Definition gigante : Member := mkMember
   (Some "The Chin")
   Genovese
   Boss
-  (mkTenure 1981 (Some 2005))
+  (Some ActualBoss)  (* Actual power while Salerno was front *)
+  (mkTenure 1981 (Some 2006))  (* Half-open [1981,2006) *)
   (Some 1928)
   (Some 2005).
 
@@ -331,7 +385,8 @@ Definition anastasia : Member := mkMember
   (Some "The Mad Hatter")
   Gambino
   Boss
-  (mkTenure 1951 (Some 1957))
+  (Some ActualBoss)
+  (mkTenure 1951 (Some 1958))  (* Half-open [1951,1958) *)
   (Some 1902)
   (Some 1957).
 
@@ -341,7 +396,8 @@ Definition carlo_gambino : Member := mkMember
   (Some "Don Carlo")
   Gambino
   Boss
-  (mkTenure 1957 (Some 1976))
+  (Some ActualBoss)
+  (mkTenure 1957 (Some 1977))  (* Half-open [1957,1977) *)
   (Some 1902)
   (Some 1976).
 
@@ -351,7 +407,8 @@ Definition castellano : Member := mkMember
   (Some "Big Paul")
   Gambino
   Boss
-  (mkTenure 1976 (Some 1985))
+  (Some ActualBoss)
+  (mkTenure 1976 (Some 1986))  (* Half-open [1976,1986) *)
   (Some 1915)
   (Some 1985).
 
@@ -361,7 +418,8 @@ Definition gotti : Member := mkMember
   (Some "The Teflon Don")
   Gambino
   Boss
-  (mkTenure 1985 (Some 2002))
+  (Some ActualBoss)
+  (mkTenure 1985 (Some 2003))  (* Half-open [1985,2003) *)
   (Some 1940)
   (Some 2002).
 
@@ -371,7 +429,8 @@ Definition peter_gotti : Member := mkMember
   None
   Gambino
   Boss
-  (mkTenure 2002 (Some 2016))
+  (Some ActualBoss)
+  (mkTenure 2002 (Some 2017))  (* Half-open [2002,2017) *)
   (Some 1939)
   (Some 2021).
 
@@ -388,7 +447,8 @@ Definition tommy_lucchese : Member := mkMember
   (Some "Three Finger Brown")
   Lucchese
   Boss
-  (mkTenure 1951 (Some 1967))
+  (Some ActualBoss)
+  (mkTenure 1951 (Some 1968))  (* Half-open [1951,1968) *)
   (Some 1899)
   (Some 1967).
 
@@ -398,7 +458,8 @@ Definition tramunti : Member := mkMember
   (Some "Mr. Gribbs")
   Lucchese
   Boss
-  (mkTenure 1967 (Some 1974))
+  (Some ActualBoss)
+  (mkTenure 1967 (Some 1975))  (* Half-open [1967,1975) *)
   (Some 1910)
   (Some 1978).
 
@@ -408,7 +469,8 @@ Definition corallo : Member := mkMember
   (Some "Tony Ducks")
   Lucchese
   Boss
-  (mkTenure 1974 (Some 1986))
+  (Some ActualBoss)
+  (mkTenure 1974 (Some 1987))  (* Half-open [1974,1987) *)
   (Some 1913)
   (Some 2000).
 
@@ -418,7 +480,8 @@ Definition amuso : Member := mkMember
   (Some "Vic")
   Lucchese
   Boss
-  (mkTenure 1986 None)
+  (Some ActualBoss)
+  (mkTenure 1986 None)  (* Ongoing *)
   (Some 1934)
   None.
 
@@ -435,7 +498,8 @@ Definition evola : Member := mkMember
   None
   Bonanno
   Boss
-  (mkTenure 1968 (Some 1973))
+  (Some ActualBoss)
+  (mkTenure 1968 (Some 1974))  (* Half-open [1968,1974) *)
   (Some 1907)
   (Some 1973).
 
@@ -445,7 +509,8 @@ Definition rastelli : Member := mkMember
   (Some "Rusty")
   Bonanno
   Boss
-  (mkTenure 1973 (Some 1991))
+  (Some ActualBoss)
+  (mkTenure 1973 (Some 1992))  (* Half-open [1973,1992) *)
   (Some 1918)
   (Some 1991).
 
@@ -455,7 +520,8 @@ Definition massino : Member := mkMember
   (Some "Big Joey")
   Bonanno
   Boss
-  (mkTenure 1991 (Some 2004))
+  (Some ActualBoss)
+  (mkTenure 1991 (Some 2005))  (* Half-open [1991,2005) *)
   (Some 1943)
   None.
 
@@ -472,7 +538,8 @@ Definition magliocco : Member := mkMember
   None
   Colombo
   Boss
-  (mkTenure 1962 (Some 1963))
+  (Some ActualBoss)
+  (mkTenure 1962 (Some 1964))  (* Half-open [1962,1964) *)
   (Some 1898)
   (Some 1963).
 
@@ -482,7 +549,8 @@ Definition joseph_colombo : Member := mkMember
   None
   Colombo
   Boss
-  (mkTenure 1963 (Some 1971))
+  (Some ActualBoss)
+  (mkTenure 1963 (Some 1972))  (* Half-open [1963,1972) *)
   (Some 1923)
   (Some 1978).
 
@@ -492,7 +560,8 @@ Definition persico : Member := mkMember
   (Some "The Snake")
   Colombo
   Boss
-  (mkTenure 1973 (Some 2019))
+  (Some ActualBoss)
+  (mkTenure 1973 (Some 2020))  (* Half-open [1973,2020) *)
   (Some 1933)
   (Some 2019).
 
