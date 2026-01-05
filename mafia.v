@@ -17,6 +17,151 @@
 (*                                                                            *)
 (******************************************************************************)
 
+(** -------------------------------------------------------------------------- *)
+(** TODO                                                                        *)
+(** -------------------------------------------------------------------------- *)
+(**
+- [ ] 1. Define EvidenceTier inductive type (Definitive | Authoritative | Strong | Supported | Claimed)
+- [ ] 2. Define Evidence inductive type with all 16 constructors
+- [ ] 3. Define evidence_tier function mapping Evidence to EvidenceTier
+- [ ] 4. Define minimum_tier_for_inclusion constant
+- [ ] 5. Define tier requirements per rank (Boss/Underboss/Consigliere: Tier 1-3; Capo: Tier 1-4; Soldier/Associate: Tier 1-5)
+- [ ] 6. Replace Confidence type with EvidenceTier
+- [ ] 7. Replace Source record with Evidence type
+- [ ] 8. Define VerifiedMember record requiring evidence and tier-rank compatibility proof
+- [ ] 9. Define dependent Position type or add member_wf predicate enforcing BossKind only valid for Boss rank
+- [ ] 10. Add Forall member_wf enforcement for all dataset lists
+- [ ] 11. Define Case record type (case_name, court, district, docket, year, outcome)
+- [ ] 12. Define Defendant record type (case, person_id, role_at_time, charges, verdict, sentence)
+- [ ] 13. Define Murder record type (victim_id, victim_rank, perpetrator_ids, year, method, case_if_prosecuted)
+- [ ] 14. Define CooperatorRecord type (person_id, flip_year, handler, cases_testified, debriefing_count)
+- [ ] 15. Define Imprisonment record type (person_id, start_year, end_year, facility, case)
+- [ ] 16. Define BloodRelation type (person_id_1, person_id_2, relation)
+- [ ] 17. Define CrewMembership record (person_id, capo_id, crew_name, tenure)
+- [ ] 18. Define Territory record (family, geographic_area, primary_rackets)
+- [ ] 19. Define War record (name, families_involved, start_year, end_year, casualties, outcome)
+- [ ] 20. Add month/day optional granularity to Tenure type
+- [ ] 21. Add initiation_year field to Member record
+- [ ] 22. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
+- [ ] 23. Fix Anthony Graziano: change Underboss to Consigliere
+- [ ] 24. Fix Nicholas Corozzo: change Underboss to Caporegime
+- [ ] 25. Fix Victor Orena: change Underboss to Acting Boss
+- [ ] 26. Fix Gigante tenure_end: change 2006 to 2005
+- [ ] 27. Add constraint/proof that tenure_end <= death_year for all members
+- [ ] 28. Add exists_actual_boss_at_time predicate
+- [ ] 29. Add exactly_one_actual_boss_at_time predicate
+- [ ] 30. Separate overlap allowed under coarse time predicate from strict succession
+- [ ] 31. Add Commission Trial (1986) as Case record
+- [ ] 32. Add Commission Trial Defendant records
+- [ ] 33. Add Commission Trial sentences
+- [ ] 34. Add Windows Case (1991) as Case record
+- [ ] 35. Add Windows Case Defendant records
+- [ ] 36. Add U.S. v. Gotti (1992) as Case record
+- [ ] 37. Add U.S. v. Gotti Defendant records
+- [ ] 38. Add U.S. v. Gigante (1997) as Case record
+- [ ] 39. Add U.S. v. Bellomo (1996) as Case record
+- [ ] 40. Add Bellomo bail denial record
+- [ ] 41. Add U.S. v. Massino (2004) as Case record
+- [ ] 42. Add Operation Old Bridge (2008) as Case record
+- [ ] 43. Add Operation Old Bridge Defendant records
+- [ ] 44. Add 2011 FBI sweep as Case record
+- [ ] 45. Add 2011 waterfront case Defendant records
+- [ ] 46. Add U.S. v. Cirillo (2005) as Case record
+- [ ] 47. Add Cirillo guilty plea as acting boss
+- [ ] 48. Add U.S. v. Leo (2010) as Case record
+- [ ] 49. Add Daniel Leo guilty plea as acting boss
+- [ ] 50. Add U.S. v. Crea/Madonna (2017) as Case record
+- [ ] 51. Add Crea 2020 life sentence as underboss
+- [ ] 52. Add Madonna 2020 life sentence as acting boss
+- [ ] 53. Add U.S. v. Russo (2011) as Case record
+- [ ] 54. Add U.S. v. Russo (2021) as Case record
+- [ ] 55. Add 2018 Bonanno/Lucchese case as Case record
+- [ ] 56. Add Frank Locascio (Gambino consigliere)
+- [ ] 57. Add Jackie D'Amico (Gambino acting boss)
+- [ ] 58. Add Leonard DiMaria (Gambino capo)
+- [ ] 59. Add Charles Carneglia (Gambino soldier)
+- [ ] 60. Add Vincent Gotti (Gambino soldier)
+- [ ] 61. Add Richard Gotti (Gambino soldier)
+- [ ] 62. Add Louis Manna (Genovese consigliere)
+- [ ] 63. Add Ernest Muscarella (Genovese acting consigliere)
+- [ ] 64. Add Matthew Ianniello (Genovese capo)
+- [ ] 65. Add Lawrence Dentico (Genovese panel member)
+- [ ] 66. Add Salvatore Caldarella (Genovese soldier)
+- [ ] 67. Add Stephen Depiro (Genovese soldier)
+- [ ] 68. Add Anthony Baratta (Lucchese capo)
+- [ ] 69. Add Eugene Castelle (Lucchese soldier)
+- [ ] 70. Add Vincent Salanardi (Lucchese soldier)
+- [ ] 71. Add Ralph Scopo Sr. (Colombo)
+- [ ] 72. Add Richard Fusco (Colombo consigliere)
+- [ ] 73. Add Ralph DiMatteo (Colombo consigliere)
+- [ ] 74. Add Theodore Persico Jr. (Colombo capo)
+- [ ] 75. Add Salvatore Miciotta (Colombo soldier)
+- [ ] 76. Add Michael Uvino (Colombo soldier)
+- [ ] 77. Add William Cutolo acting underboss role
+- [ ] 78. Add Joseph Cammarano Jr. (Bonanno acting boss)
+- [ ] 79. Add John Zancocchio (Bonanno consigliere)
+- [ ] 80. Add Simone Esposito (Bonanno consigliere)
+- [ ] 81. Add Gerlando Sciascia (Bonanno capo)
+- [ ] 82. Add Dominick Napolitano (Bonanno capo)
+- [ ] 83. Add Louis Attanasio (Bonanno soldier)
+- [ ] 84. Add Philip Rastelli conviction details
+- [ ] 85. Add Gravano CooperatorRecord
+- [ ] 86. Add Vitale CooperatorRecord
+- [ ] 87. Add Massino CooperatorRecord
+- [ ] 88. Add D'Arco CooperatorRecord
+- [ ] 89. Add Miciotta CooperatorRecord
+- [ ] 90. Add Sessa CooperatorRecord
+- [ ] 91. Add Murder record: Anastasia (1957)
+- [ ] 92. Add Murder record: Castellano (1985)
+- [ ] 93. Add Murder record: Galante (1979)
+- [ ] 94. Add Murder record: Joey Scopo (1993)
+- [ ] 95. Add Murder record: Louis DiBono (1990)
+- [ ] 96. Add Murder record: Sciascia (1999)
+- [ ] 97. Add Murder record: Napolitano (1981)
+- [ ] 98. Add Murder record: Cutolo (1999)
+- [ ] 99. Add BloodRelation: Carmine/Alphonse Persico
+- [ ] 100. Add BloodRelation: John/Peter Gotti
+- [ ] 101. Add BloodRelation: Vincent/Louis Gigante
+- [ ] 102. Add BloodRelation: John Gotti/Richard Gotti
+- [ ] 103. Add BloodRelation: Joseph Massino/Salvatore Vitale
+- [ ] 104. Add BloodRelation: Carmine Persico/Theodore Persico Jr.
+- [ ] 105. Add Imprisonment record: Gotti
+- [ ] 106. Add Imprisonment record: Amuso
+- [ ] 107. Add Imprisonment record: Persico
+- [ ] 108. Add Imprisonment record: Gigante
+- [ ] 109. Add Imprisonment record: Massino
+- [ ] 110. Add Imprisonment record: Crea
+- [ ] 111. Add Imprisonment record: Madonna
+- [ ] 112. Add War record: Colombo War (1991-1993)
+- [ ] 113. Add War record: Banana War (1964-1968)
+- [ ] 114. Add War record: Castellammarese War (1930-1931)
+- [ ] 115. Add pre-1931: Salvatore Maranzano
+- [ ] 116. Add pre-1931: Joe Masseria
+- [ ] 117. Add pre-1931: Castellammarese War participants
+- [ ] 118. Add Buffalo family boss succession
+- [ ] 119. Add Chicago Outfit boss succession
+- [ ] 120. Expand Apalachin attendees
+- [ ] 121. Complete Genovese succession chain proofs
+- [ ] 122. Complete Bonanno succession chain proofs
+- [ ] 123. Complete Colombo succession chain proofs
+- [ ] 124. Prove unique_actual_boss_at_time for Genovese sample years
+- [ ] 125. Prove unique_actual_boss_at_time for Gambino sample years
+- [ ] 126. Prove unique_actual_boss_at_time for Lucchese sample years
+- [ ] 127. Prove unique_actual_boss_at_time for Bonanno sample years
+- [ ] 128. Prove unique_actual_boss_at_time for Colombo sample years
+- [ ] 129. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 130. Add validation same person roles don't overlap
+- [ ] 131. Add proof promotions temporally ordered per person
+- [ ] 132. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 133. Add actual Commission vote records
+- [ ] 134. Replace manual list destruct patterns
+- [ ] 135. Replace manual *_eqb proofs with in_app_iff/firstorder
+- [ ] 136. Populate Evidence field for all members with None
+- [ ] 137. Normalize evidence tiers across same-era members
+- [ ] 138. Add actual_boss_of query function
+- [ ] 139. Prove actual_boss_of returns unique result
+*)
+
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.Arith.Arith.
