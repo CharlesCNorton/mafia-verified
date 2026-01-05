@@ -17,39 +17,6 @@
 (*                                                                            *)
 (******************************************************************************)
 
-(******************************************************************************)
-(*                              REFACTOR TODO                                 *)
-(******************************************************************************)
-(*                                                                            *)
-(* 1. Update all 86 Member definitions to new record format:                  *)
-(*    - Add member_person_id : nat (unique per individual)                    *)
-(*    - Add member_source : option Source                                     *)
-(*    - Add member_confidence : Confidence                                    *)
-(*    - Ensure same individual across roles shares person_id                  *)
-(*                                                                            *)
-(* 2. Person ID assignments needed:                                           *)
-(*    - Costello: same ID for costello_underboss and costello (boss)          *)
-(*    - Anastasia: same ID for anastasia_underboss and anastasia (boss)       *)
-(*    - Galante: same ID for galante (underboss) and galante_boss             *)
-(*    - Alphonse Persico: same ID for consigliere and acting boss roles       *)
-(*    - Crea: same ID for crea (underboss) and crea_acting (boss)             *)
-(*                                                                            *)
-(* 3. Source attribution for each member:                                     *)
-(*    - DOJ source for court-proven members                                   *)
-(*    - FBI source for organizational chart members                           *)
-(*    - Raab source for historical members                                    *)
-(*                                                                            *)
-(* 4. Confidence levels:                                                      *)
-(*    - High: court records, convictions, DOJ indictments                     *)
-(*    - Medium: FBI charts, reliable journalism                               *)
-(*    - Low: single-source, disputed                                          *)
-(*                                                                            *)
-(* 5. Add lemmas proving:                                                     *)
-(*    - count_unique_persons < length all_leadership (due to multi-role)      *)
-(*    - All multi-role individuals have consistent person_id                  *)
-(*                                                                            *)
-(******************************************************************************)
-
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.Arith.Arith.
@@ -1542,39 +1509,49 @@ Definition bonanno_consiglieres : list Member :=
 
 (** Joseph Magliocco - Boss 1962-1963 *)
 Definition magliocco : Member := mkMember
+  69
   "Joseph Magliocco"
   None
   Colombo
   Boss
   (Some ActualBoss)
-  (mkTenure 1962 (Some 1964))  (* Half-open [1962,1964) *)
+  (mkTenure 1962 (Some 1964))
   (Some 1898)
-  (Some 1963).
+  (Some 1963)
+  (Some raab_source)
+  High.
 
 (** Joseph Colombo - Boss 1963-1971, family renamed after him *)
 Definition joseph_colombo : Member := mkMember
+  70
   "Joseph Colombo"
   None
   Colombo
   Boss
   (Some ActualBoss)
-  (mkTenure 1963 (Some 1972))  (* Half-open [1963,1972) *)
+  (mkTenure 1963 (Some 1972))
   (Some 1923)
-  (Some 1978).
+  (Some 1978)
+  (Some raab_source)
+  High.
 
 (** Carmine Persico - Boss 1973-2019 (imprisoned most of tenure) *)
 Definition persico : Member := mkMember
+  71
   "Carmine Persico"
   (Some "The Snake")
   Colombo
   Boss
   (Some ActualBoss)
-  (mkTenure 1973 (Some 2020))  (* Half-open [1973,2020) *)
+  (mkTenure 1973 (Some 2020))
   (Some 1933)
-  (Some 2019).
+  (Some 2019)
+  (Some doj_source)
+  High.
 
 (** Thomas Gioeli - Acting Boss 2000s *)
 Definition gioeli : Member := mkMember
+  72
   "Thomas Gioeli"
   (Some "Tommy Shots")
   Colombo
@@ -1582,10 +1559,13 @@ Definition gioeli : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2005 (Some 2009))
   (Some 1952)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Andrew Russo - Street Boss 2011-2022 (DOJ EDNY 2011, 2012) *)
 Definition russo : Member := mkMember
+  73
   "Andrew Russo"
   (Some "Andy Mush")
   Colombo
@@ -1593,10 +1573,13 @@ Definition russo : Member := mkMember
   (Some StreetBoss)
   (mkTenure 2011 (Some 2023))
   (Some 1934)
-  (Some 2022).
+  (Some 2022)
+  (Some doj_source)
+  High.
 
 (** Alphonse Persico - Acting Boss during father's imprisonment *)
 Definition alphonse_persico_boss : Member := mkMember
+  74
   "Alphonse Persico"
   (Some "Allie Boy")
   Colombo
@@ -1604,7 +1587,9 @@ Definition alphonse_persico_boss : Member := mkMember
   (Some ActingBoss)
   (mkTenure 1986 (Some 1988))
   (Some 1929)
-  (Some 1989).
+  (Some 1989)
+  (Some doj_source)
+  High.
 
 Definition colombo_bosses : list Member :=
   [profaci; magliocco; joseph_colombo; persico; alphonse_persico_boss; gioeli; russo].
@@ -1613,6 +1598,7 @@ Definition colombo_bosses : list Member :=
 
 (** Gennaro Langella - Underboss 1980s *)
 Definition langella : Member := mkMember
+  75
   "Gennaro Langella"
   (Some "Gerry Lang")
   Colombo
@@ -1620,10 +1606,13 @@ Definition langella : Member := mkMember
   None
   (mkTenure 1980 (Some 1987))
   (Some 1938)
-  (Some 2013).
+  (Some 2013)
+  (Some doj_source)
+  High.
 
 (** Victor Orena - Underboss/Acting Boss 1988-1991 *)
 Definition orena : Member := mkMember
+  76
   "Victor Orena"
   (Some "Little Vic")
   Colombo
@@ -1631,10 +1620,13 @@ Definition orena : Member := mkMember
   None
   (mkTenure 1988 (Some 1992))
   (Some 1934)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** William Cutolo - Underboss 1990s *)
 Definition cutolo : Member := mkMember
+  77
   "William Cutolo"
   (Some "Wild Bill")
   Colombo
@@ -1642,10 +1634,13 @@ Definition cutolo : Member := mkMember
   None
   (mkTenure 1994 (Some 2000))
   (Some 1949)
-  (Some 1999).
+  (Some 1999)
+  (Some doj_source)
+  High.
 
-(** John Franzese Sr - Acting Underboss 2000s *)
+(** John Franzese Sr - Underboss 1960s *)
 Definition franzese : Member := mkMember
+  78
   "John Franzese"
   (Some "Sonny")
   Colombo
@@ -1653,10 +1648,13 @@ Definition franzese : Member := mkMember
   None
   (mkTenure 1966 (Some 1970))
   (Some 1917)
-  (Some 2020).
+  (Some 2020)
+  (Some raab_source)
+  High.
 
 (** John DeRoss - Underboss 1990s-2000s *)
 Definition deross : Member := mkMember
+  79
   "John DeRoss"
   None
   Colombo
@@ -1664,10 +1662,13 @@ Definition deross : Member := mkMember
   None
   (mkTenure 1995 (Some 2006))
   (Some 1940)
-  (Some 2006).
+  (Some 2006)
+  (Some doj_source)
+  High.
 
 (** Benjamin Castellazzo - Underboss 2010s *)
 Definition castellazzo : Member := mkMember
+  80
   "Benjamin Castellazzo"
   (Some "Benji")
   Colombo
@@ -1675,7 +1676,9 @@ Definition castellazzo : Member := mkMember
   None
   (mkTenure 2011 (Some 2019))
   (Some 1957)
-  None.
+  None
+  (Some doj_source)
+  Medium.
 
 Definition colombo_underbosses : list Member :=
   [langella; orena; cutolo; franzese; deross; castellazzo].
@@ -1684,17 +1687,21 @@ Definition colombo_underbosses : list Member :=
 
 (** Alphonse Persico - Consigliere 1970s-1980s, brother of Carmine *)
 Definition alphonse_persico : Member := mkMember
+  74
   "Alphonse Persico"
   (Some "Allie Boy")
   Colombo
   Consigliere
   None
-  (mkTenure 1973 (Some 1990))
+  (mkTenure 1973 (Some 1986))
   (Some 1929)
-  (Some 1989).
+  (Some 1989)
+  (Some doj_source)
+  High.
 
 (** Carmine Sessa - Consigliere early 1990s, turned witness *)
 Definition sessa : Member := mkMember
+  81
   "Carmine Sessa"
   None
   Colombo
@@ -1702,7 +1709,9 @@ Definition sessa : Member := mkMember
   None
   (mkTenure 1991 (Some 1993))
   (Some 1948)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 Definition colombo_consiglieres : list Member :=
   [alphonse_persico; sessa].
