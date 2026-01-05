@@ -21,145 +21,137 @@
 (** TODO                                                                        *)
 (** -------------------------------------------------------------------------- *)
 (**
-- [ ] 1. Define EvidenceTier inductive type (Definitive | Authoritative | Strong | Supported | Claimed)
-- [ ] 2. Define Evidence inductive type with all 16 constructors
-- [ ] 3. Define evidence_tier function mapping Evidence to EvidenceTier
-- [ ] 4. Define minimum_tier_for_inclusion constant
-- [ ] 5. Define tier requirements per rank (Boss/Underboss/Consigliere: Tier 1-3; Capo: Tier 1-4; Soldier/Associate: Tier 1-5)
-- [ ] 6. Replace Confidence type with EvidenceTier
-- [ ] 7. Replace Source record with Evidence type
-- [ ] 8. Define VerifiedMember record requiring evidence and tier-rank compatibility proof
-- [ ] 9. Define dependent Position type or add member_wf predicate enforcing BossKind only valid for Boss rank
-- [ ] 10. Add Forall member_wf enforcement for all dataset lists
-- [ ] 11. Define Case record type (case_name, court, district, docket, year, outcome)
-- [ ] 12. Define Defendant record type (case, person_id, role_at_time, charges, verdict, sentence)
-- [ ] 13. Define Murder record type (victim_id, victim_rank, perpetrator_ids, year, method, case_if_prosecuted)
-- [ ] 14. Define CooperatorRecord type (person_id, flip_year, handler, cases_testified, debriefing_count)
-- [ ] 15. Define Imprisonment record type (person_id, start_year, end_year, facility, case)
-- [ ] 16. Define BloodRelation type (person_id_1, person_id_2, relation)
-- [ ] 17. Define CrewMembership record (person_id, capo_id, crew_name, tenure)
-- [ ] 18. Define Territory record (family, geographic_area, primary_rackets)
-- [ ] 19. Define War record (name, families_involved, start_year, end_year, casualties, outcome)
-- [ ] 20. Add month/day optional granularity to Tenure type
-- [ ] 21. Add initiation_year field to Member record
-- [ ] 22. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
-- [ ] 23. Fix Anthony Graziano: change Underboss to Consigliere
-- [ ] 24. Fix Nicholas Corozzo: change Underboss to Caporegime
-- [ ] 25. Fix Victor Orena: change Underboss to Acting Boss
-- [ ] 26. Fix Gigante tenure_end: change 2006 to 2005
-- [ ] 27. Add constraint/proof that tenure_end <= death_year for all members
-- [ ] 28. Add exists_actual_boss_at_time predicate
-- [ ] 29. Add exactly_one_actual_boss_at_time predicate
-- [ ] 30. Separate overlap allowed under coarse time predicate from strict succession
-- [ ] 31. Add Commission Trial (1986) as Case record
-- [ ] 32. Add Commission Trial Defendant records
-- [ ] 33. Add Commission Trial sentences
-- [ ] 34. Add Windows Case (1991) as Case record
-- [ ] 35. Add Windows Case Defendant records
-- [ ] 36. Add U.S. v. Gotti (1992) as Case record
-- [ ] 37. Add U.S. v. Gotti Defendant records
-- [ ] 38. Add U.S. v. Gigante (1997) as Case record
-- [ ] 39. Add U.S. v. Bellomo (1996) as Case record
-- [ ] 40. Add Bellomo bail denial record
-- [ ] 41. Add U.S. v. Massino (2004) as Case record
-- [ ] 42. Add Operation Old Bridge (2008) as Case record
-- [ ] 43. Add Operation Old Bridge Defendant records
-- [ ] 44. Add 2011 FBI sweep as Case record
-- [ ] 45. Add 2011 waterfront case Defendant records
-- [ ] 46. Add U.S. v. Cirillo (2005) as Case record
-- [ ] 47. Add Cirillo guilty plea as acting boss
-- [ ] 48. Add U.S. v. Leo (2010) as Case record
-- [ ] 49. Add Daniel Leo guilty plea as acting boss
-- [ ] 50. Add U.S. v. Crea/Madonna (2017) as Case record
-- [ ] 51. Add Crea 2020 life sentence as underboss
-- [ ] 52. Add Madonna 2020 life sentence as acting boss
-- [ ] 53. Add U.S. v. Russo (2011) as Case record
-- [ ] 54. Add U.S. v. Russo (2021) as Case record
-- [ ] 55. Add 2018 Bonanno/Lucchese case as Case record
-- [ ] 56. Add Frank Locascio (Gambino consigliere)
-- [ ] 57. Add Jackie D'Amico (Gambino acting boss)
-- [ ] 58. Add Leonard DiMaria (Gambino capo)
-- [ ] 59. Add Charles Carneglia (Gambino soldier)
-- [ ] 60. Add Vincent Gotti (Gambino soldier)
-- [ ] 61. Add Richard Gotti (Gambino soldier)
-- [ ] 62. Add Louis Manna (Genovese consigliere)
-- [ ] 63. Add Ernest Muscarella (Genovese acting consigliere)
-- [ ] 64. Add Matthew Ianniello (Genovese capo)
-- [ ] 65. Add Lawrence Dentico (Genovese panel member)
-- [ ] 66. Add Salvatore Caldarella (Genovese soldier)
-- [ ] 67. Add Stephen Depiro (Genovese soldier)
-- [ ] 68. Add Anthony Baratta (Lucchese capo)
-- [ ] 69. Add Eugene Castelle (Lucchese soldier)
-- [ ] 70. Add Vincent Salanardi (Lucchese soldier)
-- [ ] 71. Add Ralph Scopo Sr. (Colombo)
-- [ ] 72. Add Richard Fusco (Colombo consigliere)
-- [ ] 73. Add Ralph DiMatteo (Colombo consigliere)
-- [ ] 74. Add Theodore Persico Jr. (Colombo capo)
-- [ ] 75. Add Salvatore Miciotta (Colombo soldier)
-- [ ] 76. Add Michael Uvino (Colombo soldier)
-- [ ] 77. Add William Cutolo acting underboss role
-- [ ] 78. Add Joseph Cammarano Jr. (Bonanno acting boss)
-- [ ] 79. Add John Zancocchio (Bonanno consigliere)
-- [ ] 80. Add Simone Esposito (Bonanno consigliere)
-- [ ] 81. Add Gerlando Sciascia (Bonanno capo)
-- [ ] 82. Add Dominick Napolitano (Bonanno capo)
-- [ ] 83. Add Louis Attanasio (Bonanno soldier)
-- [ ] 84. Add Philip Rastelli conviction details
-- [ ] 85. Add Gravano CooperatorRecord
-- [ ] 86. Add Vitale CooperatorRecord
-- [ ] 87. Add Massino CooperatorRecord
-- [ ] 88. Add D'Arco CooperatorRecord
-- [ ] 89. Add Miciotta CooperatorRecord
-- [ ] 90. Add Sessa CooperatorRecord
-- [ ] 91. Add Murder record: Anastasia (1957)
-- [ ] 92. Add Murder record: Castellano (1985)
-- [ ] 93. Add Murder record: Galante (1979)
-- [ ] 94. Add Murder record: Joey Scopo (1993)
-- [ ] 95. Add Murder record: Louis DiBono (1990)
-- [ ] 96. Add Murder record: Sciascia (1999)
-- [ ] 97. Add Murder record: Napolitano (1981)
-- [ ] 98. Add Murder record: Cutolo (1999)
-- [ ] 99. Add BloodRelation: Carmine/Alphonse Persico
-- [ ] 100. Add BloodRelation: John/Peter Gotti
-- [ ] 101. Add BloodRelation: Vincent/Louis Gigante
-- [ ] 102. Add BloodRelation: John Gotti/Richard Gotti
-- [ ] 103. Add BloodRelation: Joseph Massino/Salvatore Vitale
-- [ ] 104. Add BloodRelation: Carmine Persico/Theodore Persico Jr.
-- [ ] 105. Add Imprisonment record: Gotti
-- [ ] 106. Add Imprisonment record: Amuso
-- [ ] 107. Add Imprisonment record: Persico
-- [ ] 108. Add Imprisonment record: Gigante
-- [ ] 109. Add Imprisonment record: Massino
-- [ ] 110. Add Imprisonment record: Crea
-- [ ] 111. Add Imprisonment record: Madonna
-- [ ] 112. Add War record: Colombo War (1991-1993)
-- [ ] 113. Add War record: Banana War (1964-1968)
-- [ ] 114. Add War record: Castellammarese War (1930-1931)
-- [ ] 115. Add pre-1931: Salvatore Maranzano
-- [ ] 116. Add pre-1931: Joe Masseria
-- [ ] 117. Add pre-1931: Castellammarese War participants
-- [ ] 118. Add Buffalo family boss succession
-- [ ] 119. Add Chicago Outfit boss succession
-- [ ] 120. Expand Apalachin attendees
-- [ ] 121. Complete Genovese succession chain proofs
-- [ ] 122. Complete Bonanno succession chain proofs
-- [ ] 123. Complete Colombo succession chain proofs
-- [ ] 124. Prove unique_actual_boss_at_time for Genovese sample years
-- [ ] 125. Prove unique_actual_boss_at_time for Gambino sample years
-- [ ] 126. Prove unique_actual_boss_at_time for Lucchese sample years
-- [ ] 127. Prove unique_actual_boss_at_time for Bonanno sample years
-- [ ] 128. Prove unique_actual_boss_at_time for Colombo sample years
-- [ ] 129. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 130. Add validation same person roles don't overlap
-- [ ] 131. Add proof promotions temporally ordered per person
-- [ ] 132. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 133. Add actual Commission vote records
-- [ ] 134. Replace manual list destruct patterns
-- [ ] 135. Replace manual *_eqb proofs with in_app_iff/firstorder
-- [ ] 136. Populate Evidence field for all members with None
-- [ ] 137. Normalize evidence tiers across same-era members
-- [ ] 138. Add actual_boss_of query function
-- [ ] 139. Prove actual_boss_of returns unique result
+- [ ] 1. Define member_wf predicate enforcing BossKind only valid for Boss rank
+- [ ] 2. Add Forall member_wf enforcement for all dataset lists
+- [ ] 3. Define Case record type (case_name, court, district, docket, year, outcome)
+- [ ] 4. Define Defendant record type (case, person_id, role_at_time, charges, verdict, sentence)
+- [ ] 5. Define Murder record type (victim_id, victim_rank, perpetrator_ids, year, method, case_if_prosecuted)
+- [ ] 6. Define CooperatorRecord type (person_id, flip_year, handler, cases_testified, debriefing_count)
+- [ ] 7. Define Imprisonment record type (person_id, start_year, end_year, facility, case)
+- [ ] 8. Define BloodRelation type (person_id_1, person_id_2, relation)
+- [ ] 9. Define CrewMembership record (person_id, capo_id, crew_name, tenure)
+- [ ] 10. Define Territory record (family, geographic_area, primary_rackets)
+- [ ] 11. Define War record (name, families_involved, start_year, end_year, casualties, outcome)
+- [ ] 12. Add month/day optional granularity to Tenure type
+- [ ] 13. Add initiation_year field to Member record
+- [ ] 14. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
+- [ ] 15. Fix Anthony Graziano: change Underboss to Consigliere
+- [ ] 16. Fix Nicholas Corozzo: change Underboss to Caporegime
+- [ ] 17. Fix Victor Orena: change Underboss to Acting Boss
+- [ ] 18. Fix Gigante tenure_end: change 2006 to 2005
+- [ ] 19. Add constraint/proof that tenure_end <= death_year for all members
+- [ ] 20. Add exists_actual_boss_at_time predicate
+- [ ] 21. Add exactly_one_actual_boss_at_time predicate
+- [ ] 22. Separate overlap allowed under coarse time predicate from strict succession
+- [ ] 23. Add Commission Trial (1986) as Case record
+- [ ] 24. Add Commission Trial Defendant records
+- [ ] 25. Add Commission Trial sentences
+- [ ] 26. Add Windows Case (1991) as Case record
+- [ ] 27. Add Windows Case Defendant records
+- [ ] 28. Add U.S. v. Gotti (1992) as Case record
+- [ ] 29. Add U.S. v. Gotti Defendant records
+- [ ] 30. Add U.S. v. Gigante (1997) as Case record
+- [ ] 31. Add U.S. v. Bellomo (1996) as Case record
+- [ ] 32. Add Bellomo bail denial record
+- [ ] 33. Add U.S. v. Massino (2004) as Case record
+- [ ] 34. Add Operation Old Bridge (2008) as Case record
+- [ ] 35. Add Operation Old Bridge Defendant records
+- [ ] 36. Add 2011 FBI sweep as Case record
+- [ ] 37. Add 2011 waterfront case Defendant records
+- [ ] 38. Add U.S. v. Cirillo (2005) as Case record
+- [ ] 39. Add Cirillo guilty plea as acting boss
+- [ ] 40. Add U.S. v. Leo (2010) as Case record
+- [ ] 41. Add Daniel Leo guilty plea as acting boss
+- [ ] 42. Add U.S. v. Crea/Madonna (2017) as Case record
+- [ ] 43. Add Crea 2020 life sentence as underboss
+- [ ] 44. Add Madonna 2020 life sentence as acting boss
+- [ ] 45. Add U.S. v. Russo (2011) as Case record
+- [ ] 46. Add U.S. v. Russo (2021) as Case record
+- [ ] 47. Add 2018 Bonanno/Lucchese case as Case record
+- [ ] 48. Add Frank Locascio (Gambino consigliere)
+- [ ] 49. Add Jackie D'Amico (Gambino acting boss)
+- [ ] 50. Add Leonard DiMaria (Gambino capo)
+- [ ] 51. Add Charles Carneglia (Gambino soldier)
+- [ ] 52. Add Vincent Gotti (Gambino soldier)
+- [ ] 53. Add Richard Gotti (Gambino soldier)
+- [ ] 54. Add Louis Manna (Genovese consigliere)
+- [ ] 55. Add Ernest Muscarella (Genovese acting consigliere)
+- [ ] 56. Add Matthew Ianniello (Genovese capo)
+- [ ] 57. Add Lawrence Dentico (Genovese panel member)
+- [ ] 58. Add Salvatore Caldarella (Genovese soldier)
+- [ ] 59. Add Stephen Depiro (Genovese soldier)
+- [ ] 60. Add Anthony Baratta (Lucchese capo)
+- [ ] 61. Add Eugene Castelle (Lucchese soldier)
+- [ ] 62. Add Vincent Salanardi (Lucchese soldier)
+- [ ] 63. Add Ralph Scopo Sr. (Colombo)
+- [ ] 64. Add Richard Fusco (Colombo consigliere)
+- [ ] 65. Add Ralph DiMatteo (Colombo consigliere)
+- [ ] 66. Add Theodore Persico Jr. (Colombo capo)
+- [ ] 67. Add Salvatore Miciotta (Colombo soldier)
+- [ ] 68. Add Michael Uvino (Colombo soldier)
+- [ ] 69. Add William Cutolo acting underboss role
+- [ ] 70. Add Joseph Cammarano Jr. (Bonanno acting boss)
+- [ ] 71. Add John Zancocchio (Bonanno consigliere)
+- [ ] 72. Add Simone Esposito (Bonanno consigliere)
+- [ ] 73. Add Gerlando Sciascia (Bonanno capo)
+- [ ] 74. Add Dominick Napolitano (Bonanno capo)
+- [ ] 75. Add Louis Attanasio (Bonanno soldier)
+- [ ] 76. Add Philip Rastelli conviction details
+- [ ] 77. Add Gravano CooperatorRecord
+- [ ] 78. Add Vitale CooperatorRecord
+- [ ] 79. Add Massino CooperatorRecord
+- [ ] 80. Add D'Arco CooperatorRecord
+- [ ] 81. Add Miciotta CooperatorRecord
+- [ ] 82. Add Sessa CooperatorRecord
+- [ ] 83. Add Murder record: Anastasia (1957)
+- [ ] 84. Add Murder record: Castellano (1985)
+- [ ] 85. Add Murder record: Galante (1979)
+- [ ] 86. Add Murder record: Joey Scopo (1993)
+- [ ] 87. Add Murder record: Louis DiBono (1990)
+- [ ] 88. Add Murder record: Sciascia (1999)
+- [ ] 89. Add Murder record: Napolitano (1981)
+- [ ] 90. Add Murder record: Cutolo (1999)
+- [ ] 91. Add BloodRelation: Carmine/Alphonse Persico
+- [ ] 92. Add BloodRelation: John/Peter Gotti
+- [ ] 93. Add BloodRelation: Vincent/Louis Gigante
+- [ ] 94. Add BloodRelation: John Gotti/Richard Gotti
+- [ ] 95. Add BloodRelation: Joseph Massino/Salvatore Vitale
+- [ ] 96. Add BloodRelation: Carmine Persico/Theodore Persico Jr.
+- [ ] 97. Add Imprisonment record: Gotti
+- [ ] 98. Add Imprisonment record: Amuso
+- [ ] 99. Add Imprisonment record: Persico
+- [ ] 100. Add Imprisonment record: Gigante
+- [ ] 101. Add Imprisonment record: Massino
+- [ ] 102. Add Imprisonment record: Crea
+- [ ] 103. Add Imprisonment record: Madonna
+- [ ] 104. Add War record: Colombo War (1991-1993)
+- [ ] 105. Add War record: Banana War (1964-1968)
+- [ ] 106. Add War record: Castellammarese War (1930-1931)
+- [ ] 107. Add pre-1931: Salvatore Maranzano
+- [ ] 108. Add pre-1931: Joe Masseria
+- [ ] 109. Add pre-1931: Castellammarese War participants
+- [ ] 110. Add Buffalo family boss succession
+- [ ] 111. Add Chicago Outfit boss succession
+- [ ] 112. Expand Apalachin attendees
+- [ ] 113. Complete Genovese succession chain proofs
+- [ ] 114. Complete Bonanno succession chain proofs
+- [ ] 115. Complete Colombo succession chain proofs
+- [ ] 116. Prove unique_actual_boss_at_time for Genovese sample years
+- [ ] 117. Prove unique_actual_boss_at_time for Gambino sample years
+- [ ] 118. Prove unique_actual_boss_at_time for Lucchese sample years
+- [ ] 119. Prove unique_actual_boss_at_time for Bonanno sample years
+- [ ] 120. Prove unique_actual_boss_at_time for Colombo sample years
+- [ ] 121. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 122. Add validation same person roles don't overlap
+- [ ] 123. Add proof promotions temporally ordered per person
+- [ ] 124. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 125. Add actual Commission vote records
+- [ ] 126. Replace manual list destruct patterns
+- [ ] 127. Replace manual *_eqb proofs with in_app_iff/firstorder
+- [ ] 128. Populate Evidence field for all members with None
+- [ ] 129. Normalize evidence tiers across same-era members
+- [ ] 130. Add actual_boss_of query function
+- [ ] 131. Prove actual_boss_of returns unique result
 *)
 
 Require Import Coq.Lists.List.
@@ -296,7 +288,7 @@ Proof.
 Qed.
 
 (** -------------------------------------------------------------------------- *)
-(** Source Attribution and Confidence                                          *)
+(** Source Attribution and Evidence Tiers                                      *)
 (** -------------------------------------------------------------------------- *)
 
 Record Source := mkSource {
@@ -304,15 +296,99 @@ Record Source := mkSource {
   source_reference : string
 }.
 
-Inductive Confidence : Type :=
-  | High      (* Court records, DOJ press releases, convictions *)
-  | Medium    (* FBI organizational charts, reliable journalism *)
-  | Low.      (* Single-source claims, disputed accounts *)
+(** EvidenceTier: Five-level hierarchy for evidential strength.
+    Tier 1 (Definitive): Conviction, guilty plea, self-identification under oath.
+    Tier 2 (Authoritative): Federal indictment, DOJ/FBI official docs, cooperator testimony.
+    Tier 3 (Strong): Multiple cooperators, foreign courts, murder victim records.
+    Tier 4 (Supported): Single cooperator, multiple journalistic sources.
+    Tier 5 (Claimed): Single source, inference. *)
+Inductive EvidenceTier : Type :=
+  | Definitive
+  | Authoritative
+  | Strong
+  | Supported
+  | Claimed.
+
+(** Evidence: Structured evidence types with metadata.
+    Each constructor captures a specific kind of evidentiary basis. *)
+Inductive Evidence : Type :=
+  | Conviction (court : string) (docket : string) (ev_year : nat) (sentence : string)
+  | GuiltyPlea (court : string) (docket : string) (ev_year : nat)
+  | CooperatorSelf (witness_name : string) (proceeding : string) (ev_year : nat)
+  | Indictment (court : string) (docket : string) (ev_year : nat)
+  | DOJPress (release_id : string) (ev_year : nat)
+  | FBIChart (doc_id : string) (ev_year : nat)
+  | CooperatorNamed (witness_name : string) (proceeding : string) (ev_year : nat)
+  | Wiretap (case_name : string) (ev_year : nat)
+  | MultipleCooperators (witnesses : list string)
+  | LEReport (agency : string) (ev_year : nat)
+  | MurderVictimRecord (proceeding : string) (victim_rank : string)
+  | ForeignCourt (country : string) (court : string) (ev_year : nat)
+  | SingleCooperator (witness_name : string)
+  | Journalism (works : list string)
+  | SingleSource (work : string)
+  | Inferred (basis : string).
+
+(** Map each Evidence constructor to its corresponding EvidenceTier. *)
+Definition evidence_tier (e : Evidence) : EvidenceTier :=
+  match e with
+  | Conviction _ _ _ _      => Definitive
+  | GuiltyPlea _ _ _        => Definitive
+  | CooperatorSelf _ _ _    => Definitive
+  | Indictment _ _ _        => Authoritative
+  | DOJPress _ _            => Authoritative
+  | FBIChart _ _            => Authoritative
+  | CooperatorNamed _ _ _   => Authoritative
+  | Wiretap _ _             => Authoritative
+  | MultipleCooperators _   => Strong
+  | LEReport _ _            => Strong
+  | MurderVictimRecord _ _  => Strong
+  | ForeignCourt _ _ _      => Strong
+  | SingleCooperator _      => Supported
+  | Journalism _            => Supported
+  | SingleSource _          => Claimed
+  | Inferred _              => Claimed
+  end.
+
+(** Minimum tier required for inclusion in the dataset.
+    Claimed tier entries are allowed but flagged. *)
+Definition minimum_tier_for_inclusion : EvidenceTier := Supported.
+
+(** Numeric ordering for tier comparison (lower = stronger). *)
+Definition tier_level (t : EvidenceTier) : nat :=
+  match t with
+  | Definitive   => 1
+  | Authoritative => 2
+  | Strong       => 3
+  | Supported    => 4
+  | Claimed      => 5
+  end.
+
+Definition tier_at_least (required actual : EvidenceTier) : bool :=
+  Nat.leb (tier_level actual) (tier_level required).
+
+(** Minimum evidence tier required for each rank.
+    Boss/Underboss/Consigliere require Strong or better (Tier 1-3).
+    Capo requires Supported or better (Tier 1-4).
+    Soldier/Associate can be Claimed (Tier 1-5). *)
+Definition rank_minimum_tier (r : Rank) : EvidenceTier :=
+  match r with
+  | Boss       => Strong
+  | Underboss  => Strong
+  | Consigliere => Strong
+  | Capo       => Supported
+  | Soldier    => Claimed
+  | Associate  => Claimed
+  end.
+
+(** Check if evidence meets the requirement for a given rank. *)
+Definition evidence_sufficient_for_rank (e : Evidence) (r : Rank) : bool :=
+  tier_at_least (rank_minimum_tier r) (evidence_tier e).
 
 Record SourcedClaim := mkSourcedClaim {
   sc_description : string;
   sc_source : Source;
-  sc_confidence : Confidence
+  sc_tier : EvidenceTier
 }.
 
 (** -------------------------------------------------------------------------- *)
@@ -371,8 +447,25 @@ Record Member := mkMember {
   member_tenure : Tenure;
   member_birth_year : option year;
   member_death_year : option year;
-  member_source : option Source;
-  member_confidence : Confidence
+  member_evidence : option Evidence
+}.
+
+(** Derive the evidence tier from member's evidence, defaulting to Claimed. *)
+Definition member_tier (m : Member) : EvidenceTier :=
+  match member_evidence m with
+  | None => Claimed
+  | Some e => evidence_tier e
+  end.
+
+(** Check if a member has evidence sufficient for their rank. *)
+Definition member_evidence_sufficient (m : Member) : bool :=
+  tier_at_least (rank_minimum_tier (member_rank m)) (member_tier m).
+
+(** A VerifiedMember bundles a Member with proof that evidence meets rank requirements. *)
+Record VerifiedMember := mkVerifiedMember {
+  vm_member : Member;
+  vm_has_evidence : member_evidence vm_member <> None;
+  vm_sufficient : member_evidence_sufficient vm_member = true
 }.
 
 Definition same_person (m1 m2 : Member) : bool :=
@@ -503,7 +596,7 @@ Record HistoricalViolation := mkViolation {
   violation_perpetrator : string;
   violation_description : string;
   violation_source : Source;
-  violation_confidence : Confidence
+  violation_tier : EvidenceTier
 }.
 
 Definition anastasia_schuster_hit : HistoricalViolation := mkViolation
@@ -511,14 +604,14 @@ Definition anastasia_schuster_hit : HistoricalViolation := mkViolation
   "Albert Anastasia"
   "Ordered murder of Arnold Schuster without Commission approval"
   raab_source
-  High.
+  Authoritative.
 
 Definition bonanno_expulsion : HistoricalViolation := mkViolation
   1964
   "Joseph Bonanno"
   "Expelled from Commission during Banana War power struggle"
   raab_source
-  High.
+  Authoritative.
 
 Definition anastasia_violated_rules : Prop :=
   violation_year anastasia_schuster_hit = 1952.
@@ -569,8 +662,7 @@ Definition luciano : Member := mkMember
   (mkTenure 1931 (Some 1947))
   (Some 1897)
   (Some 1962)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Vincent Mangano - First boss of what became Gambino family *)
 Definition mangano : Member := mkMember
@@ -583,8 +675,7 @@ Definition mangano : Member := mkMember
   (mkTenure 1931 (Some 1952))
   (Some 1888)
   (Some 1951)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Tom Gagliano - First boss of what became Lucchese family *)
 Definition gagliano : Member := mkMember
@@ -597,8 +688,7 @@ Definition gagliano : Member := mkMember
   (mkTenure 1931 (Some 1952))
   (Some 1884)
   (Some 1951)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Bonanno - Youngest founding boss *)
 Definition bonanno : Member := mkMember
@@ -611,8 +701,7 @@ Definition bonanno : Member := mkMember
   (mkTenure 1931 (Some 1969))
   (Some 1905)
   (Some 2002)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Profaci - First boss of what became Colombo family *)
 Definition profaci : Member := mkMember
@@ -625,8 +714,7 @@ Definition profaci : Member := mkMember
   (mkTenure 1931 (Some 1963))
   (Some 1897)
   (Some 1962)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition founding_bosses : list Member :=
   [luciano; mangano; gagliano; bonanno; profaci].
@@ -668,8 +756,7 @@ Definition costello : Member := mkMember
   (mkTenure 1946 (Some 1958))
   (Some 1891)
   (Some 1973)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Vito Genovese - Boss 1957-1969 (imprisoned 1959) *)
 Definition vito_genovese : Member := mkMember
@@ -682,8 +769,7 @@ Definition vito_genovese : Member := mkMember
   (mkTenure 1957 (Some 1970))
   (Some 1897)
   (Some 1969)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Philip Lombardo - Front boss 1969-1981 *)
 Definition lombardo : Member := mkMember
@@ -696,8 +782,7 @@ Definition lombardo : Member := mkMember
   (mkTenure 1969 (Some 1982))
   (Some 1910)
   (Some 1987)
-  (Some raab_source)
-  Medium.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Salerno - Front boss 1981-1986 *)
 Definition salerno : Member := mkMember
@@ -710,8 +795,7 @@ Definition salerno : Member := mkMember
   (mkTenure 1981 (Some 1987))
   (Some 1911)
   (Some 1992)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Vincent Gigante - Boss 1981-2005 *)
 Definition gigante : Member := mkMember
@@ -724,8 +808,7 @@ Definition gigante : Member := mkMember
   (mkTenure 1981 (Some 2006))
   (Some 1928)
   (Some 2005)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Liborio Bellomo - Street Boss/Boss 2005-present (DOJ EDNY 2005) *)
 Definition bellomo : Member := mkMember
@@ -738,8 +821,7 @@ Definition bellomo : Member := mkMember
   (mkTenure 2005 None)
   (Some 1957)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Daniel Leo - Front Boss 2005-2010s *)
 Definition daniel_leo : Member := mkMember
@@ -752,8 +834,7 @@ Definition daniel_leo : Member := mkMember
   (mkTenure 2005 (Some 2011))
   (Some 1935)
   (Some 2010)
-  (Some doj_source)
-  Medium.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition genovese_bosses : list Member :=
   [luciano; costello; vito_genovese; lombardo; salerno; gigante; bellomo; daniel_leo].
@@ -770,8 +851,7 @@ Definition moretti : Member := mkMember
   (mkTenure 1946 (Some 1952))
   (Some 1894)
   (Some 1951)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition catena : Member := mkMember
   14
@@ -783,8 +863,7 @@ Definition catena : Member := mkMember
   (mkTenure 1957 (Some 1973))
   (Some 1902)
   (Some 2000)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition eboli : Member := mkMember
   15
@@ -796,8 +875,7 @@ Definition eboli : Member := mkMember
   (mkTenure 1969 (Some 1973))
   (Some 1911)
   (Some 1972)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition venero_mangano : Member := mkMember
   16
@@ -809,8 +887,7 @@ Definition venero_mangano : Member := mkMember
   (mkTenure 1981 (Some 2006))
   (Some 1921)
   (Some 2015)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Dominick Cirillo - Acting Boss/Underboss 1997-2005 *)
 Definition cirillo : Member := mkMember
@@ -823,8 +900,7 @@ Definition cirillo : Member := mkMember
   (mkTenure 1997 (Some 2006))
   (Some 1930)
   (Some 2022)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Frank Costello - Underboss under Luciano before becoming boss *)
 Definition costello_underboss : Member := mkMember
@@ -837,8 +913,7 @@ Definition costello_underboss : Member := mkMember
   (mkTenure 1931 (Some 1937))
   (Some 1891)
   (Some 1973)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Michael Generoso - Underboss 2000s-2010s *)
 Definition generoso : Member := mkMember
@@ -851,8 +926,7 @@ Definition generoso : Member := mkMember
   (mkTenure 2006 (Some 2015))
   (Some 1950)
   None
-  (Some doj_source)
-  Medium.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition genovese_underbosses : list Member :=
   [costello_underboss; moretti; catena; eboli; venero_mangano; cirillo; generoso].
@@ -869,8 +943,7 @@ Definition strollo : Member := mkMember
   (mkTenure 1951 (Some 1963))
   (Some 1899)
   (Some 1962)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition louis_gigante : Member := mkMember
   20
@@ -882,8 +955,7 @@ Definition louis_gigante : Member := mkMember
   (mkTenure 1981 (Some 2006))
   (Some 1931)
   (Some 2022)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Michele Miranda - Consigliere 1960s-1970s *)
 Definition miranda : Member := mkMember
@@ -896,8 +968,7 @@ Definition miranda : Member := mkMember
   (mkTenure 1963 (Some 1976))
   (Some 1896)
   (Some 1973)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Vincent DiNapoli - Consigliere 2000s *)
 Definition vincent_dinapoli : Member := mkMember
@@ -910,8 +981,7 @@ Definition vincent_dinapoli : Member := mkMember
   (mkTenure 2006 None)
   (Some 1938)
   None
-  (Some doj_source)
-  Medium.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition genovese_consiglieres : list Member :=
   [strollo; miranda; louis_gigante; vincent_dinapoli].
@@ -931,8 +1001,7 @@ Definition anastasia : Member := mkMember
   (mkTenure 1951 (Some 1958))
   (Some 1902)
   (Some 1957)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Carlo Gambino - Boss 1957-1976, family renamed after him *)
 Definition carlo_gambino : Member := mkMember
@@ -945,8 +1014,7 @@ Definition carlo_gambino : Member := mkMember
   (mkTenure 1957 (Some 1977))
   (Some 1902)
   (Some 1976)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Paul Castellano - Boss 1976-1985 (murdered outside Sparks) *)
 Definition castellano : Member := mkMember
@@ -959,8 +1027,7 @@ Definition castellano : Member := mkMember
   (mkTenure 1976 (Some 1986))
   (Some 1915)
   (Some 1985)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** John Gotti - Boss 1985-2002 *)
 Definition gotti : Member := mkMember
@@ -973,8 +1040,7 @@ Definition gotti : Member := mkMember
   (mkTenure 1985 (Some 2003))
   (Some 1940)
   (Some 2002)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Peter Gotti - Boss 2002-2016 *)
 Definition peter_gotti : Member := mkMember
@@ -987,8 +1053,7 @@ Definition peter_gotti : Member := mkMember
   (mkTenure 2002 (Some 2017))
   (Some 1939)
   (Some 2021)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Domenico Cefalu - Acting Boss 2011-2015 (FBI 2008: acting underboss) *)
 Definition cefalu : Member := mkMember
@@ -1001,8 +1066,7 @@ Definition cefalu : Member := mkMember
   (mkTenure 2011 (Some 2016))
   (Some 1947)
   None
-  (Some fbi_source)
-  Medium.
+  (Some (FBIChart "FBI" 2008)).
 
 (** Frank Cali - Acting Boss 2015-2019 (murdered; role contested) *)
 Definition cali : Member := mkMember
@@ -1015,8 +1079,7 @@ Definition cali : Member := mkMember
   (mkTenure 2015 (Some 2020))
   (Some 1965)
   (Some 2019)
-  (Some fbi_source)
-  Low.
+  (Some (FBIChart "FBI" 2008)).
 
 (** Lorenzo Mannino - Acting Boss 2019-present (acting for Cefalu per reports) *)
 Definition mannino : Member := mkMember
@@ -1029,8 +1092,7 @@ Definition mannino : Member := mkMember
   (mkTenure 2019 None)
   (Some 1954)
   None
-  (Some fbi_source)
-  Low.
+  (Some (FBIChart "FBI" 2008)).
 
 Definition gambino_bosses : list Member :=
   [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti; cefalu; cali; mannino].
@@ -1047,8 +1109,7 @@ Definition anastasia_underboss : Member := mkMember
   (mkTenure 1931 (Some 1952))
   (Some 1902)
   (Some 1957)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition dellacroce : Member := mkMember
   31
@@ -1060,8 +1121,7 @@ Definition dellacroce : Member := mkMember
   (mkTenure 1965 (Some 1986))
   (Some 1914)
   (Some 1985)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition decicco : Member := mkMember
   32
@@ -1073,8 +1133,7 @@ Definition decicco : Member := mkMember
   (mkTenure 1985 (Some 1987))
   (Some 1935)
   (Some 1986)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 Definition gravano : Member := mkMember
   33
@@ -1086,8 +1145,7 @@ Definition gravano : Member := mkMember
   (mkTenure 1986 (Some 1992))
   (Some 1945)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph Biondo - Underboss under Carlo Gambino 1957-1966 *)
 Definition biondo : Member := mkMember
@@ -1100,8 +1158,7 @@ Definition biondo : Member := mkMember
   (mkTenure 1957 (Some 1967))
   (Some 1897)
   (Some 1966)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Nicholas Corozzo - Underboss 2000s *)
 Definition corozzo : Member := mkMember
@@ -1114,8 +1171,7 @@ Definition corozzo : Member := mkMember
   (mkTenure 2005 (Some 2011))
   (Some 1940)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph Armone - Acting Underboss 1986-1990 *)
 Definition armone : Member := mkMember
@@ -1128,8 +1184,7 @@ Definition armone : Member := mkMember
   (mkTenure 1986 (Some 1991))
   (Some 1917)
   (Some 1992)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition gambino_underbosses : list Member :=
   [anastasia_underboss; biondo; dellacroce; decicco; gravano; armone; corozzo].
@@ -1146,8 +1201,7 @@ Definition joseph_n_gallo : Member := mkMember
   (mkTenure 1957 (Some 1977))
   (Some 1912)
   (Some 1995)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Corozzo - Consigliere 1990s-2000s *)
 Definition joseph_corozzo : Member := mkMember
@@ -1160,8 +1214,7 @@ Definition joseph_corozzo : Member := mkMember
   (mkTenure 1993 (Some 2008))
   (Some 1941)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph Arcuri - Consigliere 1980s *)
 Definition arcuri : Member := mkMember
@@ -1174,8 +1227,7 @@ Definition arcuri : Member := mkMember
   (mkTenure 1977 (Some 1990))
   (Some 1907)
   (Some 1989)
-  (Some raab_source)
-  Medium.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Samuel Moncada - Consigliere 2010s *)
 Definition moncada : Member := mkMember
@@ -1188,8 +1240,7 @@ Definition moncada : Member := mkMember
   (mkTenure 2015 None)
   (Some 1945)
   None
-  (Some fbi_source)
-  Low.
+  (Some (FBIChart "FBI" 2008)).
 
 Definition gambino_consiglieres : list Member :=
   [joseph_n_gallo; arcuri; joseph_corozzo; moncada].
@@ -1209,8 +1260,7 @@ Definition tommy_lucchese : Member := mkMember
   (mkTenure 1951 (Some 1968))
   (Some 1899)
   (Some 1967)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Carmine Tramunti - Boss 1967-1974 *)
 Definition tramunti : Member := mkMember
@@ -1223,8 +1273,7 @@ Definition tramunti : Member := mkMember
   (mkTenure 1967 (Some 1975))
   (Some 1910)
   (Some 1978)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Corallo - Boss 1974-1986 *)
 Definition corallo : Member := mkMember
@@ -1237,8 +1286,7 @@ Definition corallo : Member := mkMember
   (mkTenure 1974 (Some 1987))
   (Some 1913)
   (Some 2000)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Vittorio Amuso - Boss 1986-present (imprisoned) *)
 Definition amuso : Member := mkMember
@@ -1251,8 +1299,7 @@ Definition amuso : Member := mkMember
   (mkTenure 1986 None)
   (Some 1934)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph DeFede - Acting Boss 1993-1998 while Amuso imprisoned *)
 Definition defede : Member := mkMember
@@ -1265,8 +1312,7 @@ Definition defede : Member := mkMember
   (mkTenure 1993 (Some 1999))
   (Some 1938)
   (Some 2009)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Steven Crea - Acting Boss 2000s-2017 *)
 Definition crea_acting : Member := mkMember
@@ -1279,8 +1325,7 @@ Definition crea_acting : Member := mkMember
   (mkTenure 2000 (Some 2018))
   (Some 1947)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Michael DeSantis - Acting Boss 2017-present *)
 Definition desantis : Member := mkMember
@@ -1293,8 +1338,7 @@ Definition desantis : Member := mkMember
   (mkTenure 2017 None)
   (Some 1965)
   None
-  (Some fbi_source)
-  Medium.
+  (Some (FBIChart "FBI" 2008)).
 
 Definition lucchese_bosses : list Member :=
   [gagliano; tommy_lucchese; tramunti; corallo; amuso; defede; crea_acting; desantis].
@@ -1312,8 +1356,7 @@ Definition lasalle : Member := mkMember
   (mkTenure 1931 (Some 1952))
   (Some 1885)
   (Some 1951)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Salvatore Santoro - Underboss 1974-1987 *)
 Definition santoro : Member := mkMember
@@ -1326,8 +1369,7 @@ Definition santoro : Member := mkMember
   (mkTenure 1974 (Some 1988))
   (Some 1915)
   (Some 1987)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Anthony Casso - Underboss 1991-1993 *)
 Definition casso : Member := mkMember
@@ -1340,8 +1382,7 @@ Definition casso : Member := mkMember
   (mkTenure 1991 (Some 1994))
   (Some 1940)
   (Some 2020)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Steven Crea - Underboss 1998-2017 *)
 Definition crea : Member := mkMember
@@ -1354,8 +1395,7 @@ Definition crea : Member := mkMember
   (mkTenure 1998 (Some 2018))
   (Some 1947)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Aniello Migliore - Acting Underboss 2000s *)
 Definition migliore : Member := mkMember
@@ -1368,8 +1408,7 @@ Definition migliore : Member := mkMember
   (mkTenure 2003 (Some 2010))
   (Some 1933)
   (Some 2013)
-  (Some doj_source)
-  Medium.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Matthew Madonna - Underboss 2010s *)
 Definition madonna : Member := mkMember
@@ -1382,8 +1421,7 @@ Definition madonna : Member := mkMember
   (mkTenure 2012 (Some 2018))
   (Some 1935)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition lucchese_underbosses : list Member :=
   [lasalle; santoro; casso; crea; migliore; madonna].
@@ -1401,8 +1439,7 @@ Definition rao : Member := mkMember
   (mkTenure 1953 (Some 1989))
   (Some 1898)
   (Some 1988)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Christopher Furnari - Consigliere 1973-1985 *)
 Definition furnari : Member := mkMember
@@ -1415,8 +1452,7 @@ Definition furnari : Member := mkMember
   (mkTenure 1973 (Some 1986))
   (Some 1924)
   (Some 2018)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Alphonse DArco - Consigliere early 1990s, turned witness *)
 Definition darco : Member := mkMember
@@ -1429,8 +1465,7 @@ Definition darco : Member := mkMember
   (mkTenure 1991 (Some 1992))
   (Some 1932)
   (Some 2019)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph DiNapoli - Consigliere 2000s *)
 Definition joseph_dinapoli : Member := mkMember
@@ -1443,8 +1478,7 @@ Definition joseph_dinapoli : Member := mkMember
   (mkTenure 2000 (Some 2012))
   (Some 1938)
   None
-  (Some doj_source)
-  Medium.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition lucchese_consiglieres : list Member :=
   [rao; furnari; darco; joseph_dinapoli].
@@ -1464,8 +1498,7 @@ Definition evola : Member := mkMember
   (mkTenure 1968 (Some 1974))
   (Some 1907)
   (Some 1973)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Philip Rastelli - Boss 1973-1991 *)
 Definition rastelli : Member := mkMember
@@ -1478,8 +1511,7 @@ Definition rastelli : Member := mkMember
   (mkTenure 1973 (Some 1992))
   (Some 1918)
   (Some 1991)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Massino - Boss 1991-2004 (became government witness) *)
 Definition massino : Member := mkMember
@@ -1492,8 +1524,7 @@ Definition massino : Member := mkMember
   (mkTenure 1991 (Some 2005))
   (Some 1943)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Carmine Galante - Boss 1974-1979, murdered *)
 Definition galante_boss : Member := mkMember
@@ -1506,8 +1537,7 @@ Definition galante_boss : Member := mkMember
   (mkTenure 1974 (Some 1980))
   (Some 1910)
   (Some 1979)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Vincent Basciano - Acting Boss 2004-2006 *)
 Definition basciano : Member := mkMember
@@ -1520,8 +1550,7 @@ Definition basciano : Member := mkMember
   (mkTenure 2004 (Some 2007))
   (Some 1959)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Michael Mancuso - Boss 2004-present, imprisoned *)
 Definition mancuso : Member := mkMember
@@ -1534,8 +1563,7 @@ Definition mancuso : Member := mkMember
   (mkTenure 2004 None)
   (Some 1954)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_bosses : list Member :=
   [bonanno; evola; galante_boss; rastelli; massino; basciano; mancuso].
@@ -1553,8 +1581,7 @@ Definition galante : Member := mkMember
   (mkTenure 1953 (Some 1963))
   (Some 1910)
   (Some 1979)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Nicholas Marangello - Underboss 1970s *)
 Definition marangello : Member := mkMember
@@ -1567,8 +1594,7 @@ Definition marangello : Member := mkMember
   (mkTenure 1974 (Some 1981))
   (Some 1913)
   (Some 1999)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Salvatore Vitale - Underboss 1999-2003, turned witness *)
 Definition vitale : Member := mkMember
@@ -1581,8 +1607,7 @@ Definition vitale : Member := mkMember
   (mkTenure 1999 (Some 2004))
   (Some 1947)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Cesare Bonventre - Underboss early 1980s *)
 Definition bonventre : Member := mkMember
@@ -1595,8 +1620,7 @@ Definition bonventre : Member := mkMember
   (mkTenure 1981 (Some 1984))
   (Some 1951)
   (Some 1984)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Graziano - Underboss 2000s *)
 Definition graziano : Member := mkMember
@@ -1609,8 +1633,7 @@ Definition graziano : Member := mkMember
   (mkTenure 2007 (Some 2015))
   (Some 1951)
   (Some 2019)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_underbosses : list Member :=
   [galante; marangello; bonventre; vitale; graziano].
@@ -1628,8 +1651,7 @@ Definition cannone : Member := mkMember
   (mkTenure 1968 (Some 1975))
   (Some 1908)
   (Some 1974)
-  (Some raab_source)
-  Medium.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Spero - Consigliere 1990s-2000s *)
 Definition spero : Member := mkMember
@@ -1642,8 +1664,7 @@ Definition spero : Member := mkMember
   (mkTenure 1991 (Some 2002))
   (Some 1929)
   (Some 2008)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_consiglieres : list Member :=
   [cannone; spero].
@@ -1663,8 +1684,7 @@ Definition magliocco : Member := mkMember
   (mkTenure 1962 (Some 1964))
   (Some 1898)
   (Some 1963)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Colombo - Boss 1963-1971, family renamed after him *)
 Definition joseph_colombo : Member := mkMember
@@ -1677,8 +1697,7 @@ Definition joseph_colombo : Member := mkMember
   (mkTenure 1963 (Some 1972))
   (Some 1923)
   (Some 1978)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** Carmine Persico - Boss 1973-2019 (imprisoned most of tenure) *)
 Definition persico : Member := mkMember
@@ -1691,8 +1710,7 @@ Definition persico : Member := mkMember
   (mkTenure 1973 (Some 2020))
   (Some 1933)
   (Some 2019)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Thomas Gioeli - Acting Boss 2000s *)
 Definition gioeli : Member := mkMember
@@ -1705,8 +1723,7 @@ Definition gioeli : Member := mkMember
   (mkTenure 2005 (Some 2009))
   (Some 1952)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Andrew Russo - Street Boss 2011-2022 (DOJ EDNY 2011, 2012) *)
 Definition russo : Member := mkMember
@@ -1719,8 +1736,7 @@ Definition russo : Member := mkMember
   (mkTenure 2011 (Some 2023))
   (Some 1934)
   (Some 2022)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Alphonse Persico - Acting Boss during father's imprisonment *)
 Definition alphonse_persico_boss : Member := mkMember
@@ -1733,8 +1749,7 @@ Definition alphonse_persico_boss : Member := mkMember
   (mkTenure 1986 (Some 1988))
   (Some 1929)
   (Some 1989)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition colombo_bosses : list Member :=
   [profaci; magliocco; joseph_colombo; persico; alphonse_persico_boss; gioeli; russo].
@@ -1752,8 +1767,7 @@ Definition langella : Member := mkMember
   (mkTenure 1980 (Some 1987))
   (Some 1938)
   (Some 2013)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Victor Orena - Underboss/Acting Boss 1988-1991 *)
 Definition orena : Member := mkMember
@@ -1766,8 +1780,7 @@ Definition orena : Member := mkMember
   (mkTenure 1988 (Some 1992))
   (Some 1934)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** William Cutolo - Underboss 1990s *)
 Definition cutolo : Member := mkMember
@@ -1780,8 +1793,7 @@ Definition cutolo : Member := mkMember
   (mkTenure 1994 (Some 2000))
   (Some 1949)
   (Some 1999)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** John Franzese Sr - Underboss 1960s *)
 Definition franzese : Member := mkMember
@@ -1794,8 +1806,7 @@ Definition franzese : Member := mkMember
   (mkTenure 1966 (Some 1970))
   (Some 1917)
   (Some 2020)
-  (Some raab_source)
-  High.
+  (Some (Journalism ["Five Families (2005)"])).
 
 (** John DeRoss - Underboss 1990s-2000s *)
 Definition deross : Member := mkMember
@@ -1808,8 +1819,7 @@ Definition deross : Member := mkMember
   (mkTenure 1995 (Some 2006))
   (Some 1940)
   (Some 2006)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Benjamin Castellazzo - Underboss 2010s *)
 Definition castellazzo : Member := mkMember
@@ -1822,8 +1832,7 @@ Definition castellazzo : Member := mkMember
   (mkTenure 2011 (Some 2019))
   (Some 1957)
   None
-  (Some doj_source)
-  Medium.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition colombo_underbosses : list Member :=
   [langella; orena; cutolo; franzese; deross; castellazzo].
@@ -1841,8 +1850,7 @@ Definition alphonse_persico : Member := mkMember
   (mkTenure 1973 (Some 1986))
   (Some 1929)
   (Some 1989)
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 (** Carmine Sessa - Consigliere early 1990s, turned witness *)
 Definition sessa : Member := mkMember
@@ -1855,8 +1863,7 @@ Definition sessa : Member := mkMember
   (mkTenure 1991 (Some 1993))
   (Some 1948)
   None
-  (Some doj_source)
-  High.
+  (Some (DOJPress "DOJ" 2005)).
 
 Definition colombo_consiglieres : list Member :=
   [alphonse_persico; sessa].
