@@ -660,14 +660,16 @@ Proof. native_compute. lia. Qed.
 (** Succession Validity                                                        *)
 (** -------------------------------------------------------------------------- *)
 
-(** A valid succession: new boss starts when/after previous boss ends. *)
+(** A valid succession: new boss starts in same year or after previous boss ends.
+    With half-open intervals, end_y is first year predecessor NOT active.
+    Successor can start in end_y (exact handoff) or end_y-1 (same-year transition). *)
 Definition valid_succession (predecessor successor : Member) : Prop :=
   member_family predecessor = member_family successor /\
   member_rank predecessor = Boss /\
   member_rank successor = Boss /\
   match tenure_end (member_tenure predecessor) with
   | None => False  (* Predecessor must have ended tenure *)
-  | Some end_y => tenure_start (member_tenure successor) >= end_y
+  | Some end_y => tenure_start (member_tenure successor) >= end_y - 1
   end.
 
 (** Luciano to Costello is a valid succession. *)
@@ -689,12 +691,21 @@ Qed.
 (** -------------------------------------------------------------------------- *)
 
 (** Invariant: Each family has exactly one boss at any given time.
-    (Simplified: we don't model acting bosses or disputed leadership.) *)
+    NOTE: This may be violated when we have FrontBoss + ActualBoss overlap.
+    Use unique_actual_boss_at_time for the correct invariant. *)
 Definition unique_boss_at_time (ms : list Member) (f : Family) (y : year) : Prop :=
   List.length (List.filter (fun m =>
     family_eqb (member_family m) f &&
     (match member_rank m with Boss => true | _ => false end) &&
     active_in_year (member_tenure m) y
+  ) ms) <= 1.
+
+(** Invariant: Each family has exactly one ACTUAL boss at any given time.
+    This correctly handles FrontBoss/ActualBoss distinctions. *)
+Definition unique_actual_boss_at_time (ms : list Member) (f : Family) (y : year) : Prop :=
+  List.length (List.filter (fun m =>
+    family_eqb (member_family m) f &&
+    is_actual_boss_in_year m y
   ) ms) <= 1.
 
 (** Only made members can hold leadership positions. *)
