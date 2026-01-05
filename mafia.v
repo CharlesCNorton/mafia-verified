@@ -1088,50 +1088,63 @@ Definition gambino_consiglieres : list Member :=
 
 (** Tommy Lucchese - Boss 1951-1967, family renamed after him *)
 Definition tommy_lucchese : Member := mkMember
+  41
   "Gaetano Lucchese"
   (Some "Three Finger Brown")
   Lucchese
   Boss
   (Some ActualBoss)
-  (mkTenure 1951 (Some 1968))  (* Half-open [1951,1968) *)
+  (mkTenure 1951 (Some 1968))
   (Some 1899)
-  (Some 1967).
+  (Some 1967)
+  (Some raab_source)
+  High.
 
 (** Carmine Tramunti - Boss 1967-1974 *)
 Definition tramunti : Member := mkMember
+  42
   "Carmine Tramunti"
   (Some "Mr. Gribbs")
   Lucchese
   Boss
   (Some ActualBoss)
-  (mkTenure 1967 (Some 1975))  (* Half-open [1967,1975) *)
+  (mkTenure 1967 (Some 1975))
   (Some 1910)
-  (Some 1978).
+  (Some 1978)
+  (Some raab_source)
+  High.
 
 (** Anthony Corallo - Boss 1974-1986 *)
 Definition corallo : Member := mkMember
+  43
   "Anthony Corallo"
   (Some "Tony Ducks")
   Lucchese
   Boss
   (Some ActualBoss)
-  (mkTenure 1974 (Some 1987))  (* Half-open [1974,1987) *)
+  (mkTenure 1974 (Some 1987))
   (Some 1913)
-  (Some 2000).
+  (Some 2000)
+  (Some doj_source)
+  High.
 
 (** Vittorio Amuso - Boss 1986-present (imprisoned) *)
 Definition amuso : Member := mkMember
+  44
   "Vittorio Amuso"
   (Some "Vic")
   Lucchese
   Boss
   (Some ActualBoss)
-  (mkTenure 1986 None)  (* Ongoing *)
+  (mkTenure 1986 None)
   (Some 1934)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Joseph DeFede - Acting Boss 1993-1998 while Amuso imprisoned *)
 Definition defede : Member := mkMember
+  45
   "Joseph DeFede"
   (Some "Little Joe")
   Lucchese
@@ -1139,10 +1152,13 @@ Definition defede : Member := mkMember
   (Some ActingBoss)
   (mkTenure 1993 (Some 1999))
   (Some 1938)
-  (Some 2009).
+  (Some 2009)
+  (Some doj_source)
+  High.
 
 (** Steven Crea - Acting Boss 2000s-2017 *)
 Definition crea_acting : Member := mkMember
+  46
   "Steven Crea"
   (Some "Stevie")
   Lucchese
@@ -1150,10 +1166,13 @@ Definition crea_acting : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2000 (Some 2018))
   (Some 1947)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Michael DeSantis - Acting Boss 2017-present *)
 Definition desantis : Member := mkMember
+  47
   "Michael DeSantis"
   (Some "Big Mike")
   Lucchese
@@ -1161,7 +1180,9 @@ Definition desantis : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2017 None)
   (Some 1965)
-  None.
+  None
+  (Some fbi_source)
+  Medium.
 
 Definition lucchese_bosses : list Member :=
   [gagliano; tommy_lucchese; tramunti; corallo; amuso; defede; crea_acting; desantis].
@@ -1170,6 +1191,7 @@ Definition lucchese_bosses : list Member :=
 
 (** Stefano LaSalle - Underboss under Gagliano 1931-1951 *)
 Definition lasalle : Member := mkMember
+  48
   "Stefano LaSalle"
   None
   Lucchese
@@ -1177,10 +1199,13 @@ Definition lasalle : Member := mkMember
   None
   (mkTenure 1931 (Some 1952))
   (Some 1885)
-  (Some 1951).
+  (Some 1951)
+  (Some raab_source)
+  High.
 
 (** Salvatore Santoro - Underboss 1974-1987 *)
 Definition santoro : Member := mkMember
+  49
   "Salvatore Santoro"
   (Some "Tom Mix")
   Lucchese
@@ -1188,10 +1213,13 @@ Definition santoro : Member := mkMember
   None
   (mkTenure 1974 (Some 1988))
   (Some 1915)
-  (Some 1987).
+  (Some 1987)
+  (Some doj_source)
+  High.
 
 (** Anthony Casso - Underboss 1991-1993 *)
 Definition casso : Member := mkMember
+  50
   "Anthony Casso"
   (Some "Gaspipe")
   Lucchese
@@ -1199,10 +1227,13 @@ Definition casso : Member := mkMember
   None
   (mkTenure 1991 (Some 1994))
   (Some 1940)
-  (Some 2020).
+  (Some 2020)
+  (Some doj_source)
+  High.
 
 (** Steven Crea - Underboss 1998-2017 *)
 Definition crea : Member := mkMember
+  46
   "Steven Crea"
   (Some "Stevie")
   Lucchese
@@ -1210,10 +1241,13 @@ Definition crea : Member := mkMember
   None
   (mkTenure 1998 (Some 2018))
   (Some 1947)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Aniello Migliore - Acting Underboss 2000s *)
 Definition migliore : Member := mkMember
+  51
   "Aniello Migliore"
   (Some "Neil")
   Lucchese
@@ -1221,10 +1255,13 @@ Definition migliore : Member := mkMember
   None
   (mkTenure 2003 (Some 2010))
   (Some 1933)
-  (Some 2013).
+  (Some 2013)
+  (Some doj_source)
+  Medium.
 
 (** Matthew Madonna - Underboss 2010s *)
 Definition madonna : Member := mkMember
+  52
   "Matthew Madonna"
   None
   Lucchese
@@ -1232,7 +1269,9 @@ Definition madonna : Member := mkMember
   None
   (mkTenure 2012 (Some 2018))
   (Some 1935)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 Definition lucchese_underbosses : list Member :=
   [lasalle; santoro; casso; crea; migliore; madonna].
@@ -1241,6 +1280,7 @@ Definition lucchese_underbosses : list Member :=
 
 (** Vincent Rao - Consigliere 1953-1988 *)
 Definition rao : Member := mkMember
+  53
   "Vincent Rao"
   None
   Lucchese
@@ -1248,10 +1288,13 @@ Definition rao : Member := mkMember
   None
   (mkTenure 1953 (Some 1989))
   (Some 1898)
-  (Some 1988).
+  (Some 1988)
+  (Some raab_source)
+  High.
 
 (** Christopher Furnari - Consigliere 1973-1985 *)
 Definition furnari : Member := mkMember
+  54
   "Christopher Furnari"
   (Some "Christie Tick")
   Lucchese
@@ -1259,10 +1302,13 @@ Definition furnari : Member := mkMember
   None
   (mkTenure 1973 (Some 1986))
   (Some 1924)
-  (Some 2018).
+  (Some 2018)
+  (Some doj_source)
+  High.
 
 (** Alphonse DArco - Consigliere early 1990s, turned witness *)
 Definition darco : Member := mkMember
+  55
   "Alphonse DArco"
   (Some "Little Al")
   Lucchese
@@ -1270,10 +1316,13 @@ Definition darco : Member := mkMember
   None
   (mkTenure 1991 (Some 1992))
   (Some 1932)
-  (Some 2019).
+  (Some 2019)
+  (Some doj_source)
+  High.
 
 (** Joseph DiNapoli - Consigliere 2000s *)
 Definition joseph_dinapoli : Member := mkMember
+  56
   "Joseph DiNapoli"
   (Some "Joey Dee")
   Lucchese
@@ -1281,7 +1330,9 @@ Definition joseph_dinapoli : Member := mkMember
   None
   (mkTenure 2000 (Some 2012))
   (Some 1938)
-  None.
+  None
+  (Some doj_source)
+  Medium.
 
 Definition lucchese_consiglieres : list Member :=
   [rao; furnari; darco; joseph_dinapoli].
