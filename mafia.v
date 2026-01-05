@@ -18,140 +18,123 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO                                                                        *)
+(** TODO (111 remaining)                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-- [ ] 1. Define member_wf predicate enforcing BossKind only valid for Boss rank
-- [ ] 2. Add Forall member_wf enforcement for all dataset lists
-- [ ] 3. Define Case record type (case_name, court, district, docket, year, outcome)
-- [ ] 4. Define Defendant record type (case, person_id, role_at_time, charges, verdict, sentence)
-- [ ] 5. Define Murder record type (victim_id, victim_rank, perpetrator_ids, year, method, case_if_prosecuted)
-- [ ] 6. Define CooperatorRecord type (person_id, flip_year, handler, cases_testified, debriefing_count)
-- [ ] 7. Define Imprisonment record type (person_id, start_year, end_year, facility, case)
-- [ ] 8. Define BloodRelation type (person_id_1, person_id_2, relation)
-- [ ] 9. Define CrewMembership record (person_id, capo_id, crew_name, tenure)
-- [ ] 10. Define Territory record (family, geographic_area, primary_rackets)
-- [ ] 11. Define War record (name, families_involved, start_year, end_year, casualties, outcome)
-- [x] 12. Add month/day optional granularity to Tenure type
-- [ ] 13. Add initiation_year field to Member record
-- [ ] 14. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
-- [x] 15. Fix Anthony Graziano: change Underboss to Consigliere
-- [x] 16. Fix Nicholas Corozzo: change Underboss to Caporegime
-- [x] 17. Fix Victor Orena: change Underboss to Acting Boss
-- [x] 18. Fix Gigante tenure_end: change 2006 to 2005
-- [ ] 19. Add constraint/proof that tenure_end <= death_year for all members
-- [ ] 20. Add exists_actual_boss_at_time predicate
-- [ ] 21. Add exactly_one_actual_boss_at_time predicate
-- [ ] 22. Separate overlap allowed under coarse time predicate from strict succession
-- [ ] 23. Add Commission Trial (1986) as Case record
-- [ ] 24. Add Commission Trial Defendant records
-- [ ] 25. Add Commission Trial sentences
-- [ ] 26. Add Windows Case (1991) as Case record
-- [ ] 27. Add Windows Case Defendant records
-- [ ] 28. Add U.S. v. Gotti (1992) as Case record
-- [ ] 29. Add U.S. v. Gotti Defendant records
-- [ ] 30. Add U.S. v. Gigante (1997) as Case record
-- [ ] 31. Add U.S. v. Bellomo (1996) as Case record
-- [ ] 32. Add Bellomo bail denial record
-- [ ] 33. Add U.S. v. Massino (2004) as Case record
-- [ ] 34. Add Operation Old Bridge (2008) as Case record
-- [ ] 35. Add Operation Old Bridge Defendant records
-- [ ] 36. Add 2011 FBI sweep as Case record
-- [ ] 37. Add 2011 waterfront case Defendant records
-- [ ] 38. Add U.S. v. Cirillo (2005) as Case record
-- [ ] 39. Add Cirillo guilty plea as acting boss
-- [ ] 40. Add U.S. v. Leo (2010) as Case record
-- [ ] 41. Add Daniel Leo guilty plea as acting boss
-- [ ] 42. Add U.S. v. Crea/Madonna (2017) as Case record
-- [ ] 43. Add Crea 2020 life sentence as underboss
-- [ ] 44. Add Madonna 2020 life sentence as acting boss
-- [ ] 45. Add U.S. v. Russo (2011) as Case record
-- [ ] 46. Add U.S. v. Russo (2021) as Case record
-- [ ] 47. Add 2018 Bonanno/Lucchese case as Case record
-- [ ] 48. Add Frank Locascio (Gambino consigliere)
-- [ ] 49. Add Jackie D'Amico (Gambino acting boss)
-- [ ] 50. Add Leonard DiMaria (Gambino capo)
-- [ ] 51. Add Charles Carneglia (Gambino soldier)
-- [ ] 52. Add Vincent Gotti (Gambino soldier)
-- [ ] 53. Add Richard Gotti (Gambino soldier)
-- [ ] 54. Add Louis Manna (Genovese consigliere)
-- [ ] 55. Add Ernest Muscarella (Genovese acting consigliere)
-- [ ] 56. Add Matthew Ianniello (Genovese capo)
-- [ ] 57. Add Lawrence Dentico (Genovese panel member)
-- [ ] 58. Add Salvatore Caldarella (Genovese soldier)
-- [ ] 59. Add Stephen Depiro (Genovese soldier)
-- [ ] 60. Add Anthony Baratta (Lucchese capo)
-- [ ] 61. Add Eugene Castelle (Lucchese soldier)
-- [ ] 62. Add Vincent Salanardi (Lucchese soldier)
-- [ ] 63. Add Ralph Scopo Sr. (Colombo)
-- [ ] 64. Add Richard Fusco (Colombo consigliere)
-- [ ] 65. Add Ralph DiMatteo (Colombo consigliere)
-- [ ] 66. Add Theodore Persico Jr. (Colombo capo)
-- [ ] 67. Add Salvatore Miciotta (Colombo soldier)
-- [ ] 68. Add Michael Uvino (Colombo soldier)
-- [ ] 69. Add William Cutolo acting underboss role
-- [ ] 70. Add Joseph Cammarano Jr. (Bonanno acting boss)
-- [ ] 71. Add John Zancocchio (Bonanno consigliere)
-- [ ] 72. Add Simone Esposito (Bonanno consigliere)
-- [ ] 73. Add Gerlando Sciascia (Bonanno capo)
-- [ ] 74. Add Dominick Napolitano (Bonanno capo)
-- [ ] 75. Add Louis Attanasio (Bonanno soldier)
-- [ ] 76. Add Philip Rastelli conviction details
-- [ ] 77. Add Gravano CooperatorRecord
-- [ ] 78. Add Vitale CooperatorRecord
-- [ ] 79. Add Massino CooperatorRecord
-- [ ] 80. Add D'Arco CooperatorRecord
-- [ ] 81. Add Miciotta CooperatorRecord
-- [ ] 82. Add Sessa CooperatorRecord
-- [ ] 83. Add Murder record: Anastasia (1957)
-- [ ] 84. Add Murder record: Castellano (1985)
-- [ ] 85. Add Murder record: Galante (1979)
-- [ ] 86. Add Murder record: Joey Scopo (1993)
-- [ ] 87. Add Murder record: Louis DiBono (1990)
-- [ ] 88. Add Murder record: Sciascia (1999)
-- [ ] 89. Add Murder record: Napolitano (1981)
-- [ ] 90. Add Murder record: Cutolo (1999)
-- [ ] 91. Add BloodRelation: Carmine/Alphonse Persico
-- [ ] 92. Add BloodRelation: John/Peter Gotti
-- [ ] 93. Add BloodRelation: Vincent/Louis Gigante
-- [ ] 94. Add BloodRelation: John Gotti/Richard Gotti
-- [ ] 95. Add BloodRelation: Joseph Massino/Salvatore Vitale
-- [ ] 96. Add BloodRelation: Carmine Persico/Theodore Persico Jr.
-- [ ] 97. Add Imprisonment record: Gotti
-- [ ] 98. Add Imprisonment record: Amuso
-- [ ] 99. Add Imprisonment record: Persico
-- [ ] 100. Add Imprisonment record: Gigante
-- [ ] 101. Add Imprisonment record: Massino
-- [ ] 102. Add Imprisonment record: Crea
-- [ ] 103. Add Imprisonment record: Madonna
-- [ ] 104. Add War record: Colombo War (1991-1993)
-- [ ] 105. Add War record: Banana War (1964-1968)
-- [ ] 106. Add War record: Castellammarese War (1930-1931)
-- [ ] 107. Add pre-1931: Salvatore Maranzano
-- [ ] 108. Add pre-1931: Joe Masseria
-- [ ] 109. Add pre-1931: Castellammarese War participants
-- [ ] 110. Add Buffalo family boss succession
-- [ ] 111. Add Chicago Outfit boss succession
-- [ ] 112. Expand Apalachin attendees
-- [ ] 113. Complete Genovese succession chain proofs
-- [ ] 114. Complete Bonanno succession chain proofs
-- [ ] 115. Complete Colombo succession chain proofs
-- [ ] 116. Prove unique_actual_boss_at_time for Genovese sample years
-- [ ] 117. Prove unique_actual_boss_at_time for Gambino sample years
-- [ ] 118. Prove unique_actual_boss_at_time for Lucchese sample years
-- [ ] 119. Prove unique_actual_boss_at_time for Bonanno sample years
-- [ ] 120. Prove unique_actual_boss_at_time for Colombo sample years
-- [ ] 121. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 122. Add validation same person roles don't overlap
-- [ ] 123. Add proof promotions temporally ordered per person
-- [ ] 124. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 125. Add actual Commission vote records
-- [ ] 126. Replace manual list destruct patterns
-- [ ] 127. Replace manual *_eqb proofs with in_app_iff/firstorder
-- [ ] 128. Populate Evidence field for all members with None
-- [ ] 129. Normalize evidence tiers across same-era members
-- [ ] 130. Add actual_boss_of query function
-- [ ] 131. Prove actual_boss_of returns unique result
+NOTE: Work in progress. Record types defined but not yet populated with data.
+      exists/exactly_one predicates added but proofs not yet complete.
+
+- [ ] 1. Add initiation_year field to Member record
+- [ ] 2. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
+- [ ] 3. Separate overlap allowed under coarse time predicate from strict succession
+- [ ] 4. Add Commission Trial (1986) as Case record
+- [ ] 5. Add Commission Trial Defendant records
+- [ ] 6. Add Commission Trial sentences
+- [ ] 7. Add Windows Case (1991) as Case record
+- [ ] 8. Add Windows Case Defendant records
+- [ ] 9. Add U.S. v. Gotti (1992) as Case record
+- [ ] 10. Add U.S. v. Gotti Defendant records
+- [ ] 11. Add U.S. v. Gigante (1997) as Case record
+- [ ] 12. Add U.S. v. Bellomo (1996) as Case record
+- [ ] 13. Add Bellomo bail denial record
+- [ ] 14. Add U.S. v. Massino (2004) as Case record
+- [ ] 15. Add Operation Old Bridge (2008) as Case record
+- [ ] 16. Add Operation Old Bridge Defendant records
+- [ ] 17. Add 2011 FBI sweep as Case record
+- [ ] 18. Add 2011 waterfront case Defendant records
+- [ ] 19. Add U.S. v. Cirillo (2005) as Case record
+- [ ] 20. Add Cirillo guilty plea as acting boss
+- [ ] 21. Add U.S. v. Leo (2010) as Case record
+- [ ] 22. Add Daniel Leo guilty plea as acting boss
+- [ ] 23. Add U.S. v. Crea/Madonna (2017) as Case record
+- [ ] 24. Add Crea 2020 life sentence as underboss
+- [ ] 25. Add Madonna 2020 life sentence as acting boss
+- [ ] 26. Add U.S. v. Russo (2011) as Case record
+- [ ] 27. Add U.S. v. Russo (2021) as Case record
+- [ ] 28. Add 2018 Bonanno/Lucchese case as Case record
+- [ ] 29. Add Frank Locascio (Gambino consigliere)
+- [ ] 30. Add Jackie D'Amico (Gambino acting boss)
+- [ ] 31. Add Leonard DiMaria (Gambino capo)
+- [ ] 32. Add Charles Carneglia (Gambino soldier)
+- [ ] 33. Add Vincent Gotti (Gambino soldier)
+- [ ] 34. Add Richard Gotti (Gambino soldier)
+- [ ] 35. Add Louis Manna (Genovese consigliere)
+- [ ] 36. Add Ernest Muscarella (Genovese acting consigliere)
+- [ ] 37. Add Matthew Ianniello (Genovese capo)
+- [ ] 38. Add Lawrence Dentico (Genovese panel member)
+- [ ] 39. Add Salvatore Caldarella (Genovese soldier)
+- [ ] 40. Add Stephen Depiro (Genovese soldier)
+- [ ] 41. Add Anthony Baratta (Lucchese capo)
+- [ ] 42. Add Eugene Castelle (Lucchese soldier)
+- [ ] 43. Add Vincent Salanardi (Lucchese soldier)
+- [ ] 44. Add Ralph Scopo Sr. (Colombo)
+- [ ] 45. Add Richard Fusco (Colombo consigliere)
+- [ ] 46. Add Ralph DiMatteo (Colombo consigliere)
+- [ ] 47. Add Theodore Persico Jr. (Colombo capo)
+- [ ] 48. Add Salvatore Miciotta (Colombo soldier)
+- [ ] 49. Add Michael Uvino (Colombo soldier)
+- [ ] 50. Add William Cutolo acting underboss role
+- [ ] 51. Add Joseph Cammarano Jr. (Bonanno acting boss)
+- [ ] 52. Add John Zancocchio (Bonanno consigliere)
+- [ ] 53. Add Simone Esposito (Bonanno consigliere)
+- [ ] 54. Add Gerlando Sciascia (Bonanno capo)
+- [ ] 55. Add Dominick Napolitano (Bonanno capo)
+- [ ] 56. Add Louis Attanasio (Bonanno soldier)
+- [ ] 57. Add Philip Rastelli conviction details
+- [ ] 58. Add Gravano CooperatorRecord
+- [ ] 59. Add Vitale CooperatorRecord
+- [ ] 60. Add Massino CooperatorRecord
+- [ ] 61. Add D'Arco CooperatorRecord
+- [ ] 62. Add Miciotta CooperatorRecord
+- [ ] 63. Add Sessa CooperatorRecord
+- [ ] 64. Add Murder record: Anastasia (1957)
+- [ ] 65. Add Murder record: Castellano (1985)
+- [ ] 66. Add Murder record: Galante (1979)
+- [ ] 67. Add Murder record: Joey Scopo (1993)
+- [ ] 68. Add Murder record: Louis DiBono (1990)
+- [ ] 69. Add Murder record: Sciascia (1999)
+- [ ] 70. Add Murder record: Napolitano (1981)
+- [ ] 71. Add Murder record: Cutolo (1999)
+- [ ] 72. Add BloodRelation: Carmine/Alphonse Persico
+- [ ] 73. Add BloodRelation: John/Peter Gotti
+- [ ] 74. Add BloodRelation: Vincent/Louis Gigante
+- [ ] 75. Add BloodRelation: John Gotti/Richard Gotti
+- [ ] 76. Add BloodRelation: Joseph Massino/Salvatore Vitale
+- [ ] 77. Add BloodRelation: Carmine Persico/Theodore Persico Jr.
+- [ ] 78. Add Imprisonment record: Gotti
+- [ ] 79. Add Imprisonment record: Amuso
+- [ ] 80. Add Imprisonment record: Persico
+- [ ] 81. Add Imprisonment record: Gigante
+- [ ] 82. Add Imprisonment record: Massino
+- [ ] 83. Add Imprisonment record: Crea
+- [ ] 84. Add Imprisonment record: Madonna
+- [ ] 85. Add War record: Colombo War (1991-1993)
+- [ ] 86. Add War record: Banana War (1964-1968)
+- [ ] 87. Add War record: Castellammarese War (1930-1931)
+- [ ] 88. Add pre-1931: Salvatore Maranzano
+- [ ] 89. Add pre-1931: Joe Masseria
+- [ ] 90. Add pre-1931: Castellammarese War participants
+- [ ] 91. Add Buffalo family boss succession
+- [ ] 92. Add Chicago Outfit boss succession
+- [ ] 93. Expand Apalachin attendees
+- [ ] 94. Complete Genovese succession chain proofs
+- [ ] 95. Complete Bonanno succession chain proofs
+- [ ] 96. Complete Colombo succession chain proofs
+- [ ] 97. Prove unique_actual_boss_at_time for Genovese sample years
+- [ ] 98. Prove unique_actual_boss_at_time for Gambino sample years
+- [ ] 99. Prove unique_actual_boss_at_time for Lucchese sample years
+- [ ] 100. Prove unique_actual_boss_at_time for Bonanno sample years
+- [ ] 101. Prove unique_actual_boss_at_time for Colombo sample years
+- [ ] 102. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 103. Add validation same person roles don't overlap
+- [ ] 104. Add proof promotions temporally ordered per person
+- [ ] 105. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 106. Add actual Commission vote records
+- [ ] 107. Replace manual list destruct patterns
+- [ ] 108. Replace manual *_eqb proofs with in_app_iff/firstorder
+- [ ] 109. Populate Evidence field for all members with None
+- [ ] 110. Normalize evidence tiers across same-era members
+- [ ] 111. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -493,6 +476,35 @@ Record VerifiedMember := mkVerifiedMember {
   vm_has_evidence : member_evidence vm_member <> None;
   vm_sufficient : member_evidence_sufficient vm_member = true
 }.
+
+(** Well-formedness: BossKind is only valid for Boss rank. *)
+Definition member_wf (m : Member) : Prop :=
+  match member_rank m with
+  | Boss => True
+  | _ => member_boss_kind m = None
+  end.
+
+Definition member_wf_b (m : Member) : bool :=
+  match member_rank m with
+  | Boss => true
+  | _ => match member_boss_kind m with
+         | None => true
+         | Some _ => false
+         end
+  end.
+
+(** Temporal consistency: tenure_end should not exceed death_year. *)
+Definition tenure_death_consistent (m : Member) : Prop :=
+  match tenure_end (member_tenure m), member_death_year m with
+  | Some t_end, Some d_year => t_end <= d_year + 1
+  | _, _ => True
+  end.
+
+Definition tenure_death_consistent_b (m : Member) : bool :=
+  match tenure_end (member_tenure m), member_death_year m with
+  | Some t_end, Some d_year => Nat.leb t_end (d_year + 1)
+  | _, _ => true
+  end.
 
 Definition same_person (m1 m2 : Member) : bool :=
   Nat.eqb (member_person_id m1) (member_person_id m2).
@@ -2170,6 +2182,20 @@ Definition unique_actual_boss_at_time (ms : list Member) (f : Family) (y : year)
     family_eqb (member_family m) f &&
     is_actual_boss_in_year m y
   ) ms) <= 1.
+
+(** Existence: Each family has at least one actual boss at a given time. *)
+Definition exists_actual_boss_at_time (ms : list Member) (f : Family) (y : year) : Prop :=
+  List.length (List.filter (fun m =>
+    family_eqb (member_family m) f &&
+    is_actual_boss_in_year m y
+  ) ms) >= 1.
+
+(** Exactly one: Combines existence and uniqueness. *)
+Definition exactly_one_actual_boss_at_time (ms : list Member) (f : Family) (y : year) : Prop :=
+  List.length (List.filter (fun m =>
+    family_eqb (member_family m) f &&
+    is_actual_boss_in_year m y
+  ) ms) = 1.
 
 (** Only made members can hold leadership positions. *)
 Lemma leadership_requires_made : forall r,
