@@ -1343,39 +1343,49 @@ Definition lucchese_consiglieres : list Member :=
 
 (** Natale Evola - Boss 1968-1973 *)
 Definition evola : Member := mkMember
+  57
   "Natale Evola"
   None
   Bonanno
   Boss
   (Some ActualBoss)
-  (mkTenure 1968 (Some 1974))  (* Half-open [1968,1974) *)
+  (mkTenure 1968 (Some 1974))
   (Some 1907)
-  (Some 1973).
+  (Some 1973)
+  (Some raab_source)
+  High.
 
 (** Philip Rastelli - Boss 1973-1991 *)
 Definition rastelli : Member := mkMember
+  58
   "Philip Rastelli"
   (Some "Rusty")
   Bonanno
   Boss
   (Some ActualBoss)
-  (mkTenure 1973 (Some 1992))  (* Half-open [1973,1992) *)
+  (mkTenure 1973 (Some 1992))
   (Some 1918)
-  (Some 1991).
+  (Some 1991)
+  (Some raab_source)
+  High.
 
 (** Joseph Massino - Boss 1991-2004 (became government witness) *)
 Definition massino : Member := mkMember
+  59
   "Joseph Massino"
   (Some "Big Joey")
   Bonanno
   Boss
   (Some ActualBoss)
-  (mkTenure 1991 (Some 2005))  (* Half-open [1991,2005) *)
+  (mkTenure 1991 (Some 2005))
   (Some 1943)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Carmine Galante - Boss 1974-1979, murdered *)
 Definition galante_boss : Member := mkMember
+  60
   "Carmine Galante"
   (Some "The Cigar")
   Bonanno
@@ -1383,10 +1393,13 @@ Definition galante_boss : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1974 (Some 1980))
   (Some 1910)
-  (Some 1979).
+  (Some 1979)
+  (Some raab_source)
+  High.
 
 (** Vincent Basciano - Acting Boss 2004-2006 *)
 Definition basciano : Member := mkMember
+  61
   "Vincent Basciano"
   (Some "Vinny Gorgeous")
   Bonanno
@@ -1394,10 +1407,13 @@ Definition basciano : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2004 (Some 2007))
   (Some 1959)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Michael Mancuso - Boss 2004-present, imprisoned *)
 Definition mancuso : Member := mkMember
+  62
   "Michael Mancuso"
   None
   Bonanno
@@ -1405,7 +1421,9 @@ Definition mancuso : Member := mkMember
   (Some ActualBoss)
   (mkTenure 2004 None)
   (Some 1954)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 Definition bonanno_bosses : list Member :=
   [bonanno; evola; galante_boss; rastelli; massino; basciano; mancuso].
@@ -1414,6 +1432,7 @@ Definition bonanno_bosses : list Member :=
 
 (** Carmine Galante - Underboss 1953-1962, later Boss 1974-1979 *)
 Definition galante : Member := mkMember
+  60
   "Carmine Galante"
   (Some "The Cigar")
   Bonanno
@@ -1421,10 +1440,13 @@ Definition galante : Member := mkMember
   None
   (mkTenure 1953 (Some 1963))
   (Some 1910)
-  (Some 1979).
+  (Some 1979)
+  (Some raab_source)
+  High.
 
 (** Nicholas Marangello - Underboss 1970s *)
 Definition marangello : Member := mkMember
+  63
   "Nicholas Marangello"
   (Some "Nicky Glasses")
   Bonanno
@@ -1432,10 +1454,13 @@ Definition marangello : Member := mkMember
   None
   (mkTenure 1974 (Some 1981))
   (Some 1913)
-  (Some 1999).
+  (Some 1999)
+  (Some raab_source)
+  High.
 
 (** Salvatore Vitale - Underboss 1999-2003, turned witness *)
 Definition vitale : Member := mkMember
+  64
   "Salvatore Vitale"
   (Some "Good Looking Sal")
   Bonanno
@@ -1443,10 +1468,13 @@ Definition vitale : Member := mkMember
   None
   (mkTenure 1999 (Some 2004))
   (Some 1947)
-  None.
+  None
+  (Some doj_source)
+  High.
 
 (** Cesare Bonventre - Underboss early 1980s *)
 Definition bonventre : Member := mkMember
+  65
   "Cesare Bonventre"
   (Some "The Tall Guy")
   Bonanno
@@ -1454,10 +1482,13 @@ Definition bonventre : Member := mkMember
   None
   (mkTenure 1981 (Some 1984))
   (Some 1951)
-  (Some 1984).
+  (Some 1984)
+  (Some raab_source)
+  High.
 
 (** Anthony Graziano - Underboss 2000s *)
 Definition graziano : Member := mkMember
+  66
   "Anthony Graziano"
   (Some "TG")
   Bonanno
@@ -1465,7 +1496,9 @@ Definition graziano : Member := mkMember
   None
   (mkTenure 2007 (Some 2015))
   (Some 1951)
-  (Some 2019).
+  (Some 2019)
+  (Some doj_source)
+  High.
 
 Definition bonanno_underbosses : list Member :=
   [galante; marangello; bonventre; vitale; graziano].
@@ -1474,6 +1507,7 @@ Definition bonanno_underbosses : list Member :=
 
 (** Stefano Cannone - Consigliere 1960s-1970s *)
 Definition cannone : Member := mkMember
+  67
   "Stefano Cannone"
   (Some "Stevie Beef")
   Bonanno
@@ -1481,10 +1515,13 @@ Definition cannone : Member := mkMember
   None
   (mkTenure 1968 (Some 1975))
   (Some 1908)
-  (Some 1974).
+  (Some 1974)
+  (Some raab_source)
+  Medium.
 
 (** Anthony Spero - Consigliere 1990s-2000s *)
 Definition spero : Member := mkMember
+  68
   "Anthony Spero"
   None
   Bonanno
@@ -1492,7 +1529,9 @@ Definition spero : Member := mkMember
   None
   (mkTenure 1991 (Some 2002))
   (Some 1929)
-  (Some 2008).
+  (Some 2008)
+  (Some doj_source)
+  High.
 
 Definition bonanno_consiglieres : list Member :=
   [cannone; spero].
