@@ -450,8 +450,30 @@ Definition gigante : Member := mkMember
   (Some 1928)
   (Some 2005).
 
+(** Liborio Bellomo - Boss 2005-present (succeeded Gigante) *)
+Definition bellomo : Member := mkMember
+  "Liborio Bellomo"
+  (Some "Barney")
+  Genovese
+  Boss
+  (Some ActualBoss)
+  (mkTenure 2005 None)  (* Ongoing *)
+  (Some 1957)
+  None.
+
+(** Daniel Leo - Front Boss 2005-2010s *)
+Definition daniel_leo : Member := mkMember
+  "Daniel Leo"
+  None
+  Genovese
+  Boss
+  (Some FrontBoss)
+  (mkTenure 2005 (Some 2011))
+  (Some 1935)
+  (Some 2010).
+
 Definition genovese_bosses : list Member :=
-  [luciano; costello; vito_genovese; lombardo; salerno; gigante].
+  [luciano; costello; vito_genovese; lombardo; salerno; gigante; bellomo; daniel_leo].
 
 (** Genovese Underbosses *)
 
@@ -495,8 +517,41 @@ Definition venero_mangano : Member := mkMember
   (Some 1921)
   (Some 2015).
 
+(** Dominick Cirillo - Acting Boss/Underboss 1997-2005 *)
+Definition cirillo : Member := mkMember
+  "Dominick Cirillo"
+  (Some "Quiet Dom")
+  Genovese
+  Underboss
+  None
+  (mkTenure 1997 (Some 2006))
+  (Some 1930)
+  (Some 2022).
+
+(** Frank Costello - Underboss under Luciano before becoming boss *)
+Definition costello_underboss : Member := mkMember
+  "Frank Costello"
+  (Some "The Prime Minister")
+  Genovese
+  Underboss
+  None
+  (mkTenure 1931 (Some 1937))
+  (Some 1891)
+  (Some 1973).
+
+(** Michael Generoso - Underboss 2000s-2010s *)
+Definition generoso : Member := mkMember
+  "Michael Generoso"
+  None
+  Genovese
+  Underboss
+  None
+  (mkTenure 2006 (Some 2015))
+  (Some 1950)
+  None.
+
 Definition genovese_underbosses : list Member :=
-  [moretti; catena; eboli; venero_mangano].
+  [costello_underboss; moretti; catena; eboli; venero_mangano; cirillo; generoso].
 
 (** Genovese Consiglieres *)
 
@@ -520,8 +575,30 @@ Definition louis_gigante : Member := mkMember
   (Some 1931)
   (Some 2022).
 
+(** Michele Miranda - Consigliere 1960s-1970s *)
+Definition miranda : Member := mkMember
+  "Michele Miranda"
+  (Some "Mike")
+  Genovese
+  Consigliere
+  None
+  (mkTenure 1963 (Some 1976))
+  (Some 1896)
+  (Some 1973).
+
+(** Vincent DiNapoli - Consigliere 2000s *)
+Definition vincent_dinapoli : Member := mkMember
+  "Vincent DiNapoli"
+  (Some "Vinny")
+  Genovese
+  Consigliere
+  None
+  (mkTenure 2006 None)
+  (Some 1938)
+  None.
+
 Definition genovese_consiglieres : list Member :=
-  [strollo; louis_gigante].
+  [strollo; miranda; louis_gigante; vincent_dinapoli].
 
 (** -------------------------------------------------------------------------- *)
 (** Gambino Family Succession                                                  *)
@@ -582,8 +659,41 @@ Definition peter_gotti : Member := mkMember
   (Some 1939)
   (Some 2021).
 
+(** Domenico Cefalu - Boss 2011-2015 *)
+Definition cefalu : Member := mkMember
+  "Domenico Cefalu"
+  (Some "Italian Dom")
+  Gambino
+  Boss
+  (Some ActualBoss)
+  (mkTenure 2011 (Some 2016))
+  (Some 1947)
+  None.
+
+(** Frank Cali - Boss 2015-2019 (murdered at home) *)
+Definition cali : Member := mkMember
+  "Frank Cali"
+  (Some "Franky Boy")
+  Gambino
+  Boss
+  (Some ActualBoss)
+  (mkTenure 2015 (Some 2020))
+  (Some 1965)
+  (Some 2019).
+
+(** Lorenzo Mannino - Boss 2019-present *)
+Definition mannino : Member := mkMember
+  "Lorenzo Mannino"
+  None
+  Gambino
+  Boss
+  (Some ActualBoss)
+  (mkTenure 2019 None)
+  (Some 1954)
+  None.
+
 Definition gambino_bosses : list Member :=
-  [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti].
+  [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti; cefalu; cali; mannino].
 
 (** Gambino Underbosses *)
 
@@ -627,8 +737,41 @@ Definition gravano : Member := mkMember
   (Some 1945)
   None.
 
+(** Joseph Biondo - Underboss under Carlo Gambino 1957-1966 *)
+Definition biondo : Member := mkMember
+  "Joseph Biondo"
+  (Some "Joe the Blonde")
+  Gambino
+  Underboss
+  None
+  (mkTenure 1957 (Some 1967))
+  (Some 1897)
+  (Some 1966).
+
+(** Nicholas Corozzo - Underboss 2000s *)
+Definition corozzo : Member := mkMember
+  "Nicholas Corozzo"
+  (Some "Little Nick")
+  Gambino
+  Underboss
+  None
+  (mkTenure 2005 (Some 2011))
+  (Some 1940)
+  None.
+
+(** Joseph Armone - Acting Underboss 1986-1990 *)
+Definition armone : Member := mkMember
+  "Joseph Armone"
+  (Some "Piney")
+  Gambino
+  Underboss
+  None
+  (mkTenure 1986 (Some 1991))
+  (Some 1917)
+  (Some 1992).
+
 Definition gambino_underbosses : list Member :=
-  [anastasia_underboss; dellacroce; decicco; gravano].
+  [anastasia_underboss; biondo; dellacroce; decicco; gravano; armone; corozzo].
 
 (** Gambino Consiglieres *)
 
@@ -642,8 +785,41 @@ Definition joseph_n_gallo : Member := mkMember
   (Some 1912)
   (Some 1995).
 
+(** Joseph Corozzo - Consigliere 1990s-2000s *)
+Definition joseph_corozzo : Member := mkMember
+  "Joseph Corozzo"
+  (Some "Jo Jo")
+  Gambino
+  Consigliere
+  None
+  (mkTenure 1993 (Some 2008))
+  (Some 1941)
+  None.
+
+(** Joseph Arcuri - Consigliere 1980s *)
+Definition arcuri : Member := mkMember
+  "Joseph Arcuri"
+  None
+  Gambino
+  Consigliere
+  None
+  (mkTenure 1977 (Some 1990))
+  (Some 1907)
+  (Some 1989).
+
+(** Samuel Moncada - Consigliere 2010s *)
+Definition moncada : Member := mkMember
+  "Samuel Moncada"
+  None
+  Gambino
+  Consigliere
+  None
+  (mkTenure 2015 None)
+  (Some 1945)
+  None.
+
 Definition gambino_consiglieres : list Member :=
-  [joseph_n_gallo].
+  [joseph_n_gallo; arcuri; joseph_corozzo; moncada].
 
 (** -------------------------------------------------------------------------- *)
 (** Lucchese Family Succession                                                 *)
@@ -693,8 +869,41 @@ Definition amuso : Member := mkMember
   (Some 1934)
   None.
 
+(** Joseph DeFede - Acting Boss 1993-1998 while Amuso imprisoned *)
+Definition defede : Member := mkMember
+  "Joseph DeFede"
+  (Some "Little Joe")
+  Lucchese
+  Boss
+  (Some ActingBoss)
+  (mkTenure 1993 (Some 1999))
+  (Some 1938)
+  (Some 2009).
+
+(** Steven Crea - Acting Boss 2000s-2017 *)
+Definition crea_acting : Member := mkMember
+  "Steven Crea"
+  (Some "Stevie")
+  Lucchese
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2000 (Some 2018))
+  (Some 1947)
+  None.
+
+(** Michael DeSantis - Acting Boss 2017-present *)
+Definition desantis : Member := mkMember
+  "Michael DeSantis"
+  (Some "Big Mike")
+  Lucchese
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2017 None)
+  (Some 1965)
+  None.
+
 Definition lucchese_bosses : list Member :=
-  [gagliano; tommy_lucchese; tramunti; corallo; amuso].
+  [gagliano; tommy_lucchese; tramunti; corallo; amuso; defede; crea_acting; desantis].
 
 (** Lucchese Underbosses *)
 
@@ -742,8 +951,30 @@ Definition crea : Member := mkMember
   (Some 1947)
   None.
 
+(** Aniello Migliore - Acting Underboss 2000s *)
+Definition migliore : Member := mkMember
+  "Aniello Migliore"
+  (Some "Neil")
+  Lucchese
+  Underboss
+  None
+  (mkTenure 2003 (Some 2010))
+  (Some 1933)
+  (Some 2013).
+
+(** Matthew Madonna - Underboss 2010s *)
+Definition madonna : Member := mkMember
+  "Matthew Madonna"
+  None
+  Lucchese
+  Underboss
+  None
+  (mkTenure 2012 (Some 2018))
+  (Some 1935)
+  None.
+
 Definition lucchese_underbosses : list Member :=
-  [lasalle; santoro; casso; crea].
+  [lasalle; santoro; casso; crea; migliore; madonna].
 
 (** Lucchese Consiglieres *)
 
@@ -780,8 +1011,19 @@ Definition darco : Member := mkMember
   (Some 1932)
   (Some 2019).
 
+(** Joseph DiNapoli - Consigliere 2000s *)
+Definition joseph_dinapoli : Member := mkMember
+  "Joseph DiNapoli"
+  (Some "Joey Dee")
+  Lucchese
+  Consigliere
+  None
+  (mkTenure 2000 (Some 2012))
+  (Some 1938)
+  None.
+
 Definition lucchese_consiglieres : list Member :=
-  [rao; furnari; darco].
+  [rao; furnari; darco; joseph_dinapoli].
 
 (** -------------------------------------------------------------------------- *)
 (** Bonanno Family Succession                                                  *)
@@ -820,8 +1062,41 @@ Definition massino : Member := mkMember
   (Some 1943)
   None.
 
+(** Carmine Galante - Boss 1974-1979, murdered *)
+Definition galante_boss : Member := mkMember
+  "Carmine Galante"
+  (Some "The Cigar")
+  Bonanno
+  Boss
+  (Some ActualBoss)
+  (mkTenure 1974 (Some 1980))
+  (Some 1910)
+  (Some 1979).
+
+(** Vincent Basciano - Acting Boss 2004-2006 *)
+Definition basciano : Member := mkMember
+  "Vincent Basciano"
+  (Some "Vinny Gorgeous")
+  Bonanno
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2004 (Some 2007))
+  (Some 1959)
+  None.
+
+(** Michael Mancuso - Boss 2004-present, imprisoned *)
+Definition mancuso : Member := mkMember
+  "Michael Mancuso"
+  None
+  Bonanno
+  Boss
+  (Some ActualBoss)
+  (mkTenure 2004 None)
+  (Some 1954)
+  None.
+
 Definition bonanno_bosses : list Member :=
-  [bonanno; evola; rastelli; massino].
+  [bonanno; evola; galante_boss; rastelli; massino; basciano; mancuso].
 
 (** Bonanno Underbosses *)
 
@@ -858,8 +1133,30 @@ Definition vitale : Member := mkMember
   (Some 1947)
   None.
 
+(** Cesare Bonventre - Underboss early 1980s *)
+Definition bonventre : Member := mkMember
+  "Cesare Bonventre"
+  (Some "The Tall Guy")
+  Bonanno
+  Underboss
+  None
+  (mkTenure 1981 (Some 1984))
+  (Some 1951)
+  (Some 1984).
+
+(** Anthony Graziano - Underboss 2000s *)
+Definition graziano : Member := mkMember
+  "Anthony Graziano"
+  (Some "TG")
+  Bonanno
+  Underboss
+  None
+  (mkTenure 2007 (Some 2015))
+  (Some 1951)
+  (Some 2019).
+
 Definition bonanno_underbosses : list Member :=
-  [galante; marangello; vitale].
+  [galante; marangello; bonventre; vitale; graziano].
 
 (** Bonanno Consiglieres *)
 
@@ -925,8 +1222,41 @@ Definition persico : Member := mkMember
   (Some 1933)
   (Some 2019).
 
+(** Thomas Gioeli - Acting Boss 2000s *)
+Definition gioeli : Member := mkMember
+  "Thomas Gioeli"
+  (Some "Tommy Shots")
+  Colombo
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2005 (Some 2009))
+  (Some 1952)
+  None.
+
+(** Andrew Russo - Acting Boss 2010s-present *)
+Definition russo : Member := mkMember
+  "Andrew Russo"
+  (Some "Andy Mush")
+  Colombo
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2011 None)
+  (Some 1934)
+  None.
+
+(** Alphonse Persico - Acting Boss during father's imprisonment *)
+Definition alphonse_persico_boss : Member := mkMember
+  "Alphonse Persico"
+  (Some "Allie Boy")
+  Colombo
+  Boss
+  (Some ActingBoss)
+  (mkTenure 1986 (Some 1988))
+  (Some 1929)
+  (Some 1989).
+
 Definition colombo_bosses : list Member :=
-  [profaci; magliocco; joseph_colombo; persico].
+  [profaci; magliocco; joseph_colombo; persico; alphonse_persico_boss; gioeli; russo].
 
 (** Colombo Underbosses *)
 
@@ -974,8 +1304,30 @@ Definition franzese : Member := mkMember
   (Some 1917)
   (Some 2020).
 
+(** John DeRoss - Underboss 1990s-2000s *)
+Definition deross : Member := mkMember
+  "John DeRoss"
+  None
+  Colombo
+  Underboss
+  None
+  (mkTenure 1995 (Some 2006))
+  (Some 1940)
+  (Some 2006).
+
+(** Benjamin Castellazzo - Underboss 2010s *)
+Definition castellazzo : Member := mkMember
+  "Benjamin Castellazzo"
+  (Some "Benji")
+  Colombo
+  Underboss
+  None
+  (mkTenure 2011 (Some 2019))
+  (Some 1957)
+  None.
+
 Definition colombo_underbosses : list Member :=
-  [langella; orena; cutolo; franzese].
+  [langella; orena; cutolo; franzese; deross; castellazzo].
 
 (** Colombo Consiglieres *)
 
@@ -1283,8 +1635,8 @@ Proof. reflexivity. Qed.
 
 Definition total_documented_bosses : nat := List.length all_bosses.
 
-(** We have documented 25 bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 25.
+(** We have documented bosses across all families. *)
+Lemma boss_count : total_documented_bosses = 39.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
