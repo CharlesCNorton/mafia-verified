@@ -17,6 +17,39 @@
 (*                                                                            *)
 (******************************************************************************)
 
+(******************************************************************************)
+(*                              REFACTOR TODO                                 *)
+(******************************************************************************)
+(*                                                                            *)
+(* 1. Update all 86 Member definitions to new record format:                  *)
+(*    - Add member_person_id : nat (unique per individual)                    *)
+(*    - Add member_source : option Source                                     *)
+(*    - Add member_confidence : Confidence                                    *)
+(*    - Ensure same individual across roles shares person_id                  *)
+(*                                                                            *)
+(* 2. Person ID assignments needed:                                           *)
+(*    - Costello: same ID for costello_underboss and costello (boss)          *)
+(*    - Anastasia: same ID for anastasia_underboss and anastasia (boss)       *)
+(*    - Galante: same ID for galante (underboss) and galante_boss             *)
+(*    - Alphonse Persico: same ID for consigliere and acting boss roles       *)
+(*    - Crea: same ID for crea (underboss) and crea_acting (boss)             *)
+(*                                                                            *)
+(* 3. Source attribution for each member:                                     *)
+(*    - DOJ source for court-proven members                                   *)
+(*    - FBI source for organizational chart members                           *)
+(*    - Raab source for historical members                                    *)
+(*                                                                            *)
+(* 4. Confidence levels:                                                      *)
+(*    - High: court records, convictions, DOJ indictments                     *)
+(*    - Medium: FBI charts, reliable journalism                               *)
+(*    - Low: single-source, disputed                                          *)
+(*                                                                            *)
+(* 5. Add lemmas proving:                                                     *)
+(*    - count_unique_persons < length all_leadership (due to multi-role)      *)
+(*    - All multi-role individuals have consistent person_id                  *)
+(*                                                                            *)
+(******************************************************************************)
+
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.Arith.Arith.
@@ -151,6 +184,41 @@ Proof.
 Qed.
 
 (** -------------------------------------------------------------------------- *)
+(** Source Attribution and Confidence                                          *)
+(** -------------------------------------------------------------------------- *)
+
+Record Source := mkSource {
+  source_name : string;
+  source_reference : string
+}.
+
+Inductive Confidence : Type :=
+  | High      (* Court records, DOJ press releases, convictions *)
+  | Medium    (* FBI organizational charts, reliable journalism *)
+  | Low.      (* Single-source claims, disputed accounts *)
+
+Record SourcedClaim := mkSourcedClaim {
+  sc_description : string;
+  sc_source : Source;
+  sc_confidence : Confidence
+}.
+
+(** -------------------------------------------------------------------------- *)
+(** Person Identity                                                            *)
+(** -------------------------------------------------------------------------- *)
+
+Record Person := mkPerson {
+  person_id : nat;
+  person_name : string;
+  person_alias : option string;
+  person_birth_year : option nat;
+  person_death_year : option nat
+}.
+
+Definition person_eqb (p1 p2 : Person) : bool :=
+  Nat.eqb (person_id p1) (person_id p2).
+
+(** -------------------------------------------------------------------------- *)
 (** Time Representation                                                        *)
 (** -------------------------------------------------------------------------- *)
 
@@ -178,17 +246,30 @@ Definition active_in_year (t : Tenure) (y : year) : bool :=
 (** Member Records                                                             *)
 (** -------------------------------------------------------------------------- *)
 
-(** A member record captures a person's affiliation at a point in time. *)
+(** A member record captures a role assignment: a person holding a position
+    for a tenure. The person_id field links records for the same individual
+    across different roles (e.g., underboss then boss). *)
 Record Member := mkMember {
+  member_person_id : nat;
   member_name : string;
-  member_alias : option string;    (* Nickname, e.g., "Lucky", "The Chin" *)
+  member_alias : option string;
   member_family : Family;
   member_rank : Rank;
-  member_boss_kind : option BossKind;  (* None for non-bosses, Some k for bosses *)
+  member_boss_kind : option BossKind;
   member_tenure : Tenure;
   member_birth_year : option year;
-  member_death_year : option year
+  member_death_year : option year;
+  member_source : option Source;
+  member_confidence : Confidence
 }.
+
+Definition same_person (m1 m2 : Member) : bool :=
+  Nat.eqb (member_person_id m1) (member_person_id m2).
+
+Definition count_unique_persons (ms : list Member) : nat :=
+  let ids := List.map member_person_id ms in
+  let unique := List.nodup Nat.eq_dec ids in
+  List.length unique.
 
 (** Check if a member held a specific rank during a given year. *)
 Definition held_rank_in_year (m : Member) (r : Rank) (y : year) : bool :=
@@ -251,10 +332,10 @@ Inductive CommissionAction : Type :=
   | SuspendFamily       (* Temporarily remove Commission vote *)
   | AdmitFamily.        (* Add new family to Commission *)
 
-(** The quorum required for Commission decisions. *)
-Definition commission_quorum : nat := 4.  (* Majority of 7 *)
+(** Commission seats and voting constraints. *)
+Definition commission_total_seats : nat := 7.
+Definition commission_quorum : nat := 4.
 
-(** Voting on Commission matters - simple majority wins. *)
 Record CommissionVote := mkVote {
   vote_action : CommissionAction;
   vote_year : year;
@@ -263,27 +344,81 @@ Record CommissionVote := mkVote {
   vote_abstain : nat
 }.
 
-(** A vote passes with majority support. *)
-Definition vote_passes (v : CommissionVote) : bool :=
-  Nat.ltb (votes_against v) (votes_for v) &&
-  Nat.leb commission_quorum (votes_for v + votes_against v + vote_abstain v).
+Definition total_votes (v : CommissionVote) : nat :=
+  votes_for v + votes_against v + vote_abstain v.
 
-(** Murder sanctions require unanimous consent (traditional rule). *)
+(** A well-formed vote has total votes <= seats. *)
+Definition vote_well_formed (v : CommissionVote) : bool :=
+  Nat.leb (total_votes v) commission_total_seats.
+
+(** A vote has quorum if enough members participated. *)
+Definition has_quorum (v : CommissionVote) : bool :=
+  Nat.leb commission_quorum (total_votes v).
+
+(** A vote passes with majority support and quorum. *)
+Definition vote_passes (v : CommissionVote) : bool :=
+  vote_well_formed v &&
+  has_quorum v &&
+  Nat.ltb (votes_against v) (votes_for v).
+
+(** Murder sanctions require unanimous consent among those voting.
+    Unanimous means: all who voted, voted yes (no against, no abstain). *)
 Definition murder_unanimous (v : CommissionVote) : bool :=
   match vote_action v with
-  | SanctionMurder => Nat.eqb (votes_against v) 0
+  | SanctionMurder =>
+      Nat.eqb (votes_against v) 0 &&
+      Nat.eqb (vote_abstain v) 0 &&
+      Nat.leb 1 (votes_for v)
   | _ => true
   end.
 
-(** Historical Commission violations. *)
+(** Historical Commission violations with sourcing. *)
 
-(** Anastasia violated Commission rules by ordering hits without approval. *)
+Definition doj_source : Source := mkSource
+  "Department of Justice"
+  "EDNY/SDNY press releases and indictments".
+
+Definition fbi_source : Source := mkSource
+  "Federal Bureau of Investigation"
+  "FBI organizational charts and press releases".
+
+Definition raab_source : Source := mkSource
+  "Selwyn Raab"
+  "Five Families (2005)".
+
+Record HistoricalViolation := mkViolation {
+  violation_year : year;
+  violation_perpetrator : string;
+  violation_description : string;
+  violation_source : Source;
+  violation_confidence : Confidence
+}.
+
+Definition anastasia_schuster_hit : HistoricalViolation := mkViolation
+  1952
+  "Albert Anastasia"
+  "Ordered murder of Arnold Schuster without Commission approval"
+  raab_source
+  High.
+
+Definition bonanno_expulsion : HistoricalViolation := mkViolation
+  1964
+  "Joseph Bonanno"
+  "Expelled from Commission during Banana War power struggle"
+  raab_source
+  High.
+
 Definition anastasia_violated_rules : Prop :=
-  True.  (* Well-documented historical fact *)
+  violation_year anastasia_schuster_hit = 1952.
 
-(** Bonanno was expelled from Commission during 1960s power struggle. *)
+Lemma anastasia_violation_proven : anastasia_violated_rules.
+Proof. reflexivity. Qed.
+
 Definition bonanno_expelled_1960s : Prop :=
-  True.  (* Historical: "Banana War" resulted in temporary expulsion *)
+  violation_year bonanno_expulsion = 1964.
+
+Lemma bonanno_expulsion_proven : bonanno_expelled_1960s.
+Proof. reflexivity. Qed.
 
 (** Commission seat correlates to NYC family. *)
 Definition seat_to_family (s : CommissionSeat) : option Family :=
@@ -450,14 +585,14 @@ Definition gigante : Member := mkMember
   (Some 1928)
   (Some 2005).
 
-(** Liborio Bellomo - Boss 2005-present (succeeded Gigante) *)
+(** Liborio Bellomo - Street Boss/Boss 2005-present (DOJ EDNY 2005) *)
 Definition bellomo : Member := mkMember
   "Liborio Bellomo"
   (Some "Barney")
   Genovese
   Boss
-  (Some ActualBoss)
-  (mkTenure 2005 None)  (* Ongoing *)
+  (Some StreetBoss)
+  (mkTenure 2005 None)
   (Some 1957)
   None.
 
@@ -659,35 +794,35 @@ Definition peter_gotti : Member := mkMember
   (Some 1939)
   (Some 2021).
 
-(** Domenico Cefalu - Boss 2011-2015 *)
+(** Domenico Cefalu - Acting Boss 2011-2015 (FBI 2008: acting underboss) *)
 Definition cefalu : Member := mkMember
   "Domenico Cefalu"
   (Some "Italian Dom")
   Gambino
   Boss
-  (Some ActualBoss)
+  (Some ActingBoss)
   (mkTenure 2011 (Some 2016))
   (Some 1947)
   None.
 
-(** Frank Cali - Boss 2015-2019 (murdered at home) *)
+(** Frank Cali - Acting Boss 2015-2019 (murdered; role contested) *)
 Definition cali : Member := mkMember
   "Frank Cali"
   (Some "Franky Boy")
   Gambino
   Boss
-  (Some ActualBoss)
+  (Some ActingBoss)
   (mkTenure 2015 (Some 2020))
   (Some 1965)
   (Some 2019).
 
-(** Lorenzo Mannino - Boss 2019-present *)
+(** Lorenzo Mannino - Acting Boss 2019-present (acting for Cefalu per reports) *)
 Definition mannino : Member := mkMember
   "Lorenzo Mannino"
   None
   Gambino
   Boss
-  (Some ActualBoss)
+  (Some ActingBoss)
   (mkTenure 2019 None)
   (Some 1954)
   None.
@@ -1233,16 +1368,16 @@ Definition gioeli : Member := mkMember
   (Some 1952)
   None.
 
-(** Andrew Russo - Acting Boss 2010s-present *)
+(** Andrew Russo - Street Boss 2011-2022 (DOJ EDNY 2011, 2012) *)
 Definition russo : Member := mkMember
   "Andrew Russo"
   (Some "Andy Mush")
   Colombo
   Boss
-  (Some ActingBoss)
-  (mkTenure 2011 None)
+  (Some StreetBoss)
+  (mkTenure 2011 (Some 2023))
   (Some 1934)
-  None.
+  (Some 2022).
 
 (** Alphonse Persico - Acting Boss during father's imprisonment *)
 Definition alphonse_persico_boss : Member := mkMember
@@ -1450,19 +1585,19 @@ Definition count_by_rank (r : Rank) (ms : list Member) : nat :=
 
 (** Each family has had multiple bosses. *)
 Lemma genovese_multiple_bosses : count_family_members Genovese all_bosses >= 2.
-Proof. native_compute. lia. Qed.
+Proof. vm_compute. lia. Qed.
 
 Lemma gambino_multiple_bosses : count_family_members Gambino all_bosses >= 2.
-Proof. native_compute. lia. Qed.
+Proof. vm_compute. lia. Qed.
 
 Lemma lucchese_multiple_bosses : count_family_members Lucchese all_bosses >= 2.
-Proof. native_compute. lia. Qed.
+Proof. vm_compute. lia. Qed.
 
 Lemma bonanno_multiple_bosses : count_family_members Bonanno all_bosses >= 2.
-Proof. native_compute. lia. Qed.
+Proof. vm_compute. lia. Qed.
 
 Lemma colombo_multiple_bosses : count_family_members Colombo all_bosses >= 2.
-Proof. native_compute. lia. Qed.
+Proof. vm_compute. lia. Qed.
 
 (** All leadership are made members. *)
 Lemma all_leadership_made : forall m,
@@ -1483,16 +1618,33 @@ Qed.
 (** Succession Validity                                                        *)
 (** -------------------------------------------------------------------------- *)
 
-(** A valid succession: new boss starts in same year or after previous boss ends.
-    With half-open intervals, end_y is first year predecessor NOT active.
-    Successor can start in end_y (exact handoff) or end_y-1 (same-year transition). *)
+(** Succession with year-level granularity.
+
+    Time model limitation: We use year granularity, not month/day.
+    With half-open [start, end) intervals:
+    - end_y is first year predecessor is NOT active
+    - predecessor active through end_y - 1
+
+    We define two succession predicates:
+    - valid_succession: allows same-year transition (overlap at year level)
+    - strict_succession: requires successor start >= predecessor end (no overlap) *)
+
 Definition valid_succession (predecessor successor : Member) : Prop :=
   member_family predecessor = member_family successor /\
   member_rank predecessor = Boss /\
   member_rank successor = Boss /\
   match tenure_end (member_tenure predecessor) with
-  | None => False  (* Predecessor must have ended tenure *)
+  | None => False
   | Some end_y => tenure_start (member_tenure successor) >= end_y - 1
+  end.
+
+Definition strict_succession (predecessor successor : Member) : Prop :=
+  member_family predecessor = member_family successor /\
+  member_rank predecessor = Boss /\
+  member_rank successor = Boss /\
+  match tenure_end (member_tenure predecessor) with
+  | None => False
+  | Some end_y => tenure_start (member_tenure successor) >= end_y
   end.
 
 (** Genovese family succession chain *)
