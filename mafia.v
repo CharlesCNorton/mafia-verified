@@ -1059,8 +1059,8 @@ Definition gotti : Member := mkMember
   Boss
   (Some ActualBoss)
   None
-  (mkTenure 1985 (Some 2003))
-  None
+  (mkTenure 1985 (Some 2002))
+  (Some Died)
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1588,15 +1588,27 @@ Definition evola : Member := mkMember
   None
   (Some (Journalism ["Five Families (2005)"])).
 
-(** Philip Rastelli - Boss 1973-1991 *)
+(** Philip Rastelli - Boss 1973-1974 (before Galante takeover) *)
+Definition rastelli_early : Member := mkMember
+  (mkPerson 58 "Philip Rastelli" (Some "Rusty") (Some 1918) (Some 1991))
+  Bonanno
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1973 (Some 1975))
+  (Some Imprisoned)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Philip Rastelli - Boss 1979-1991 (after Galante murdered) *)
 Definition rastelli : Member := mkMember
   (mkPerson 58 "Philip Rastelli" (Some "Rusty") (Some 1918) (Some 1991))
   Bonanno
   Boss
   (Some ActualBoss)
   None
-  (mkTenure 1973 (Some 1992))
-  None
+  (mkTenure 1979 (Some 1992))
+  (Some Died)
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1607,8 +1619,8 @@ Definition massino : Member := mkMember
   Boss
   (Some ActualBoss)
   None
-  (mkTenure 1991 (Some 2005))
-  None
+  (mkTenure 1991 (Some 2004))
+  (Some Imprisoned)
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1620,7 +1632,7 @@ Definition galante_boss : Member := mkMember
   (Some ActualBoss)
   None
   (mkTenure 1974 (Some 1980))
-  None
+  (Some Murdered)
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1649,7 +1661,7 @@ Definition mancuso : Member := mkMember
   (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_bosses : list Member :=
-  [bonanno; evola; galante_boss; rastelli; massino; basciano; mancuso].
+  [bonanno; evola; rastelli_early; galante_boss; rastelli; massino; basciano; mancuso].
 
 (** Bonanno Underbosses *)
 
@@ -2073,6 +2085,15 @@ Record Cooperator := mkCooperator {
   cooperator_notes : option string
 }.
 
+(** Crew: A capo's crew of soldiers. *)
+Record Crew := mkCrew {
+  crew_family : Family;
+  crew_capo_id : nat;           (* person_id of the capo *)
+  crew_soldier_ids : list nat;  (* person_ids of soldiers *)
+  crew_territory : option string;
+  crew_active_years : option (year * option year)  (* start, end *)
+}.
+
 (** Murder record: Sanctioned or unsanctioned killings. *)
 Record Murder := mkMurder {
   murder_victim : string;
@@ -2098,6 +2119,22 @@ Record BloodRelation := mkBloodRelation {
   relation_member1 : Member;
   relation_member2 : Member;
   relation_type : BloodRelationType
+}.
+
+(** Cross-family relation types. *)
+Inductive CrossFamilyRelationType : Type :=
+  | Alliance
+  | MarriageTie
+  | JointOperation
+  | Commission_Coordination.
+
+(** Cross-family relation: Links between different families. *)
+Record CrossFamilyRelation := mkCrossFamilyRelation {
+  cfr_families : list Family;
+  cfr_members : list nat;  (* person_ids involved *)
+  cfr_type : CrossFamilyRelationType;
+  cfr_year : option year;
+  cfr_description : string
 }.
 
 (** Imprisonment record: Incarceration details. *)
@@ -2602,6 +2639,27 @@ Definition gigante_brothers : BloodRelation := mkBloodRelation
 
 Definition all_blood_relations : list BloodRelation :=
   [persico_brothers; gotti_brothers; gigante_brothers].
+
+(** Cross-family relations *)
+
+(** Carlo Gambino and Tommy Lucchese were brothers-in-law *)
+Definition gambino_lucchese_marriage : CrossFamilyRelation := mkCrossFamilyRelation
+  [Gambino; Lucchese]
+  [24; 41]  (* carlo_gambino, tommy_lucchese person_ids *)
+  MarriageTie
+  None
+  "Carlo Gambino married Tommy Lucchese's sister".
+
+(** Anastasia hit was Genovese-Gambino coordination *)
+Definition anastasia_hit_coordination : CrossFamilyRelation := mkCrossFamilyRelation
+  [Genovese; Gambino]
+  [7; 24]  (* vito_genovese, carlo_gambino person_ids *)
+  JointOperation
+  (Some 1957)
+  "Vito Genovese and Carlo Gambino coordinated Anastasia murder".
+
+Definition all_cross_family_relations : list CrossFamilyRelation :=
+  [gambino_lucchese_marriage; anastasia_hit_coordination].
 
 (** -------------------------------------------------------------------------- *)
 (** Imprisonment Records                                                       *)
@@ -3164,7 +3222,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 40.
+Lemma boss_count : total_documented_bosses = 41.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
