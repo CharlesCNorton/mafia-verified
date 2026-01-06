@@ -360,6 +360,7 @@ Record Member := mkMember {
   member_family : Family;
   member_rank : Rank;
   member_boss_kind : option BossKind;
+  member_acting_for : option nat;  (* person_id of boss being acted for *)
   member_tenure : Tenure;
   member_tenure_end_cause : option TenureEndCause;
   member_initiation_year : option year;
@@ -608,6 +609,7 @@ Definition luciano : Member := mkMember
   Genovese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1931 (Some 1947))
   None
   None
@@ -619,6 +621,7 @@ Definition mangano : Member := mkMember
   Gambino
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1931 (Some 1952))
   None
   None
@@ -630,6 +633,7 @@ Definition gagliano : Member := mkMember
   Lucchese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1931 (Some 1952))
   None
   None
@@ -641,6 +645,7 @@ Definition bonanno : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1931 (Some 1969))
   None
   None
@@ -652,6 +657,7 @@ Definition profaci : Member := mkMember
   Colombo
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1931 (Some 1963))
   None
   None
@@ -668,6 +674,7 @@ Definition maranzano : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1930 (Some 1932))
   None
   None
@@ -680,6 +687,7 @@ Definition masseria : Member := mkMember
   Genovese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1922 (Some 1932))
   None
   None
@@ -734,6 +742,7 @@ Definition costello : Member := mkMember
   Genovese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1946 (Some 1958))
   None
   None
@@ -745,6 +754,7 @@ Definition vito_genovese : Member := mkMember
   Genovese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1957 (Some 1970))
   None
   None
@@ -756,6 +766,7 @@ Definition lombardo : Member := mkMember
   Genovese
   Boss
   (Some FrontBoss)
+  None
   (mkTenure 1969 (Some 1982))
   None
   None
@@ -767,6 +778,7 @@ Definition salerno : Member := mkMember
   Genovese
   Boss
   (Some FrontBoss)
+  None
   (mkTenure 1981 (Some 1987))
   None
   None
@@ -778,6 +790,7 @@ Definition gigante : Member := mkMember
   Genovese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1981 (Some 2005))
   None
   None
@@ -789,6 +802,7 @@ Definition bellomo : Member := mkMember
   Genovese
   Boss
   (Some StreetBoss)
+  None
   (mkTenure 2005 None)
   None
   None
@@ -800,6 +814,7 @@ Definition daniel_leo : Member := mkMember
   Genovese
   Boss
   (Some FrontBoss)
+  None
   (mkTenure 2005 (Some 2011))
   None
   None
@@ -815,6 +830,7 @@ Definition moretti : Member := mkMember
   Genovese
   Underboss
   None
+  None
   (mkTenure 1946 (Some 1952))
   None
   None
@@ -824,6 +840,7 @@ Definition catena : Member := mkMember
   (mkPerson 14 "Gerardo Catena" (Some "Jerry") (Some 1902) (Some 2000))
   Genovese
   Underboss
+  None
   None
   (mkTenure 1957 (Some 1973))
   None
@@ -835,6 +852,7 @@ Definition eboli : Member := mkMember
   Genovese
   Underboss
   None
+  None
   (mkTenure 1969 (Some 1973))
   None
   None
@@ -844,6 +862,7 @@ Definition venero_mangano : Member := mkMember
   (mkPerson 16 "Venero Mangano" (Some "Benny Eggs") (Some 1921) (Some 2015))
   Genovese
   Underboss
+  None
   None
   (mkTenure 1981 (Some 2006))
   None
@@ -856,6 +875,7 @@ Definition cirillo : Member := mkMember
   Genovese
   Underboss
   None
+  None
   (mkTenure 1997 (Some 2006))
   None
   None
@@ -867,6 +887,7 @@ Definition costello_underboss : Member := mkMember
   Genovese
   Underboss
   None
+  None
   (mkTenure 1931 (Some 1937))
   None
   None
@@ -877,6 +898,7 @@ Definition generoso : Member := mkMember
   (mkPerson 18 "Michael Generoso" None (Some 1950) None)
   Genovese
   Underboss
+  None
   None
   (mkTenure 2006 (Some 2015))
   None
@@ -893,6 +915,7 @@ Definition strollo : Member := mkMember
   Genovese
   Consigliere
   None
+  None
   (mkTenure 1951 (Some 1963))
   None
   None
@@ -902,6 +925,7 @@ Definition louis_gigante : Member := mkMember
   (mkPerson 20 "Louis Gigante" None (Some 1931) (Some 2022))
   Genovese
   Consigliere
+  None
   None
   (mkTenure 1981 (Some 2006))
   None
@@ -914,6 +938,7 @@ Definition miranda : Member := mkMember
   Genovese
   Consigliere
   None
+  None
   (mkTenure 1963 (Some 1976))
   None
   None
@@ -925,6 +950,7 @@ Definition vincent_dinapoli : Member := mkMember
   Genovese
   Consigliere
   None
+  None
   (mkTenure 2006 None)
   None
   None
@@ -935,6 +961,7 @@ Definition louis_manna : Member := mkMember
   (mkPerson 88 "Louis Manna" (Some "Bobby") (Some 1929) (Some 2018))
   Genovese
   Consigliere
+  None
   None
   (mkTenure 1985 (Some 1989))
   None
@@ -952,6 +979,7 @@ Definition muscarella : Member := mkMember
   Genovese
   Consigliere
   None
+  None
   (mkTenure 1998 (Some 2006))
   None
   None
@@ -963,6 +991,7 @@ Definition ianniello : Member := mkMember
   Genovese
   Capo
   None
+  None
   (mkTenure 1970 (Some 2005))
   None
   None
@@ -973,6 +1002,7 @@ Definition dentico : Member := mkMember
   (mkPerson 91 "Lawrence Dentico" None (Some 1925) (Some 2001))
   Genovese
   Capo
+  None
   None
   (mkTenure 1990 (Some 2001))
   None
@@ -992,6 +1022,7 @@ Definition anastasia : Member := mkMember
   Gambino
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1951 (Some 1958))
   None
   None
@@ -1003,6 +1034,7 @@ Definition carlo_gambino : Member := mkMember
   Gambino
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1957 (Some 1977))
   None
   None
@@ -1014,6 +1046,7 @@ Definition castellano : Member := mkMember
   Gambino
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1976 (Some 1986))
   None
   None
@@ -1025,6 +1058,7 @@ Definition gotti : Member := mkMember
   Gambino
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1985 (Some 2003))
   None
   None
@@ -1036,6 +1070,7 @@ Definition peter_gotti : Member := mkMember
   Gambino
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 2002 (Some 2017))
   None
   None
@@ -1047,6 +1082,7 @@ Definition cefalu : Member := mkMember
   Gambino
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2011 (Some 2016))
   None
   None
@@ -1058,6 +1094,7 @@ Definition cali : Member := mkMember
   Gambino
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2015 (Some 2020))
   None
   None
@@ -1069,6 +1106,7 @@ Definition mannino : Member := mkMember
   Gambino
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2019 None)
   None
   None
@@ -1080,6 +1118,7 @@ Definition damico : Member := mkMember
   Gambino
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2002 (Some 2011))
   None
   None
@@ -1095,6 +1134,7 @@ Definition anastasia_underboss : Member := mkMember
   Gambino
   Underboss
   None
+  None
   (mkTenure 1931 (Some 1952))
   None
   None
@@ -1104,6 +1144,7 @@ Definition dellacroce : Member := mkMember
   (mkPerson 31 "Aniello Dellacroce" (Some "Neil") (Some 1914) (Some 1985))
   Gambino
   Underboss
+  None
   None
   (mkTenure 1965 (Some 1986))
   None
@@ -1115,6 +1156,7 @@ Definition decicco : Member := mkMember
   Gambino
   Underboss
   None
+  None
   (mkTenure 1985 (Some 1987))
   None
   None
@@ -1124,6 +1166,7 @@ Definition gravano : Member := mkMember
   (mkPerson 33 "Salvatore Gravano" (Some "Sammy the Bull") (Some 1945) None)
   Gambino
   Underboss
+  None
   None
   (mkTenure 1986 (Some 1992))
   None
@@ -1136,6 +1179,7 @@ Definition biondo : Member := mkMember
   Gambino
   Underboss
   None
+  None
   (mkTenure 1957 (Some 1967))
   None
   None
@@ -1147,6 +1191,7 @@ Definition corozzo : Member := mkMember
   Gambino
   Capo
   None
+  None
   (mkTenure 1990 (Some 2008))
   None
   None
@@ -1157,6 +1202,7 @@ Definition armone : Member := mkMember
   (mkPerson 36 "Joseph Armone" (Some "Piney") (Some 1917) (Some 1992))
   Gambino
   Underboss
+  None
   None
   (mkTenure 1986 (Some 1991))
   None
@@ -1173,6 +1219,7 @@ Definition joseph_n_gallo : Member := mkMember
   Gambino
   Consigliere
   None
+  None
   (mkTenure 1957 (Some 1977))
   None
   None
@@ -1183,6 +1230,7 @@ Definition joseph_corozzo : Member := mkMember
   (mkPerson 38 "Joseph Corozzo" (Some "Jo Jo") (Some 1941) None)
   Gambino
   Consigliere
+  None
   None
   (mkTenure 1993 (Some 2008))
   None
@@ -1195,6 +1243,7 @@ Definition arcuri : Member := mkMember
   Gambino
   Consigliere
   None
+  None
   (mkTenure 1977 (Some 1990))
   None
   None
@@ -1206,6 +1255,7 @@ Definition moncada : Member := mkMember
   Gambino
   Consigliere
   None
+  None
   (mkTenure 2015 None)
   None
   None
@@ -1216,6 +1266,7 @@ Definition locascio : Member := mkMember
   (mkPerson 82 "Frank Locascio" (Some "Frankie Loc") (Some 1932) (Some 2017))
   Gambino
   Consigliere
+  None
   None
   (mkTenure 1985 (Some 1992))
   None
@@ -1233,6 +1284,7 @@ Definition dimaria : Member := mkMember
   Gambino
   Capo
   None
+  None
   (mkTenure 1980 (Some 2008))
   None
   None
@@ -1249,6 +1301,7 @@ Definition carneglia : Member := mkMember
   Gambino
   Soldier
   None
+  None
   (mkTenure 1977 (Some 2009))
   None
   None
@@ -1260,6 +1313,7 @@ Definition vincent_gotti : Member := mkMember
   Gambino
   Soldier
   None
+  None
   (mkTenure 1980 (Some 2005))
   None
   None
@@ -1270,6 +1324,7 @@ Definition richard_gotti : Member := mkMember
   (mkPerson 87 "Richard Gotti" None (Some 1943) (Some 2023))
   Gambino
   Capo
+  None
   None
   (mkTenure 1985 (Some 2002))
   None
@@ -1289,6 +1344,7 @@ Definition tommy_lucchese : Member := mkMember
   Lucchese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1951 (Some 1968))
   None
   None
@@ -1300,6 +1356,7 @@ Definition tramunti : Member := mkMember
   Lucchese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1967 (Some 1975))
   None
   None
@@ -1311,6 +1368,7 @@ Definition corallo : Member := mkMember
   Lucchese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1974 (Some 1987))
   None
   None
@@ -1322,6 +1380,7 @@ Definition amuso : Member := mkMember
   Lucchese
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1986 None)
   None
   None
@@ -1333,6 +1392,7 @@ Definition defede : Member := mkMember
   Lucchese
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 1993 (Some 1999))
   None
   None
@@ -1344,6 +1404,7 @@ Definition crea_acting : Member := mkMember
   Lucchese
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2000 (Some 2018))
   None
   None
@@ -1355,6 +1416,7 @@ Definition desantis : Member := mkMember
   Lucchese
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2017 None)
   None
   None
@@ -1371,6 +1433,7 @@ Definition lasalle : Member := mkMember
   Lucchese
   Underboss
   None
+  None
   (mkTenure 1931 (Some 1952))
   None
   None
@@ -1381,6 +1444,7 @@ Definition santoro : Member := mkMember
   (mkPerson 49 "Salvatore Santoro" (Some "Tom Mix") (Some 1915) (Some 1987))
   Lucchese
   Underboss
+  None
   None
   (mkTenure 1974 (Some 1988))
   None
@@ -1393,6 +1457,7 @@ Definition casso : Member := mkMember
   Lucchese
   Underboss
   None
+  None
   (mkTenure 1991 (Some 1994))
   None
   None
@@ -1403,6 +1468,7 @@ Definition crea : Member := mkMember
   (mkPerson 46 "Steven Crea" (Some "Stevie") (Some 1947) None)
   Lucchese
   Underboss
+  None
   None
   (mkTenure 1998 (Some 2018))
   None
@@ -1415,6 +1481,7 @@ Definition migliore : Member := mkMember
   Lucchese
   Underboss
   None
+  None
   (mkTenure 2003 (Some 2010))
   None
   None
@@ -1425,6 +1492,7 @@ Definition madonna : Member := mkMember
   (mkPerson 52 "Matthew Madonna" None (Some 1935) None)
   Lucchese
   Underboss
+  None
   None
   (mkTenure 2012 (Some 2018))
   None
@@ -1442,6 +1510,7 @@ Definition rao : Member := mkMember
   Lucchese
   Consigliere
   None
+  None
   (mkTenure 1953 (Some 1989))
   None
   None
@@ -1452,6 +1521,7 @@ Definition furnari : Member := mkMember
   (mkPerson 54 "Christopher Furnari" (Some "Christie Tick") (Some 1924) (Some 2018))
   Lucchese
   Consigliere
+  None
   None
   (mkTenure 1973 (Some 1986))
   None
@@ -1464,6 +1534,7 @@ Definition darco : Member := mkMember
   Lucchese
   Consigliere
   None
+  None
   (mkTenure 1991 (Some 1992))
   None
   None
@@ -1474,6 +1545,7 @@ Definition joseph_dinapoli : Member := mkMember
   (mkPerson 56 "Joseph DiNapoli" (Some "Joey Dee") (Some 1938) None)
   Lucchese
   Consigliere
+  None
   None
   (mkTenure 2000 (Some 2012))
   None
@@ -1490,6 +1562,7 @@ Definition baratta : Member := mkMember
   (mkPerson 92 "Anthony Baratta" (Some "Bowat") (Some 1927) (Some 2009))
   Lucchese
   Capo
+  None
   None
   (mkTenure 1975 (Some 1986))
   None
@@ -1509,6 +1582,7 @@ Definition evola : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1968 (Some 1974))
   None
   None
@@ -1520,6 +1594,7 @@ Definition rastelli : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1973 (Some 1992))
   None
   None
@@ -1531,6 +1606,7 @@ Definition massino : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1991 (Some 2005))
   None
   None
@@ -1542,6 +1618,7 @@ Definition galante_boss : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1974 (Some 1980))
   None
   None
@@ -1553,6 +1630,7 @@ Definition basciano : Member := mkMember
   Bonanno
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2004 (Some 2007))
   None
   None
@@ -1564,6 +1642,7 @@ Definition mancuso : Member := mkMember
   Bonanno
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 2004 None)
   None
   None
@@ -1580,6 +1659,7 @@ Definition galante : Member := mkMember
   Bonanno
   Underboss
   None
+  None
   (mkTenure 1953 (Some 1963))
   None
   None
@@ -1590,6 +1670,7 @@ Definition marangello : Member := mkMember
   (mkPerson 63 "Nicholas Marangello" (Some "Nicky Glasses") (Some 1913) (Some 1999))
   Bonanno
   Underboss
+  None
   None
   (mkTenure 1974 (Some 1981))
   None
@@ -1602,6 +1683,7 @@ Definition vitale : Member := mkMember
   Bonanno
   Underboss
   None
+  None
   (mkTenure 1999 (Some 2004))
   None
   None
@@ -1613,6 +1695,7 @@ Definition bonventre : Member := mkMember
   Bonanno
   Underboss
   None
+  None
   (mkTenure 1981 (Some 1984))
   None
   None
@@ -1623,6 +1706,7 @@ Definition graziano : Member := mkMember
   (mkPerson 66 "Anthony Graziano" (Some "TG") (Some 1951) (Some 2019))
   Bonanno
   Consigliere
+  None
   None
   (mkTenure 2002 (Some 2019))
   None
@@ -1640,6 +1724,7 @@ Definition cannone : Member := mkMember
   Bonanno
   Consigliere
   None
+  None
   (mkTenure 1968 (Some 1975))
   None
   None
@@ -1650,6 +1735,7 @@ Definition spero : Member := mkMember
   (mkPerson 68 "Anthony Spero" None (Some 1929) (Some 2008))
   Bonanno
   Consigliere
+  None
   None
   (mkTenure 1991 (Some 2002))
   None
@@ -1667,6 +1753,7 @@ Definition cammarano : Member := mkMember
   Bonanno
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2013 None)
   None
   None
@@ -1678,6 +1765,7 @@ Definition sciascia : Member := mkMember
   Bonanno
   Capo
   None
+  None
   (mkTenure 1990 (Some 1999))
   None
   None
@@ -1688,6 +1776,7 @@ Definition napolitano : Member := mkMember
   (mkPerson 97 "Dominick Napolitano" (Some "Sonny Black") (Some 1930) (Some 1981))
   Bonanno
   Capo
+  None
   None
   (mkTenure 1977 (Some 1981))
   None
@@ -1707,6 +1796,7 @@ Definition magliocco : Member := mkMember
   Colombo
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1962 (Some 1964))
   None
   None
@@ -1718,6 +1808,7 @@ Definition joseph_colombo : Member := mkMember
   Colombo
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1963 (Some 1972))
   None
   None
@@ -1729,6 +1820,7 @@ Definition persico : Member := mkMember
   Colombo
   Boss
   (Some ActualBoss)
+  None
   (mkTenure 1973 (Some 2020))
   None
   None
@@ -1740,6 +1832,7 @@ Definition gioeli : Member := mkMember
   Colombo
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 2005 (Some 2009))
   None
   None
@@ -1751,6 +1844,7 @@ Definition russo : Member := mkMember
   Colombo
   Boss
   (Some StreetBoss)
+  None
   (mkTenure 2011 (Some 2023))
   None
   None
@@ -1762,6 +1856,7 @@ Definition alphonse_persico_boss : Member := mkMember
   Colombo
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 1986 (Some 1988))
   None
   None
@@ -1779,6 +1874,7 @@ Definition langella : Member := mkMember
   Colombo
   Underboss
   None
+  None
   (mkTenure 1980 (Some 1987))
   None
   None
@@ -1790,6 +1886,7 @@ Definition orena : Member := mkMember
   Colombo
   Boss
   (Some ActingBoss)
+  None
   (mkTenure 1988 (Some 1992))
   None
   None
@@ -1800,6 +1897,7 @@ Definition cutolo : Member := mkMember
   (mkPerson 77 "William Cutolo" (Some "Wild Bill") (Some 1949) (Some 1999))
   Colombo
   Underboss
+  None
   None
   (mkTenure 1994 (Some 2000))
   None
@@ -1812,6 +1910,7 @@ Definition franzese : Member := mkMember
   Colombo
   Underboss
   None
+  None
   (mkTenure 1966 (Some 1970))
   None
   None
@@ -1823,6 +1922,7 @@ Definition deross : Member := mkMember
   Colombo
   Underboss
   None
+  None
   (mkTenure 1995 (Some 2006))
   None
   None
@@ -1833,6 +1933,7 @@ Definition castellazzo : Member := mkMember
   (mkPerson 80 "Benjamin Castellazzo" (Some "Benji") (Some 1957) None)
   Colombo
   Underboss
+  None
   None
   (mkTenure 2011 (Some 2019))
   None
@@ -1854,6 +1955,7 @@ Definition alphonse_persico : Member := mkMember
   Colombo
   Consigliere
   None
+  None
   (mkTenure 1973 (Some 1986))
   None
   None
@@ -1864,6 +1966,7 @@ Definition sessa : Member := mkMember
   (mkPerson 81 "Carmine Sessa" None (Some 1948) None)
   Colombo
   Consigliere
+  None
   None
   (mkTenure 1991 (Some 1993))
   None
@@ -1881,6 +1984,7 @@ Definition scopo : Member := mkMember
   Colombo
   Capo
   None
+  None
   (mkTenure 1975 (Some 1986))
   None
   None
@@ -1891,6 +1995,7 @@ Definition theodore_persico : Member := mkMember
   (mkPerson 94 "Theodore Persico" (Some "Teddy") (Some 1950) None)
   Colombo
   Capo
+  None
   None
   (mkTenure 1985 (Some 2010))
   None
