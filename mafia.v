@@ -18,7 +18,7 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (5 remaining)                                                         *)
+(** TODO (4 remaining)                                                         *)
 (** -------------------------------------------------------------------------- *)
 (**
 NOTE: Work in progress. Record types defined but not yet populated with data.
@@ -72,11 +72,12 @@ DEFERRED (requires extending Family type):
 - [ ] Add Chicago Outfit boss succession
 - [ ] Expand Apalachin attendees (non-NYC families)
 
+- [x] DONE: Add actual_boss_of query function with example lemmas
+
 - [ ] 1. Prove unique_actual_boss_at_time for all families
 - [ ] 2. Prove exactly_one_actual_boss_at_time for each family
 - [ ] 3. Add validation same person roles don't overlap
 - [ ] 4. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 5. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -3226,6 +3227,40 @@ Definition can_sit_commission (r : Rank) : bool :=
   end.
 
 Lemma associate_cannot_commission : can_sit_commission Associate = false.
+Proof. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Query Functions                                                            *)
+(** -------------------------------------------------------------------------- *)
+
+(** Find actual boss for a family in a given year. Returns first match. *)
+Definition actual_boss_of (ms : list Member) (f : Family) (y : year) : option Member :=
+  List.find (fun m =>
+    family_eqb (member_family m) f &&
+    is_actual_boss_in_year m y
+  ) ms.
+
+(** Find all bosses (any kind) for a family in a given year. *)
+Definition bosses_of (ms : list Member) (f : Family) (y : year) : list Member :=
+  List.filter (fun m =>
+    family_eqb (member_family m) f &&
+    (match member_rank m with Boss => true | _ => false end) &&
+    active_in_year (member_tenure m) y
+  ) ms.
+
+(** Example: Find Gambino boss in 1960 (should return Carlo Gambino) *)
+Lemma gambino_boss_1960 :
+  actual_boss_of all_bosses Gambino 1960 = Some carlo_gambino.
+Proof. reflexivity. Qed.
+
+(** Example: Find Genovese boss in 1935 (should return Luciano) *)
+Lemma genovese_boss_1935 :
+  actual_boss_of all_bosses Genovese 1935 = Some luciano.
+Proof. reflexivity. Qed.
+
+(** Example: Find Bonanno boss in 1950 (should return Bonanno) *)
+Lemma bonanno_boss_1950 :
+  actual_boss_of all_bosses Bonanno 1950 = Some bonanno.
 Proof. reflexivity. Qed.
 
 (** -------------------------------------------------------------------------- *)
