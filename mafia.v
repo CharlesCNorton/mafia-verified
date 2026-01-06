@@ -2354,6 +2354,35 @@ Definition russo_2021_case : Case := mkCase
   (Some "Died before trial 2022").
 
 (** -------------------------------------------------------------------------- *)
+(** 2011 FBI Sweep                                                             *)
+(** -------------------------------------------------------------------------- *)
+
+(** Largest single-day mob roundup in FBI history: 127 arrested. *)
+Definition fbi_sweep_2011 : Case := mkCase
+  "2011 FBI Organized Crime Sweep"
+  "E.D.N.Y./S.D.N.Y."
+  None
+  2011
+  (Some 2013)
+  [russo; castellazzo]
+  ["RICO"; "murder"; "extortion"; "gambling"; "loansharking"]
+  (Some "127 arrested across all five families").
+
+(** -------------------------------------------------------------------------- *)
+(** 2018 Bonanno/Lucchese Case                                                 *)
+(** -------------------------------------------------------------------------- *)
+
+Definition bonanno_lucchese_2018 : Case := mkCase
+  "United States v. Zancocchio"
+  "E.D.N.Y."
+  None
+  2018
+  (Some 2019)
+  []
+  ["RICO"; "extortion"; "loansharking"]
+  (Some "Joint Bonanno-Lucchese prosecution").
+
+(** -------------------------------------------------------------------------- *)
 (** Aggregate Membership Database                                              *)
 (** -------------------------------------------------------------------------- *)
 
