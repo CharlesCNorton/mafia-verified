@@ -18,66 +18,12 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (0 remaining - COMPLETE)                                              *)
+(** DEFERRED (requires extending Family type)                                  *)
 (** -------------------------------------------------------------------------- *)
 (**
-NOTE: Work in progress. Record types defined but not yet populated with data.
-      exists/exactly_one predicates added but proofs not yet complete.
-
-- [x] DONE: initiation_year, decide equality, coarse time predicate
-- [x] DONE: Commission Trial case + defendants + sentences
-- [x] DONE: Windows Case + defendants
-- [x] DONE: U.S. v. Gotti (1992) + defendant
-- [x] DONE: U.S. v. Gigante (1997) + defendant
-- [x] DONE: U.S. v. Bellomo (1996) + defendant
-- [x] DONE: U.S. v. Massino (2004) + defendant
-- [x] DONE: Operation Old Bridge (2008)
-- [x] DONE: U.S. v. Cirillo (2005) + guilty plea
-- [x] DONE: U.S. v. Leo (2010) + guilty plea
-- [x] DONE: U.S. v. Crea/Madonna (2017) + life sentences
-- [x] DONE: U.S. v. Russo (2011, 2021)
-- [x] DONE: 2011 FBI sweep as Case record
-- [x] DONE: 2018 Bonanno/Lucchese case as Case record
-- [x] DONE: Frank Locascio (Gambino consigliere)
-- [x] DONE: Jackie D'Amico (Gambino acting boss)
-- [x] DONE: Leonard DiMaria (Gambino capo)
-- [x] DONE: Charles Carneglia (Gambino soldier)
-- [x] DONE: Vincent Gotti (Gambino soldier)
-- [x] DONE: Richard Gotti (Gambino capo)
-- [x] DONE: Louis Manna (Genovese consigliere)
-- [x] DONE: Ernest Muscarella (Genovese acting consigliere)
-- [x] DONE: Matthew Ianniello (Genovese capo)
-- [x] DONE: Lawrence Dentico (Genovese panel member)
-- [x] DONE: Anthony Baratta (Lucchese capo)
-- [x] DONE: Ralph Scopo Sr. (Colombo capo)
-- [x] DONE: Theodore Persico Jr. (Colombo capo)
-- [x] DONE: Joseph Cammarano Jr. (Bonanno acting boss)
-- [x] DONE: Gerlando Sciascia (Bonanno capo)
-- [x] DONE: Dominick Napolitano (Bonanno capo)
-- [x] DONE: Gravano CooperatorRecord
-- [x] DONE: Vitale CooperatorRecord
-- [x] DONE: Massino CooperatorRecord
-- [x] DONE: D'Arco CooperatorRecord
-- [x] DONE: Murder records (Anastasia, Castellano, Galante, Cutolo)
-- [x] DONE: BloodRelations (Persico, Gotti, Gigante brothers)
-- [x] DONE: Imprisonment records (Gotti, Amuso, Persico, Gigante)
-- [x] DONE: War records (Colombo War, Banana War, Castellammarese War)
-- [x] DONE: Pre-1931 bosses (Maranzano, Masseria)
-- [x] DONE: Complete Genovese succession chain proofs
-- [x] DONE: Complete Bonanno succession chain proofs
-- [x] DONE: Complete Colombo succession chain proofs
-
-DEFERRED (requires extending Family type):
 - [ ] Add Buffalo family boss succession
 - [ ] Add Chicago Outfit boss succession
 - [ ] Expand Apalachin attendees (non-NYC families)
-
-- [x] DONE: Add actual_boss_of query function with example lemmas
-- [x] DONE: Role overlap validation (tenures_overlap, roles_dont_overlap)
-- [x] DONE: Uniqueness proofs (count_actual_bosses = 1 for sample years)
-- [x] DONE: Decade coverage proofs (all_families_XXXX for 1935, 1955, 1985, 1995, 2000)
-
-ALL ORIGINAL TODOs COMPLETE.
 *)
 
 Require Import Coq.Lists.List.
