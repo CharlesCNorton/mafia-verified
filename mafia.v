@@ -18,7 +18,7 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (4 remaining)                                                         *)
+(** TODO (3 remaining)                                                         *)
 (** -------------------------------------------------------------------------- *)
 (**
 NOTE: Work in progress. Record types defined but not yet populated with data.
@@ -73,11 +73,11 @@ DEFERRED (requires extending Family type):
 - [ ] Expand Apalachin attendees (non-NYC families)
 
 - [x] DONE: Add actual_boss_of query function with example lemmas
+- [x] DONE: Role overlap validation (tenures_overlap, roles_dont_overlap)
 
 - [ ] 1. Prove unique_actual_boss_at_time for all families
 - [ ] 2. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 3. Add validation same person roles don't overlap
-- [ ] 4. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 3. Prove all 5 families had active bosses each decade 1931-2020
 *)
 
 Require Import Coq.Lists.List.
@@ -3261,6 +3261,34 @@ Proof. reflexivity. Qed.
 (** Example: Find Bonanno boss in 1950 (should return Bonanno) *)
 Lemma bonanno_boss_1950 :
   actual_boss_of all_bosses Bonanno 1950 = Some bonanno.
+Proof. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Role Overlap Validation                                                    *)
+(** -------------------------------------------------------------------------- *)
+
+(** Two tenures overlap if they share at least one year. *)
+Definition tenures_overlap (t1 t2 : Tenure) : bool :=
+  let start1 := tenure_start t1 in
+  let start2 := tenure_start t2 in
+  let end1 := match tenure_end t1 with Some e => e | None => 3000 end in
+  let end2 := match tenure_end t2 with Some e => e | None => 3000 end in
+  Nat.leb start1 (end2 - 1) && Nat.leb start2 (end1 - 1).
+
+(** Check if two member records for the same person have non-overlapping roles. *)
+Definition roles_dont_overlap (m1 m2 : Member) : bool :=
+  negb (same_person m1 m2) ||
+  negb (tenures_overlap (member_tenure m1) (member_tenure m2)).
+
+(** Costello was underboss 1931-1937, then boss 1946-1958 - no overlap. *)
+Lemma costello_roles_sequential :
+  tenures_overlap (member_tenure costello_underboss) (member_tenure costello) = false.
+Proof. reflexivity. Qed.
+
+(** Anastasia was underboss 1931-1952, then boss 1951-1958 - overlap in 1951-1952.
+    This is expected during succession transitions. *)
+Lemma anastasia_transition_overlap :
+  tenures_overlap (member_tenure anastasia_underboss) (member_tenure anastasia) = true.
 Proof. reflexivity. Qed.
 
 (** -------------------------------------------------------------------------- *)
