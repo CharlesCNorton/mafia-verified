@@ -18,7 +18,7 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (13 remaining)                                                        *)
+(** TODO (5 remaining)                                                         *)
 (** -------------------------------------------------------------------------- *)
 (**
 NOTE: Work in progress. Record types defined but not yet populated with data.
@@ -62,20 +62,21 @@ NOTE: Work in progress. Record types defined but not yet populated with data.
 - [x] DONE: BloodRelations (Persico, Gotti, Gigante brothers)
 - [x] DONE: Imprisonment records (Gotti, Amuso, Persico, Gigante)
 - [x] DONE: War records (Colombo War, Banana War, Castellammarese War)
+- [x] DONE: Pre-1931 bosses (Maranzano, Masseria)
+- [x] DONE: Complete Genovese succession chain proofs
+- [x] DONE: Complete Bonanno succession chain proofs
+- [x] DONE: Complete Colombo succession chain proofs
 
-- [ ] 1. Add pre-1931: Salvatore Maranzano
-- [ ] 2. Add pre-1931: Joe Masseria
-- [ ] 3. Add Buffalo family boss succession
-- [ ] 4. Add Chicago Outfit boss succession
-- [ ] 5. Expand Apalachin attendees
-- [ ] 6. Complete Genovese succession chain proofs
-- [ ] 7. Complete Bonanno succession chain proofs
-- [ ] 8. Complete Colombo succession chain proofs
-- [ ] 9. Prove unique_actual_boss_at_time for all families
-- [ ] 10. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 11. Add validation same person roles don't overlap
-- [ ] 12. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 13. Add actual_boss_of query function and prove uniqueness
+DEFERRED (requires extending Family type):
+- [ ] Add Buffalo family boss succession
+- [ ] Add Chicago Outfit boss succession
+- [ ] Expand Apalachin attendees (non-NYC families)
+
+- [ ] 1. Prove unique_actual_boss_at_time for all families
+- [ ] 2. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 3. Add validation same person roles don't overlap
+- [ ] 4. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 5. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -716,6 +717,52 @@ Definition profaci : Member := mkMember
   (Some 1962)
   None
   (Some (Journalism ["Five Families (2005)"])).
+
+(** -------------------------------------------------------------------------- *)
+(** Pre-1931 Bosses (Castellammarese War Era)                                  *)
+(** -------------------------------------------------------------------------- *)
+
+(** Salvatore Maranzano - Boss of Bosses 1931, killed same year *)
+Definition maranzano : Member := mkMember
+  98
+  "Salvatore Maranzano"
+  (Some "Little Caesar")
+  Bonanno  (* His organization became Bonanno family *)
+  Boss
+  (Some ActualBoss)
+  (mkTenure 1930 (Some 1932))
+  (Some 1886)
+  (Some 1931)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Joe Masseria - Boss, killed 1931 ending Castellammarese War *)
+Definition masseria : Member := mkMember
+  99
+  "Giuseppe Masseria"
+  (Some "Joe the Boss")
+  Genovese  (* His organization became Genovese family *)
+  Boss
+  (Some ActualBoss)
+  (mkTenure 1922 (Some 1932))
+  (Some 1886)
+  (Some 1931)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+Definition pre_1931_bosses : list Member :=
+  [maranzano; masseria].
+
+(** Both pre-1931 bosses were killed in 1931. *)
+Lemma pre_1931_bosses_killed_1931 :
+  forall m, In m pre_1931_bosses -> member_death_year m = Some 1931.
+Proof.
+  intros m Hin.
+  simpl in Hin.
+  destruct Hin as [H | [H | H]];
+    try (rewrite <- H; reflexivity);
+    contradiction.
+Qed.
 
 Definition founding_bosses : list Member :=
   [luciano; mangano; gagliano; bonanno; profaci].
@@ -3087,6 +3134,44 @@ Proof.
   - apply tommy_tramunti_succession.
   - apply tramunti_corallo_succession.
   - apply corallo_amuso_succession.
+Qed.
+
+(** Additional Genovese succession lemmas *)
+(** Note: Salerno (FrontBoss) and Gigante (ActualBoss) overlapped 1981-1987.
+    Succession chain tracks ActualBoss transitions only. Lombardo -> Gigante
+    reflects the actual power transition. *)
+Lemma lombardo_gigante_succession : valid_succession lombardo gigante.
+Proof. unfold valid_succession, lombardo, gigante. simpl. repeat split; lia. Qed.
+
+(** The complete Genovese boss succession is a valid chain (actual bosses only). *)
+Lemma genovese_complete_chain :
+  valid_chain [luciano; costello; vito_genovese; lombardo; gigante].
+Proof.
+  simpl. repeat split.
+  - apply luciano_costello_succession.
+  - apply costello_vito_succession.
+  - apply vito_lombardo_succession.
+  - apply lombardo_gigante_succession.
+Qed.
+
+(** The complete Bonanno boss succession is a valid chain. *)
+Lemma bonanno_complete_chain :
+  valid_chain [bonanno; evola; rastelli; massino].
+Proof.
+  simpl. repeat split.
+  - apply bonanno_evola_succession.
+  - apply evola_rastelli_succession.
+  - apply rastelli_massino_succession.
+Qed.
+
+(** The complete Colombo boss succession is a valid chain. *)
+Lemma colombo_complete_chain :
+  valid_chain [profaci; magliocco; joseph_colombo; persico].
+Proof.
+  simpl. repeat split.
+  - apply profaci_magliocco_succession.
+  - apply magliocco_colombo_succession.
+  - apply colombo_persico_succession.
 Qed.
 
 (** -------------------------------------------------------------------------- *)
