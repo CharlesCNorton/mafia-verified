@@ -305,6 +305,15 @@ Record Tenure := mkTenure {
   tenure_end : option year
 }.
 
+(** Reason a tenure ended. *)
+Inductive TenureEndCause : Type :=
+  | Murdered
+  | Imprisoned
+  | Died
+  | Resigned
+  | Removed
+  | Superseded.  (* Replaced by successor without removal *)
+
 (** Active in year y iff start <= y < end (half-open interval). *)
 Definition active_in_year (t : Tenure) (y : year) : bool :=
   Nat.leb (tenure_start t) y &&
@@ -352,6 +361,7 @@ Record Member := mkMember {
   member_rank : Rank;
   member_boss_kind : option BossKind;
   member_tenure : Tenure;
+  member_tenure_end_cause : option TenureEndCause;
   member_initiation_year : option year;
   member_evidence : option Evidence
 }.
@@ -600,6 +610,7 @@ Definition luciano : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1931 (Some 1947))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Vincent Mangano - First boss of what became Gambino family *)
@@ -609,6 +620,7 @@ Definition mangano : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1931 (Some 1952))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -620,6 +632,7 @@ Definition gagliano : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1931 (Some 1952))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Bonanno - Youngest founding boss *)
@@ -630,6 +643,7 @@ Definition bonanno : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1931 (Some 1969))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Profaci - First boss of what became Colombo family *)
@@ -639,6 +653,7 @@ Definition profaci : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1931 (Some 1963))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -655,6 +670,7 @@ Definition maranzano : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1930 (Some 1932))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Joe Masseria - Boss, killed 1931 ending Castellammarese War.
@@ -665,6 +681,7 @@ Definition masseria : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1922 (Some 1932))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -719,6 +736,7 @@ Definition costello : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1946 (Some 1958))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Vito Genovese - Boss 1957-1969 (imprisoned 1959) *)
@@ -728,6 +746,7 @@ Definition vito_genovese : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1957 (Some 1970))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -739,6 +758,7 @@ Definition lombardo : Member := mkMember
   (Some FrontBoss)
   (mkTenure 1969 (Some 1982))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Salerno - Front boss 1981-1986 *)
@@ -748,6 +768,7 @@ Definition salerno : Member := mkMember
   Boss
   (Some FrontBoss)
   (mkTenure 1981 (Some 1987))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -759,6 +780,7 @@ Definition gigante : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1981 (Some 2005))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Liborio Bellomo - Street Boss/Boss 2005-present (DOJ EDNY 2005) *)
@@ -769,6 +791,7 @@ Definition bellomo : Member := mkMember
   (Some StreetBoss)
   (mkTenure 2005 None)
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Daniel Leo - Front Boss 2005-2010s *)
@@ -778,6 +801,7 @@ Definition daniel_leo : Member := mkMember
   Boss
   (Some FrontBoss)
   (mkTenure 2005 (Some 2011))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -793,6 +817,7 @@ Definition moretti : Member := mkMember
   None
   (mkTenure 1946 (Some 1952))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 Definition catena : Member := mkMember
@@ -801,6 +826,7 @@ Definition catena : Member := mkMember
   Underboss
   None
   (mkTenure 1957 (Some 1973))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -811,6 +837,7 @@ Definition eboli : Member := mkMember
   None
   (mkTenure 1969 (Some 1973))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 Definition venero_mangano : Member := mkMember
@@ -819,6 +846,7 @@ Definition venero_mangano : Member := mkMember
   Underboss
   None
   (mkTenure 1981 (Some 2006))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -830,6 +858,7 @@ Definition cirillo : Member := mkMember
   None
   (mkTenure 1997 (Some 2006))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Frank Costello - Underboss under Luciano before becoming boss *)
@@ -840,6 +869,7 @@ Definition costello_underboss : Member := mkMember
   None
   (mkTenure 1931 (Some 1937))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Michael Generoso - Underboss 2000s-2010s *)
@@ -849,6 +879,7 @@ Definition generoso : Member := mkMember
   Underboss
   None
   (mkTenure 2006 (Some 2015))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -864,6 +895,7 @@ Definition strollo : Member := mkMember
   None
   (mkTenure 1951 (Some 1963))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 Definition louis_gigante : Member := mkMember
@@ -872,6 +904,7 @@ Definition louis_gigante : Member := mkMember
   Consigliere
   None
   (mkTenure 1981 (Some 2006))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -883,6 +916,7 @@ Definition miranda : Member := mkMember
   None
   (mkTenure 1963 (Some 1976))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Vincent DiNapoli - Consigliere 2000s *)
@@ -893,6 +927,7 @@ Definition vincent_dinapoli : Member := mkMember
   None
   (mkTenure 2006 None)
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Louis Manna - Consigliere 1980s, convicted 1989 for Gotti murder plot *)
@@ -902,6 +937,7 @@ Definition louis_manna : Member := mkMember
   Consigliere
   None
   (mkTenure 1985 (Some 1989))
+  None
   None
   (Some (Conviction "D.N.J." "88 Cr. 374" 1989 "80 years")).
 
@@ -918,6 +954,7 @@ Definition muscarella : Member := mkMember
   None
   (mkTenure 1998 (Some 2006))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Matthew Ianniello - Capo, Times Square operations *)
@@ -928,6 +965,7 @@ Definition ianniello : Member := mkMember
   None
   (mkTenure 1970 (Some 2005))
   None
+  None
   (Some (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "6 years")).
 
 (** Lawrence Dentico - Acting Boss/Panel member 1990s *)
@@ -937,6 +975,7 @@ Definition dentico : Member := mkMember
   Capo
   None
   (mkTenure 1990 (Some 2001))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -955,6 +994,7 @@ Definition anastasia : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1951 (Some 1958))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Carlo Gambino - Boss 1957-1976, family renamed after him *)
@@ -964,6 +1004,7 @@ Definition carlo_gambino : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1957 (Some 1977))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -975,6 +1016,7 @@ Definition castellano : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1976 (Some 1986))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** John Gotti - Boss 1985-2002 *)
@@ -984,6 +1026,7 @@ Definition gotti : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1985 (Some 2003))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -995,6 +1038,7 @@ Definition peter_gotti : Member := mkMember
   (Some ActualBoss)
   (mkTenure 2002 (Some 2017))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Domenico Cefalu - Acting Boss 2011-2015 (FBI 2008: acting underboss) *)
@@ -1004,6 +1048,7 @@ Definition cefalu : Member := mkMember
   Boss
   (Some ActingBoss)
   (mkTenure 2011 (Some 2016))
+  None
   None
   (Some (FBIChart "FBI" 2008)).
 
@@ -1015,6 +1060,7 @@ Definition cali : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2015 (Some 2020))
   None
+  None
   (Some (FBIChart "FBI" 2008)).
 
 (** Lorenzo Mannino - Acting Boss 2019-present (acting for Cefalu per reports) *)
@@ -1025,6 +1071,7 @@ Definition mannino : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2019 None)
   None
+  None
   (Some (FBIChart "FBI" 2008)).
 
 (** Jackie D'Amico - Acting Boss 2002-2011, convicted 2009 *)
@@ -1034,6 +1081,7 @@ Definition damico : Member := mkMember
   Boss
   (Some ActingBoss)
   (mkTenure 2002 (Some 2011))
+  None
   None
   (Some (DOJPress "DOJ" 2009)).
 
@@ -1049,6 +1097,7 @@ Definition anastasia_underboss : Member := mkMember
   None
   (mkTenure 1931 (Some 1952))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 Definition dellacroce : Member := mkMember
@@ -1057,6 +1106,7 @@ Definition dellacroce : Member := mkMember
   Underboss
   None
   (mkTenure 1965 (Some 1986))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1067,6 +1117,7 @@ Definition decicco : Member := mkMember
   None
   (mkTenure 1985 (Some 1987))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 Definition gravano : Member := mkMember
@@ -1075,6 +1126,7 @@ Definition gravano : Member := mkMember
   Underboss
   None
   (mkTenure 1986 (Some 1992))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1086,6 +1138,7 @@ Definition biondo : Member := mkMember
   None
   (mkTenure 1957 (Some 1967))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Nicholas Corozzo - Caporegime 1990s-2008 (indicted 2008 as capo) *)
@@ -1096,6 +1149,7 @@ Definition corozzo : Member := mkMember
   None
   (mkTenure 1990 (Some 2008))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph Armone - Acting Underboss 1986-1990 *)
@@ -1105,6 +1159,7 @@ Definition armone : Member := mkMember
   Underboss
   None
   (mkTenure 1986 (Some 1991))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1120,6 +1175,7 @@ Definition joseph_n_gallo : Member := mkMember
   None
   (mkTenure 1957 (Some 1977))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Corozzo - Consigliere 1990s-2000s *)
@@ -1129,6 +1185,7 @@ Definition joseph_corozzo : Member := mkMember
   Consigliere
   None
   (mkTenure 1993 (Some 2008))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1140,6 +1197,7 @@ Definition arcuri : Member := mkMember
   None
   (mkTenure 1977 (Some 1990))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Samuel Moncada - Consigliere 2010s *)
@@ -1150,6 +1208,7 @@ Definition moncada : Member := mkMember
   None
   (mkTenure 2015 None)
   None
+  None
   (Some (FBIChart "FBI" 2008)).
 
 (** Frank Locascio - Consigliere 1985-1992, convicted with Gotti *)
@@ -1159,6 +1218,7 @@ Definition locascio : Member := mkMember
   Consigliere
   None
   (mkTenure 1985 (Some 1992))
+  None
   None
   (Some (Conviction "E.D.N.Y." "90 Cr. 1051" 1992 "Life")).
 
@@ -1175,6 +1235,7 @@ Definition dimaria : Member := mkMember
   None
   (mkTenure 1980 (Some 2008))
   None
+  None
   (Some (DOJPress "DOJ" 2008)).
 
 Definition gambino_capos : list Member :=
@@ -1190,6 +1251,7 @@ Definition carneglia : Member := mkMember
   None
   (mkTenure 1977 (Some 2009))
   None
+  None
   (Some (Conviction "E.D.N.Y." "08 Cr. 76" 2009 "Life")).
 
 (** Vincent Gotti - Soldier, brother of John Gotti *)
@@ -1200,6 +1262,7 @@ Definition vincent_gotti : Member := mkMember
   None
   (mkTenure 1980 (Some 2005))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Richard Gotti - Capo, brother of John Gotti, convicted 2002 *)
@@ -1209,6 +1272,7 @@ Definition richard_gotti : Member := mkMember
   Capo
   None
   (mkTenure 1985 (Some 2002))
+  None
   None
   (Some (Conviction "E.D.N.Y." "02 Cr. 743" 2002 "9 years")).
 
@@ -1227,6 +1291,7 @@ Definition tommy_lucchese : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1951 (Some 1968))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Carmine Tramunti - Boss 1967-1974 *)
@@ -1236,6 +1301,7 @@ Definition tramunti : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1967 (Some 1975))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1247,6 +1313,7 @@ Definition corallo : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1974 (Some 1987))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Vittorio Amuso - Boss 1986-present (imprisoned) *)
@@ -1256,6 +1323,7 @@ Definition amuso : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1986 None)
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1267,6 +1335,7 @@ Definition defede : Member := mkMember
   (Some ActingBoss)
   (mkTenure 1993 (Some 1999))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Steven Crea - Acting Boss 2000s-2017 *)
@@ -1277,6 +1346,7 @@ Definition crea_acting : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2000 (Some 2018))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Michael DeSantis - Acting Boss 2017-present *)
@@ -1286,6 +1356,7 @@ Definition desantis : Member := mkMember
   Boss
   (Some ActingBoss)
   (mkTenure 2017 None)
+  None
   None
   (Some (FBIChart "FBI" 2008)).
 
@@ -1302,6 +1373,7 @@ Definition lasalle : Member := mkMember
   None
   (mkTenure 1931 (Some 1952))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Salvatore Santoro - Underboss 1974-1987 *)
@@ -1311,6 +1383,7 @@ Definition santoro : Member := mkMember
   Underboss
   None
   (mkTenure 1974 (Some 1988))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1322,6 +1395,7 @@ Definition casso : Member := mkMember
   None
   (mkTenure 1991 (Some 1994))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Steven Crea - Underboss 1998-2017 *)
@@ -1331,6 +1405,7 @@ Definition crea : Member := mkMember
   Underboss
   None
   (mkTenure 1998 (Some 2018))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1342,6 +1417,7 @@ Definition migliore : Member := mkMember
   None
   (mkTenure 2003 (Some 2010))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Matthew Madonna - Underboss 2010s *)
@@ -1351,6 +1427,7 @@ Definition madonna : Member := mkMember
   Underboss
   None
   (mkTenure 2012 (Some 2018))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1367,6 +1444,7 @@ Definition rao : Member := mkMember
   None
   (mkTenure 1953 (Some 1989))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Christopher Furnari - Consigliere 1973-1985 *)
@@ -1376,6 +1454,7 @@ Definition furnari : Member := mkMember
   Consigliere
   None
   (mkTenure 1973 (Some 1986))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1387,6 +1466,7 @@ Definition darco : Member := mkMember
   None
   (mkTenure 1991 (Some 1992))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Joseph DiNapoli - Consigliere 2000s *)
@@ -1396,6 +1476,7 @@ Definition joseph_dinapoli : Member := mkMember
   Consigliere
   None
   (mkTenure 2000 (Some 2012))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1411,6 +1492,7 @@ Definition baratta : Member := mkMember
   Capo
   None
   (mkTenure 1975 (Some 1986))
+  None
   None
   (Some (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "40 years")).
 
@@ -1429,6 +1511,7 @@ Definition evola : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1968 (Some 1974))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Philip Rastelli - Boss 1973-1991 *)
@@ -1438,6 +1521,7 @@ Definition rastelli : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1973 (Some 1992))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1449,6 +1533,7 @@ Definition massino : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1991 (Some 2005))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Carmine Galante - Boss 1974-1979, murdered *)
@@ -1458,6 +1543,7 @@ Definition galante_boss : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1974 (Some 1980))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1469,6 +1555,7 @@ Definition basciano : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2004 (Some 2007))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Michael Mancuso - Boss 2004-present, imprisoned *)
@@ -1478,6 +1565,7 @@ Definition mancuso : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 2004 None)
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1494,6 +1582,7 @@ Definition galante : Member := mkMember
   None
   (mkTenure 1953 (Some 1963))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Nicholas Marangello - Underboss 1970s *)
@@ -1503,6 +1592,7 @@ Definition marangello : Member := mkMember
   Underboss
   None
   (mkTenure 1974 (Some 1981))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1514,6 +1604,7 @@ Definition vitale : Member := mkMember
   None
   (mkTenure 1999 (Some 2004))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Cesare Bonventre - Underboss early 1980s *)
@@ -1524,6 +1615,7 @@ Definition bonventre : Member := mkMember
   None
   (mkTenure 1981 (Some 1984))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Graziano - Consigliere 2002-2019 (indicted 2002 as consigliere) *)
@@ -1533,6 +1625,7 @@ Definition graziano : Member := mkMember
   Consigliere
   None
   (mkTenure 2002 (Some 2019))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1549,6 +1642,7 @@ Definition cannone : Member := mkMember
   None
   (mkTenure 1968 (Some 1975))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Anthony Spero - Consigliere 1990s-2000s *)
@@ -1558,6 +1652,7 @@ Definition spero : Member := mkMember
   Consigliere
   None
   (mkTenure 1991 (Some 2002))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1574,6 +1669,7 @@ Definition cammarano : Member := mkMember
   (Some ActingBoss)
   (mkTenure 2013 None)
   None
+  None
   (Some (DOJPress "DOJ" 2013)).
 
 (** Gerlando Sciascia - Capo, Canadian operations, murdered 1999 *)
@@ -1584,6 +1680,7 @@ Definition sciascia : Member := mkMember
   None
   (mkTenure 1990 (Some 1999))
   None
+  None
   (Some (DOJPress "DOJ" 2004)).
 
 (** Dominick Napolitano - Capo, handler of Donnie Brasco, murdered 1981 *)
@@ -1593,6 +1690,7 @@ Definition napolitano : Member := mkMember
   Capo
   None
   (mkTenure 1977 (Some 1981))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1611,6 +1709,7 @@ Definition magliocco : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1962 (Some 1964))
   None
+  None
   (Some (Journalism ["Five Families (2005)"])).
 
 (** Joseph Colombo - Boss 1963-1971, family renamed after him *)
@@ -1620,6 +1719,7 @@ Definition joseph_colombo : Member := mkMember
   Boss
   (Some ActualBoss)
   (mkTenure 1963 (Some 1972))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1631,6 +1731,7 @@ Definition persico : Member := mkMember
   (Some ActualBoss)
   (mkTenure 1973 (Some 2020))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Thomas Gioeli - Acting Boss 2000s *)
@@ -1640,6 +1741,7 @@ Definition gioeli : Member := mkMember
   Boss
   (Some ActingBoss)
   (mkTenure 2005 (Some 2009))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1651,6 +1753,7 @@ Definition russo : Member := mkMember
   (Some StreetBoss)
   (mkTenure 2011 (Some 2023))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Alphonse Persico - Acting Boss during father's imprisonment *)
@@ -1660,6 +1763,7 @@ Definition alphonse_persico_boss : Member := mkMember
   Boss
   (Some ActingBoss)
   (mkTenure 1986 (Some 1988))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1677,6 +1781,7 @@ Definition langella : Member := mkMember
   None
   (mkTenure 1980 (Some 1987))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Victor Orena - Acting Boss 1988-1992 (led faction in Colombo War) *)
@@ -1686,6 +1791,7 @@ Definition orena : Member := mkMember
   Boss
   (Some ActingBoss)
   (mkTenure 1988 (Some 1992))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1697,6 +1803,7 @@ Definition cutolo : Member := mkMember
   None
   (mkTenure 1994 (Some 2000))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** John Franzese Sr - Underboss 1960s *)
@@ -1706,6 +1813,7 @@ Definition franzese : Member := mkMember
   Underboss
   None
   (mkTenure 1966 (Some 1970))
+  None
   None
   (Some (Journalism ["Five Families (2005)"])).
 
@@ -1717,6 +1825,7 @@ Definition deross : Member := mkMember
   None
   (mkTenure 1995 (Some 2006))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Benjamin Castellazzo - Underboss 2010s *)
@@ -1726,6 +1835,7 @@ Definition castellazzo : Member := mkMember
   Underboss
   None
   (mkTenure 2011 (Some 2019))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1746,6 +1856,7 @@ Definition alphonse_persico : Member := mkMember
   None
   (mkTenure 1973 (Some 1986))
   None
+  None
   (Some (DOJPress "DOJ" 2005)).
 
 (** Carmine Sessa - Consigliere early 1990s, turned witness *)
@@ -1755,6 +1866,7 @@ Definition sessa : Member := mkMember
   Consigliere
   None
   (mkTenure 1991 (Some 1993))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -1771,6 +1883,7 @@ Definition scopo : Member := mkMember
   None
   (mkTenure 1975 (Some 1986))
   None
+  None
   (Some (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "100 years")).
 
 (** Theodore Persico Jr. - Capo, nephew of Carmine Persico *)
@@ -1780,6 +1893,7 @@ Definition theodore_persico : Member := mkMember
   Capo
   None
   (mkTenure 1985 (Some 2010))
+  None
   None
   (Some (DOJPress "DOJ" 2005)).
 
