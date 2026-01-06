@@ -18,7 +18,7 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (44 remaining)                                                        *)
+(** TODO (31 remaining)                                                        *)
 (** -------------------------------------------------------------------------- *)
 (**
 NOTE: Work in progress. Record types defined but not yet populated with data.
@@ -41,51 +41,51 @@ NOTE: Work in progress. Record types defined but not yet populated with data.
 - [x] DONE: Frank Locascio (Gambino consigliere)
 - [x] DONE: Jackie D'Amico (Gambino acting boss)
 - [x] DONE: Leonard DiMaria (Gambino capo)
+- [x] DONE: Charles Carneglia (Gambino soldier)
+- [x] DONE: Vincent Gotti (Gambino soldier)
+- [x] DONE: Richard Gotti (Gambino capo)
+- [x] DONE: Louis Manna (Genovese consigliere)
+- [x] DONE: Ernest Muscarella (Genovese acting consigliere)
+- [x] DONE: Matthew Ianniello (Genovese capo)
+- [x] DONE: Lawrence Dentico (Genovese panel member)
+- [x] DONE: Anthony Baratta (Lucchese capo)
+- [x] DONE: Ralph Scopo Sr. (Colombo capo)
+- [x] DONE: Theodore Persico Jr. (Colombo capo)
+- [x] DONE: Joseph Cammarano Jr. (Bonanno acting boss)
+- [x] DONE: Gerlando Sciascia (Bonanno capo)
+- [x] DONE: Dominick Napolitano (Bonanno capo)
 
-- [ ] 1. Add Charles Carneglia (Gambino soldier)
-- [ ] 2. Add Vincent Gotti (Gambino soldier)
-- [ ] 3. Add Richard Gotti (Gambino soldier)
-- [ ] 4. Add Louis Manna (Genovese consigliere)
-- [ ] 5. Add Ernest Muscarella (Genovese acting consigliere)
-- [ ] 6. Add Matthew Ianniello (Genovese capo)
-- [ ] 7. Add Lawrence Dentico (Genovese panel member)
-- [ ] 8. Add Anthony Baratta (Lucchese capo)
-- [ ] 9. Add Ralph Scopo Sr. (Colombo)
-- [ ] 10. Add Theodore Persico Jr. (Colombo capo)
-- [ ] 11. Add Joseph Cammarano Jr. (Bonanno acting boss)
-- [ ] 12. Add Gerlando Sciascia (Bonanno capo)
-- [ ] 13. Add Dominick Napolitano (Bonanno capo)
-- [ ] 14. Add Gravano CooperatorRecord
-- [ ] 15. Add Vitale CooperatorRecord
-- [ ] 16. Add Massino CooperatorRecord
-- [ ] 17. Add D'Arco CooperatorRecord
-- [ ] 18. Add Murder record: Anastasia (1957)
-- [ ] 19. Add Murder record: Castellano (1985)
-- [ ] 20. Add Murder record: Galante (1979)
-- [ ] 21. Add Murder record: Cutolo (1999)
-- [ ] 22. Add BloodRelation: Carmine/Alphonse Persico
-- [ ] 23. Add BloodRelation: John/Peter Gotti
-- [ ] 24. Add BloodRelation: Vincent/Louis Gigante
-- [ ] 25. Add Imprisonment record: Gotti
-- [ ] 26. Add Imprisonment record: Amuso
-- [ ] 27. Add Imprisonment record: Persico
-- [ ] 28. Add Imprisonment record: Gigante
-- [ ] 29. Add War record: Colombo War (1991-1993)
-- [ ] 30. Add War record: Banana War (1964-1968)
-- [ ] 31. Add War record: Castellammarese War (1930-1931)
-- [ ] 32. Add pre-1931: Salvatore Maranzano
-- [ ] 33. Add pre-1931: Joe Masseria
-- [ ] 34. Add Buffalo family boss succession
-- [ ] 35. Add Chicago Outfit boss succession
-- [ ] 36. Expand Apalachin attendees
-- [ ] 37. Complete Genovese succession chain proofs
-- [ ] 38. Complete Bonanno succession chain proofs
-- [ ] 39. Complete Colombo succession chain proofs
-- [ ] 40. Prove unique_actual_boss_at_time for all families
-- [ ] 41. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 42. Add validation same person roles don't overlap
-- [ ] 43. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 44. Add actual_boss_of query function and prove uniqueness
+- [ ] 1. Add Gravano CooperatorRecord
+- [ ] 2. Add Vitale CooperatorRecord
+- [ ] 3. Add Massino CooperatorRecord
+- [ ] 4. Add D'Arco CooperatorRecord
+- [ ] 5. Add Murder record: Anastasia (1957)
+- [ ] 6. Add Murder record: Castellano (1985)
+- [ ] 7. Add Murder record: Galante (1979)
+- [ ] 8. Add Murder record: Cutolo (1999)
+- [ ] 9. Add BloodRelation: Carmine/Alphonse Persico
+- [ ] 10. Add BloodRelation: John/Peter Gotti
+- [ ] 11. Add BloodRelation: Vincent/Louis Gigante
+- [ ] 12. Add Imprisonment record: Gotti
+- [ ] 13. Add Imprisonment record: Amuso
+- [ ] 14. Add Imprisonment record: Persico
+- [ ] 15. Add Imprisonment record: Gigante
+- [ ] 16. Add War record: Colombo War (1991-1993)
+- [ ] 17. Add War record: Banana War (1964-1968)
+- [ ] 18. Add War record: Castellammarese War (1930-1931)
+- [ ] 19. Add pre-1931: Salvatore Maranzano
+- [ ] 20. Add pre-1931: Joe Masseria
+- [ ] 21. Add Buffalo family boss succession
+- [ ] 22. Add Chicago Outfit boss succession
+- [ ] 23. Expand Apalachin attendees
+- [ ] 24. Complete Genovese succession chain proofs
+- [ ] 25. Complete Bonanno succession chain proofs
+- [ ] 26. Complete Colombo succession chain proofs
+- [ ] 27. Prove unique_actual_boss_at_time for all families
+- [ ] 28. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 29. Add validation same person roles don't overlap
+- [ ] 30. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 31. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -1012,8 +1012,69 @@ Definition vincent_dinapoli : Member := mkMember
   None
   (Some (DOJPress "DOJ" 2005)).
 
+(** Louis Manna - Consigliere 1980s, convicted 1989 for Gotti murder plot *)
+Definition louis_manna : Member := mkMember
+  88
+  "Louis Manna"
+  (Some "Bobby")
+  Genovese
+  Consigliere
+  None
+  (mkTenure 1985 (Some 1989))
+  (Some 1929)
+  (Some 2018)
+  None
+  (Some (Conviction "D.N.J." "88 Cr. 374" 1989 "80 years")).
+
 Definition genovese_consiglieres : list Member :=
-  [strollo; miranda; louis_gigante; vincent_dinapoli].
+  [strollo; miranda; louis_gigante; louis_manna; vincent_dinapoli].
+
+(** Genovese Capos *)
+
+(** Ernest Muscarella - Acting Consigliere 1990s-2000s *)
+Definition muscarella : Member := mkMember
+  89
+  "Ernest Muscarella"
+  None
+  Genovese
+  Consigliere
+  None
+  (mkTenure 1998 (Some 2006))
+  (Some 1924)
+  (Some 2013)
+  None
+  (Some (DOJPress "DOJ" 2005)).
+
+(** Matthew Ianniello - Capo, Times Square operations *)
+Definition ianniello : Member := mkMember
+  90
+  "Matthew Ianniello"
+  (Some "Matty the Horse")
+  Genovese
+  Capo
+  None
+  (mkTenure 1970 (Some 2005))
+  (Some 1920)
+  (Some 2012)
+  None
+  (Some (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "6 years")).
+
+(** Lawrence Dentico - Acting Boss/Panel member 1990s *)
+Definition dentico : Member := mkMember
+  91
+  "Lawrence Dentico"
+  None
+  Genovese
+  Capo
+  None
+  (mkTenure 1990 (Some 2001))
+  (Some 1925)
+  (Some 2001)
+  None
+  (Some (DOJPress "DOJ" 2005)).
+
+Definition genovese_capos : list Member :=
+  [ianniello; dentico].
 
 (** -------------------------------------------------------------------------- *)
 (** Gambino Family Succession                                                  *)
@@ -1356,8 +1417,36 @@ Definition carneglia : Member := mkMember
   None
   (Some (Conviction "E.D.N.Y." "08 Cr. 76" 2009 "Life")).
 
+(** Vincent Gotti - Soldier, brother of John Gotti *)
+Definition vincent_gotti : Member := mkMember
+  86
+  "Vincent Gotti"
+  None
+  Gambino
+  Soldier
+  None
+  (mkTenure 1980 (Some 2005))
+  (Some 1952)
+  None
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Richard Gotti - Capo, brother of John Gotti, convicted 2002 *)
+Definition richard_gotti : Member := mkMember
+  87
+  "Richard Gotti"
+  None
+  Gambino
+  Capo
+  None
+  (mkTenure 1985 (Some 2002))
+  (Some 1943)
+  (Some 2023)
+  None
+  (Some (Conviction "E.D.N.Y." "02 Cr. 743" 2002 "9 years")).
+
 Definition gambino_soldiers : list Member :=
-  [carneglia].
+  [carneglia; vincent_gotti].
 
 (** -------------------------------------------------------------------------- *)
 (** Lucchese Family Succession                                                 *)
@@ -1614,6 +1703,25 @@ Definition joseph_dinapoli : Member := mkMember
 Definition lucchese_consiglieres : list Member :=
   [rao; furnari; darco; joseph_dinapoli].
 
+(** Lucchese Capos *)
+
+(** Anthony Baratta - Capo, convicted in Commission Trial *)
+Definition baratta : Member := mkMember
+  92
+  "Anthony Baratta"
+  (Some "Bowat")
+  Lucchese
+  Capo
+  None
+  (mkTenure 1975 (Some 1986))
+  (Some 1927)
+  (Some 2009)
+  None
+  (Some (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "40 years")).
+
+Definition lucchese_capos : list Member :=
+  [baratta].
+
 (** -------------------------------------------------------------------------- *)
 (** Bonanno Family Succession                                                  *)
 (** -------------------------------------------------------------------------- *)
@@ -1812,6 +1920,53 @@ Definition spero : Member := mkMember
 
 Definition bonanno_consiglieres : list Member :=
   [cannone; spero; graziano].
+
+(** Bonanno Capos *)
+
+(** Joseph Cammarano Jr. - Acting Boss 2010s *)
+Definition cammarano : Member := mkMember
+  95
+  "Joseph Cammarano"
+  (Some "Joe C")
+  Bonanno
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2013 None)
+  (Some 1956)
+  None
+  None
+  (Some (DOJPress "DOJ" 2013)).
+
+(** Gerlando Sciascia - Capo, Canadian operations, murdered 1999 *)
+Definition sciascia : Member := mkMember
+  96
+  "Gerlando Sciascia"
+  (Some "George from Canada")
+  Bonanno
+  Capo
+  None
+  (mkTenure 1990 (Some 1999))
+  (Some 1934)
+  (Some 1999)
+  None
+  (Some (DOJPress "DOJ" 2004)).
+
+(** Dominick Napolitano - Capo, handler of Donnie Brasco, murdered 1981 *)
+Definition napolitano : Member := mkMember
+  97
+  "Dominick Napolitano"
+  (Some "Sonny Black")
+  Bonanno
+  Capo
+  None
+  (mkTenure 1977 (Some 1981))
+  (Some 1930)
+  (Some 1981)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+Definition bonanno_capos : list Member :=
+  [sciascia; napolitano].
 
 (** -------------------------------------------------------------------------- *)
 (** Colombo Family Succession                                                  *)
@@ -2030,6 +2185,39 @@ Definition sessa : Member := mkMember
 
 Definition colombo_consiglieres : list Member :=
   [alphonse_persico; sessa].
+
+(** Colombo Capos *)
+
+(** Ralph Scopo Sr. - Capo, Concrete Workers Union, Commission Trial *)
+Definition scopo : Member := mkMember
+  93
+  "Ralph Scopo"
+  None
+  Colombo
+  Capo
+  None
+  (mkTenure 1975 (Some 1986))
+  (Some 1926)
+  (Some 1993)
+  None
+  (Some (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "100 years")).
+
+(** Theodore Persico Jr. - Capo, nephew of Carmine Persico *)
+Definition theodore_persico : Member := mkMember
+  94
+  "Theodore Persico"
+  (Some "Teddy")
+  Colombo
+  Capo
+  None
+  (mkTenure 1985 (Some 2010))
+  (Some 1950)
+  None
+  None
+  (Some (DOJPress "DOJ" 2005)).
+
+Definition colombo_capos : list Member :=
+  [scopo; theodore_persico].
 
 (** -------------------------------------------------------------------------- *)
 (** Apalachin Meeting (November 14, 1957)                                      *)
