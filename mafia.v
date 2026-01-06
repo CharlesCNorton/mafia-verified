@@ -17,15 +17,6 @@
 (*                                                                            *)
 (******************************************************************************)
 
-(** -------------------------------------------------------------------------- *)
-(** DEFERRED (requires extending Family type)                                  *)
-(** -------------------------------------------------------------------------- *)
-(**
-- [ ] Add Buffalo family boss succession
-- [ ] Add Chicago Outfit boss succession
-- [ ] Expand Apalachin attendees (non-NYC families)
-*)
-
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.Arith.Arith.
@@ -48,7 +39,9 @@ Inductive Family : Type :=
   | Gambino     (* Originally Mangano family *)
   | Lucchese    (* Originally Gagliano family *)
   | Bonanno     (* Originally Maranzano -> Bonanno *)
-  | Colombo.    (* Originally Profaci family *)
+  | Colombo     (* Originally Profaci family *)
+  | Buffalo     (* Magaddino family *)
+  | Chicago.    (* The Outfit *)
 
 (** Family equality is decidable. *)
 Definition family_eqb (f1 f2 : Family) : bool :=
@@ -58,6 +51,8 @@ Definition family_eqb (f1 f2 : Family) : bool :=
   | Lucchese, Lucchese => true
   | Bonanno, Bonanno => true
   | Colombo, Colombo => true
+  | Buffalo, Buffalo => true
+  | Chicago, Chicago => true
   | _, _ => false
   end.
 
@@ -448,8 +443,8 @@ Inductive CommissionSeat : Type :=
   | NYC_Lucchese
   | NYC_Bonanno
   | NYC_Colombo
-  | Buffalo
-  | Chicago.
+  | Seat_Buffalo
+  | Seat_Chicago.
 
 Definition is_nyc_seat (s : CommissionSeat) : bool :=
   match s with
@@ -460,7 +455,7 @@ Definition is_nyc_seat (s : CommissionSeat) : bool :=
 (** The Five Families hold 5 of 7 original Commission seats. *)
 Lemma five_families_majority :
   List.length (List.filter is_nyc_seat [NYC_Genovese; NYC_Gambino; NYC_Lucchese;
-                               NYC_Bonanno; NYC_Colombo; Buffalo; Chicago]) = 5.
+                               NYC_Bonanno; NYC_Colombo; Seat_Buffalo; Seat_Chicago]) = 5.
 Proof. reflexivity. Qed.
 
 (** -------------------------------------------------------------------------- *)
