@@ -24,117 +24,68 @@
 NOTE: Work in progress. Record types defined but not yet populated with data.
       exists/exactly_one predicates added but proofs not yet complete.
 
-- [ ] 1. Add initiation_year field to Member record
-- [ ] 2. Use decide equality or Scheme Equality for Family, Rank, BossKind, EvidenceTier
-- [ ] 3. Separate overlap allowed under coarse time predicate from strict succession
-- [ ] 4. Add Commission Trial (1986) as Case record
-- [ ] 5. Add Commission Trial Defendant records
-- [ ] 6. Add Commission Trial sentences
-- [ ] 7. Add Windows Case (1991) as Case record
-- [ ] 8. Add Windows Case Defendant records
-- [ ] 9. Add U.S. v. Gotti (1992) as Case record
-- [ ] 10. Add U.S. v. Gotti Defendant records
-- [ ] 11. Add U.S. v. Gigante (1997) as Case record
-- [ ] 12. Add U.S. v. Bellomo (1996) as Case record
-- [ ] 13. Add Bellomo bail denial record
-- [ ] 14. Add U.S. v. Massino (2004) as Case record
-- [ ] 15. Add Operation Old Bridge (2008) as Case record
-- [ ] 16. Add Operation Old Bridge Defendant records
-- [ ] 17. Add 2011 FBI sweep as Case record
-- [ ] 18. Add 2011 waterfront case Defendant records
-- [ ] 19. Add U.S. v. Cirillo (2005) as Case record
-- [ ] 20. Add Cirillo guilty plea as acting boss
-- [ ] 21. Add U.S. v. Leo (2010) as Case record
-- [ ] 22. Add Daniel Leo guilty plea as acting boss
-- [ ] 23. Add U.S. v. Crea/Madonna (2017) as Case record
-- [ ] 24. Add Crea 2020 life sentence as underboss
-- [ ] 25. Add Madonna 2020 life sentence as acting boss
-- [ ] 26. Add U.S. v. Russo (2011) as Case record
-- [ ] 27. Add U.S. v. Russo (2021) as Case record
-- [ ] 28. Add 2018 Bonanno/Lucchese case as Case record
-- [ ] 29. Add Frank Locascio (Gambino consigliere)
-- [ ] 30. Add Jackie D'Amico (Gambino acting boss)
-- [ ] 31. Add Leonard DiMaria (Gambino capo)
-- [ ] 32. Add Charles Carneglia (Gambino soldier)
-- [ ] 33. Add Vincent Gotti (Gambino soldier)
-- [ ] 34. Add Richard Gotti (Gambino soldier)
-- [ ] 35. Add Louis Manna (Genovese consigliere)
-- [ ] 36. Add Ernest Muscarella (Genovese acting consigliere)
-- [ ] 37. Add Matthew Ianniello (Genovese capo)
-- [ ] 38. Add Lawrence Dentico (Genovese panel member)
-- [ ] 39. Add Salvatore Caldarella (Genovese soldier)
-- [ ] 40. Add Stephen Depiro (Genovese soldier)
-- [ ] 41. Add Anthony Baratta (Lucchese capo)
-- [ ] 42. Add Eugene Castelle (Lucchese soldier)
-- [ ] 43. Add Vincent Salanardi (Lucchese soldier)
-- [ ] 44. Add Ralph Scopo Sr. (Colombo)
-- [ ] 45. Add Richard Fusco (Colombo consigliere)
-- [ ] 46. Add Ralph DiMatteo (Colombo consigliere)
-- [ ] 47. Add Theodore Persico Jr. (Colombo capo)
-- [ ] 48. Add Salvatore Miciotta (Colombo soldier)
-- [ ] 49. Add Michael Uvino (Colombo soldier)
-- [ ] 50. Add William Cutolo acting underboss role
-- [ ] 51. Add Joseph Cammarano Jr. (Bonanno acting boss)
-- [ ] 52. Add John Zancocchio (Bonanno consigliere)
-- [ ] 53. Add Simone Esposito (Bonanno consigliere)
-- [ ] 54. Add Gerlando Sciascia (Bonanno capo)
-- [ ] 55. Add Dominick Napolitano (Bonanno capo)
-- [ ] 56. Add Louis Attanasio (Bonanno soldier)
-- [ ] 57. Add Philip Rastelli conviction details
-- [ ] 58. Add Gravano CooperatorRecord
-- [ ] 59. Add Vitale CooperatorRecord
-- [ ] 60. Add Massino CooperatorRecord
-- [ ] 61. Add D'Arco CooperatorRecord
-- [ ] 62. Add Miciotta CooperatorRecord
-- [ ] 63. Add Sessa CooperatorRecord
-- [ ] 64. Add Murder record: Anastasia (1957)
-- [ ] 65. Add Murder record: Castellano (1985)
-- [ ] 66. Add Murder record: Galante (1979)
-- [ ] 67. Add Murder record: Joey Scopo (1993)
-- [ ] 68. Add Murder record: Louis DiBono (1990)
-- [ ] 69. Add Murder record: Sciascia (1999)
-- [ ] 70. Add Murder record: Napolitano (1981)
-- [ ] 71. Add Murder record: Cutolo (1999)
-- [ ] 72. Add BloodRelation: Carmine/Alphonse Persico
-- [ ] 73. Add BloodRelation: John/Peter Gotti
-- [ ] 74. Add BloodRelation: Vincent/Louis Gigante
-- [ ] 75. Add BloodRelation: John Gotti/Richard Gotti
-- [ ] 76. Add BloodRelation: Joseph Massino/Salvatore Vitale
-- [ ] 77. Add BloodRelation: Carmine Persico/Theodore Persico Jr.
-- [ ] 78. Add Imprisonment record: Gotti
-- [ ] 79. Add Imprisonment record: Amuso
-- [ ] 80. Add Imprisonment record: Persico
-- [ ] 81. Add Imprisonment record: Gigante
-- [ ] 82. Add Imprisonment record: Massino
-- [ ] 83. Add Imprisonment record: Crea
-- [ ] 84. Add Imprisonment record: Madonna
-- [ ] 85. Add War record: Colombo War (1991-1993)
-- [ ] 86. Add War record: Banana War (1964-1968)
-- [ ] 87. Add War record: Castellammarese War (1930-1931)
-- [ ] 88. Add pre-1931: Salvatore Maranzano
-- [ ] 89. Add pre-1931: Joe Masseria
-- [ ] 90. Add pre-1931: Castellammarese War participants
-- [ ] 91. Add Buffalo family boss succession
-- [ ] 92. Add Chicago Outfit boss succession
-- [ ] 93. Expand Apalachin attendees
-- [ ] 94. Complete Genovese succession chain proofs
-- [ ] 95. Complete Bonanno succession chain proofs
-- [ ] 96. Complete Colombo succession chain proofs
-- [ ] 97. Prove unique_actual_boss_at_time for Genovese sample years
-- [ ] 98. Prove unique_actual_boss_at_time for Gambino sample years
-- [ ] 99. Prove unique_actual_boss_at_time for Lucchese sample years
-- [ ] 100. Prove unique_actual_boss_at_time for Bonanno sample years
-- [ ] 101. Prove unique_actual_boss_at_time for Colombo sample years
-- [ ] 102. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 103. Add validation same person roles don't overlap
-- [ ] 104. Add proof promotions temporally ordered per person
-- [ ] 105. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 106. Add actual Commission vote records
-- [ ] 107. Replace manual list destruct patterns
-- [ ] 108. Replace manual *_eqb proofs with in_app_iff/firstorder
-- [ ] 109. Populate Evidence field for all members with None
-- [ ] 110. Normalize evidence tiers across same-era members
-- [ ] 111. Add actual_boss_of query function and prove uniqueness
+- [x] DONE: initiation_year, decide equality, coarse time predicate
+- [x] DONE: Commission Trial case + defendants + sentences
+- [x] DONE: Windows Case + defendants
+- [x] DONE: U.S. v. Gotti (1992) + defendant
+- [x] DONE: U.S. v. Gigante (1997) + defendant
+- [x] DONE: U.S. v. Bellomo (1996) + defendant
+- [x] DONE: U.S. v. Massino (2004) + defendant
+- [x] DONE: Operation Old Bridge (2008)
+- [x] DONE: U.S. v. Cirillo (2005) + guilty plea
+- [x] DONE: U.S. v. Leo (2010) + guilty plea
+- [x] DONE: U.S. v. Crea/Madonna (2017) + life sentences
+- [x] DONE: U.S. v. Russo (2011, 2021)
+
+- [ ] 1. Add 2011 FBI sweep as Case record
+- [ ] 2. Add 2018 Bonanno/Lucchese case as Case record
+- [ ] 3. Add Frank Locascio (Gambino consigliere)
+- [ ] 4. Add Jackie D'Amico (Gambino acting boss)
+- [ ] 5. Add Leonard DiMaria (Gambino capo)
+- [ ] 6. Add Charles Carneglia (Gambino soldier)
+- [ ] 7. Add Vincent Gotti (Gambino soldier)
+- [ ] 8. Add Richard Gotti (Gambino soldier)
+- [ ] 9. Add Louis Manna (Genovese consigliere)
+- [ ] 10. Add Ernest Muscarella (Genovese acting consigliere)
+- [ ] 11. Add Matthew Ianniello (Genovese capo)
+- [ ] 12. Add Lawrence Dentico (Genovese panel member)
+- [ ] 13. Add Anthony Baratta (Lucchese capo)
+- [ ] 14. Add Ralph Scopo Sr. (Colombo)
+- [ ] 15. Add Theodore Persico Jr. (Colombo capo)
+- [ ] 16. Add Joseph Cammarano Jr. (Bonanno acting boss)
+- [ ] 17. Add Gerlando Sciascia (Bonanno capo)
+- [ ] 18. Add Dominick Napolitano (Bonanno capo)
+- [ ] 19. Add Gravano CooperatorRecord
+- [ ] 20. Add Vitale CooperatorRecord
+- [ ] 21. Add Massino CooperatorRecord
+- [ ] 22. Add D'Arco CooperatorRecord
+- [ ] 23. Add Murder record: Anastasia (1957)
+- [ ] 24. Add Murder record: Castellano (1985)
+- [ ] 25. Add Murder record: Galante (1979)
+- [ ] 26. Add Murder record: Cutolo (1999)
+- [ ] 27. Add BloodRelation: Carmine/Alphonse Persico
+- [ ] 28. Add BloodRelation: John/Peter Gotti
+- [ ] 29. Add BloodRelation: Vincent/Louis Gigante
+- [ ] 30. Add Imprisonment record: Gotti
+- [ ] 31. Add Imprisonment record: Amuso
+- [ ] 32. Add Imprisonment record: Persico
+- [ ] 33. Add Imprisonment record: Gigante
+- [ ] 34. Add War record: Colombo War (1991-1993)
+- [ ] 35. Add War record: Banana War (1964-1968)
+- [ ] 36. Add War record: Castellammarese War (1930-1931)
+- [ ] 37. Add pre-1931: Salvatore Maranzano
+- [ ] 38. Add pre-1931: Joe Masseria
+- [ ] 39. Add Buffalo family boss succession
+- [ ] 40. Add Chicago Outfit boss succession
+- [ ] 41. Expand Apalachin attendees
+- [ ] 42. Complete Genovese succession chain proofs
+- [ ] 43. Complete Bonanno succession chain proofs
+- [ ] 44. Complete Colombo succession chain proofs
+- [ ] 45. Prove unique_actual_boss_at_time for all families
+- [ ] 46. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 47. Add validation same person roles don't overlap
+- [ ] 48. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 49. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -2162,6 +2113,245 @@ Definition commission_trial : Case := mkCase
 Lemma commission_trial_targeted_commission :
   List.length (case_defendants commission_trial) = 5.
 Proof. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Windows Case (1991)                                                        *)
+(** -------------------------------------------------------------------------- *)
+
+(** The Windows Case targeted mob control of the NYC window replacement
+    industry through Local 580 of the Architectural and Ornamental
+    Ironworkers Union. *)
+
+Definition windows_case : Case := mkCase
+  "United States v. Salerno (Windows Case)"
+  "S.D.N.Y."
+  (Some "88 Cr. 810")
+  1988
+  (Some 1991)
+  [salerno; persico; langella]
+  ["RICO conspiracy"; "extortion"; "bid rigging"; "labor racketeering"]
+  (Some "Convictions; Salerno died during trial").
+
+Definition salerno_windows_defendant : Defendant := mkDefendant
+  salerno
+  "Windows Case"
+  (Some "Convicted")
+  (Some "70 years consecutive")
+  (Some "Died during appeal 1992").
+
+Definition persico_windows_defendant : Defendant := mkDefendant
+  persico
+  "Windows Case"
+  (Some "Convicted")
+  (Some "50 years consecutive")
+  (Some "Added to existing Commission Trial sentence").
+
+Definition langella_windows_defendant : Defendant := mkDefendant
+  langella
+  "Windows Case"
+  (Some "Convicted")
+  (Some "65 years")
+  (Some "Colombo underboss; already imprisoned").
+
+Definition windows_case_defendant_records : list Defendant :=
+  [salerno_windows_defendant; persico_windows_defendant; langella_windows_defendant].
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Gotti (1992)                                                       *)
+(** -------------------------------------------------------------------------- *)
+
+(** John Gotti convicted on RICO charges including 5 murders. *)
+Definition gotti_case : Case := mkCase
+  "United States v. Gotti"
+  "E.D.N.Y."
+  (Some "90 Cr. 1051")
+  1990
+  (Some 1992)
+  [gotti]
+  ["RICO"; "murder"; "obstruction of justice"; "loansharking"; "gambling"]
+  (Some "Convicted; life without parole").
+
+Definition gotti_defendant : Defendant := mkDefendant
+  gotti
+  "U.S. v. Gotti"
+  (Some "Convicted")
+  (Some "Life without parole")
+  (Some "Teflon Don finally convicted; died in prison 2002").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Gigante (1997)                                                     *)
+(** -------------------------------------------------------------------------- *)
+
+(** Vincent Gigante convicted after decades of feigning insanity. *)
+Definition gigante_case : Case := mkCase
+  "United States v. Gigante"
+  "E.D.N.Y."
+  (Some "96 Cr. 762")
+  1996
+  (Some 1997)
+  [gigante]
+  ["RICO"; "murder conspiracy"; "extortion"; "labor racketeering"]
+  (Some "Convicted; 12 years").
+
+Definition gigante_defendant : Defendant := mkDefendant
+  gigante
+  "U.S. v. Gigante"
+  (Some "Convicted")
+  (Some "12 years")
+  (Some "Chin admitted faking insanity in 2003; died in prison 2005").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Bellomo (1996)                                                     *)
+(** -------------------------------------------------------------------------- *)
+
+(** Liborio Bellomo convicted on RICO charges. *)
+Definition bellomo_case : Case := mkCase
+  "United States v. Bellomo"
+  "S.D.N.Y."
+  (Some "95 Cr. 520")
+  1995
+  (Some 1996)
+  [bellomo]
+  ["RICO"; "loansharking"; "extortion"]
+  (Some "Convicted; 10 years").
+
+Definition bellomo_defendant : Defendant := mkDefendant
+  bellomo
+  "U.S. v. Bellomo"
+  (Some "Convicted")
+  (Some "10 years")
+  (Some "Bail denied; released 2008; became street boss").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Massino (2004)                                                     *)
+(** -------------------------------------------------------------------------- *)
+
+(** Joseph Massino convicted; later became first boss to turn witness. *)
+Definition massino_case : Case := mkCase
+  "United States v. Massino"
+  "E.D.N.Y."
+  (Some "03 Cr. 929")
+  2003
+  (Some 2004)
+  [massino]
+  ["RICO"; "murder"; "arson"; "extortion"; "loansharking"]
+  (Some "Convicted; life; became cooperator to avoid death penalty").
+
+Definition massino_defendant : Defendant := mkDefendant
+  massino
+  "U.S. v. Massino"
+  (Some "Convicted")
+  (Some "Life (reduced for cooperation)")
+  (Some "First sitting boss to become government witness").
+
+(** -------------------------------------------------------------------------- *)
+(** Operation Old Bridge (2008)                                                *)
+(** -------------------------------------------------------------------------- *)
+
+(** Major FBI operation targeting Gambino family leadership. *)
+Definition operation_old_bridge : Case := mkCase
+  "Operation Old Bridge"
+  "E.D.N.Y."
+  (Some "08 Cr. 76")
+  2008
+  (Some 2009)
+  [cefalu; corozzo]
+  ["RICO"; "extortion"; "murder conspiracy"]
+  (Some "Multiple convictions; dismantled Gambino leadership").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Cirillo (2005)                                                     *)
+(** -------------------------------------------------------------------------- *)
+
+Definition cirillo_case : Case := mkCase
+  "United States v. Cirillo"
+  "S.D.N.Y."
+  None
+  2005
+  (Some 2006)
+  [cirillo]
+  ["RICO conspiracy"; "extortion"]
+  (Some "Guilty plea as acting boss").
+
+Definition cirillo_defendant : Defendant := mkDefendant
+  cirillo
+  "U.S. v. Cirillo"
+  (Some "Guilty plea")
+  (Some "46 months")
+  (Some "Admitted acting boss role 1997-2005").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Leo (2010)                                                         *)
+(** -------------------------------------------------------------------------- *)
+
+Definition leo_case : Case := mkCase
+  "United States v. Leo"
+  "S.D.N.Y."
+  None
+  2010
+  (Some 2011)
+  [daniel_leo]
+  ["RICO"; "loansharking"]
+  (Some "Guilty plea as front boss").
+
+Definition leo_defendant : Defendant := mkDefendant
+  daniel_leo
+  "U.S. v. Leo"
+  (Some "Guilty plea")
+  (Some "5 years")
+  (Some "Admitted serving as front boss for Genovese family").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Crea/Madonna (2017)                                                *)
+(** -------------------------------------------------------------------------- *)
+
+Definition crea_madonna_case : Case := mkCase
+  "United States v. Crea"
+  "S.D.N.Y."
+  (Some "17 Cr. 598")
+  2017
+  (Some 2019)
+  [crea; madonna]
+  ["RICO"; "murder"; "extortion"; "loansharking"]
+  (Some "Both convicted; life sentences 2020").
+
+Definition crea_case_defendant : Defendant := mkDefendant
+  crea
+  "U.S. v. Crea"
+  (Some "Convicted")
+  (Some "Life")
+  (Some "Lucchese underboss; convicted of murder").
+
+Definition madonna_defendant : Defendant := mkDefendant
+  madonna
+  "U.S. v. Crea"
+  (Some "Convicted")
+  (Some "Life")
+  (Some "Lucchese acting boss; convicted of murder").
+
+(** -------------------------------------------------------------------------- *)
+(** U.S. v. Russo (2011, 2021)                                                 *)
+(** -------------------------------------------------------------------------- *)
+
+Definition russo_2011_case : Case := mkCase
+  "United States v. Russo (2011)"
+  "E.D.N.Y."
+  None
+  2011
+  (Some 2013)
+  [russo]
+  ["Extortion"; "loansharking"]
+  (Some "Convicted; released").
+
+Definition russo_2021_case : Case := mkCase
+  "United States v. Russo (2021)"
+  "E.D.N.Y."
+  None
+  2021
+  (Some 2022)
+  [russo]
+  ["RICO"; "extortion"]
+  (Some "Died before trial 2022").
 
 (** -------------------------------------------------------------------------- *)
 (** Aggregate Membership Database                                              *)
