@@ -18,7 +18,7 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (31 remaining)                                                        *)
+(** TODO (13 remaining)                                                        *)
 (** -------------------------------------------------------------------------- *)
 (**
 NOTE: Work in progress. Record types defined but not yet populated with data.
@@ -54,38 +54,28 @@ NOTE: Work in progress. Record types defined but not yet populated with data.
 - [x] DONE: Joseph Cammarano Jr. (Bonanno acting boss)
 - [x] DONE: Gerlando Sciascia (Bonanno capo)
 - [x] DONE: Dominick Napolitano (Bonanno capo)
+- [x] DONE: Gravano CooperatorRecord
+- [x] DONE: Vitale CooperatorRecord
+- [x] DONE: Massino CooperatorRecord
+- [x] DONE: D'Arco CooperatorRecord
+- [x] DONE: Murder records (Anastasia, Castellano, Galante, Cutolo)
+- [x] DONE: BloodRelations (Persico, Gotti, Gigante brothers)
+- [x] DONE: Imprisonment records (Gotti, Amuso, Persico, Gigante)
+- [x] DONE: War records (Colombo War, Banana War, Castellammarese War)
 
-- [ ] 1. Add Gravano CooperatorRecord
-- [ ] 2. Add Vitale CooperatorRecord
-- [ ] 3. Add Massino CooperatorRecord
-- [ ] 4. Add D'Arco CooperatorRecord
-- [ ] 5. Add Murder record: Anastasia (1957)
-- [ ] 6. Add Murder record: Castellano (1985)
-- [ ] 7. Add Murder record: Galante (1979)
-- [ ] 8. Add Murder record: Cutolo (1999)
-- [ ] 9. Add BloodRelation: Carmine/Alphonse Persico
-- [ ] 10. Add BloodRelation: John/Peter Gotti
-- [ ] 11. Add BloodRelation: Vincent/Louis Gigante
-- [ ] 12. Add Imprisonment record: Gotti
-- [ ] 13. Add Imprisonment record: Amuso
-- [ ] 14. Add Imprisonment record: Persico
-- [ ] 15. Add Imprisonment record: Gigante
-- [ ] 16. Add War record: Colombo War (1991-1993)
-- [ ] 17. Add War record: Banana War (1964-1968)
-- [ ] 18. Add War record: Castellammarese War (1930-1931)
-- [ ] 19. Add pre-1931: Salvatore Maranzano
-- [ ] 20. Add pre-1931: Joe Masseria
-- [ ] 21. Add Buffalo family boss succession
-- [ ] 22. Add Chicago Outfit boss succession
-- [ ] 23. Expand Apalachin attendees
-- [ ] 24. Complete Genovese succession chain proofs
-- [ ] 25. Complete Bonanno succession chain proofs
-- [ ] 26. Complete Colombo succession chain proofs
-- [ ] 27. Prove unique_actual_boss_at_time for all families
-- [ ] 28. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 29. Add validation same person roles don't overlap
-- [ ] 30. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 31. Add actual_boss_of query function and prove uniqueness
+- [ ] 1. Add pre-1931: Salvatore Maranzano
+- [ ] 2. Add pre-1931: Joe Masseria
+- [ ] 3. Add Buffalo family boss succession
+- [ ] 4. Add Chicago Outfit boss succession
+- [ ] 5. Expand Apalachin attendees
+- [ ] 6. Complete Genovese succession chain proofs
+- [ ] 7. Complete Bonanno succession chain proofs
+- [ ] 8. Complete Colombo succession chain proofs
+- [ ] 9. Prove unique_actual_boss_at_time for all families
+- [ ] 10. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 11. Add validation same person roles don't overlap
+- [ ] 12. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 13. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -2277,6 +2267,64 @@ Record Defendant := mkDefendant {
   defendant_notes : option string
 }.
 
+(** Cooperator record: Government witness with testimony details. *)
+Record Cooperator := mkCooperator {
+  cooperator_member : Member;
+  cooperator_flip_year : year;
+  cooperator_debriefed_by : string;
+  cooperator_testified_in : list string;
+  cooperator_sentence_reduction : option string;
+  cooperator_notes : option string
+}.
+
+(** Murder record: Sanctioned or unsanctioned killings. *)
+Record Murder := mkMurder {
+  murder_victim : string;
+  murder_victim_rank : option Rank;
+  murder_victim_family : option Family;
+  murder_year : year;
+  murder_location : option string;
+  murder_ordered_by : option string;
+  murder_carried_out_by : option (list string);
+  murder_commission_sanctioned : option bool;
+  murder_notes : option string
+}.
+
+(** Blood relation between members. *)
+Inductive BloodRelationType : Type :=
+  | Brothers
+  | FatherSon
+  | Cousins
+  | Uncle_Nephew
+  | InLaws.
+
+Record BloodRelation := mkBloodRelation {
+  relation_member1 : Member;
+  relation_member2 : Member;
+  relation_type : BloodRelationType
+}.
+
+(** Imprisonment record: Incarceration details. *)
+Record Imprisonment := mkImprisonment {
+  imprisonment_member : Member;
+  imprisonment_start_year : year;
+  imprisonment_end_year : option year;
+  imprisonment_facility : option string;
+  imprisonment_sentence : string;
+  imprisonment_died_in_prison : bool
+}.
+
+(** War record: Internal or inter-family conflicts. *)
+Record War := mkWar {
+  war_name : string;
+  war_start_year : year;
+  war_end_year : year;
+  war_families_involved : list Family;
+  war_factions : option (list string);
+  war_casualties : option nat;
+  war_outcome : option string
+}.
+
 (** -------------------------------------------------------------------------- *)
 (** RICO Era (1970-present)                                                    *)
 (** -------------------------------------------------------------------------- *)
@@ -2635,6 +2683,209 @@ Definition bonanno_lucchese_2018 : Case := mkCase
   []
   ["RICO"; "extortion"; "loansharking"]
   (Some "Joint Bonanno-Lucchese prosecution").
+
+(** -------------------------------------------------------------------------- *)
+(** Cooperators                                                                *)
+(** -------------------------------------------------------------------------- *)
+
+(** Salvatore Gravano - "Sammy the Bull", Gambino underboss turned witness *)
+Definition gravano_cooperator : Cooperator := mkCooperator
+  gravano
+  1991
+  "FBI/EDNY"
+  ["U.S. v. Gotti (1992)"; "Various trials"]
+  (Some "5 years (reduced from life)")
+  (Some "First underboss to flip; testified against Gotti; admitted 19 murders").
+
+(** Salvatore Vitale - Bonanno underboss, brother-in-law of Massino *)
+Definition vitale_cooperator : Cooperator := mkCooperator
+  vitale
+  2003
+  "FBI/EDNY"
+  ["U.S. v. Massino (2004)"; "Various Bonanno trials"]
+  (Some "Time served")
+  (Some "Key witness against Massino; admitted 11 murders").
+
+(** Joseph Massino - First boss to become government witness *)
+Definition massino_cooperator : Cooperator := mkCooperator
+  massino
+  2005
+  "FBI/EDNY"
+  ["U.S. v. Basciano"; "Various Bonanno trials"]
+  (Some "Life reduced; released 2013")
+  (Some "First sitting boss to flip; wore wire against Basciano").
+
+(** Alphonse D'Arco - Lucchese acting boss turned witness *)
+Definition darco_cooperator : Cooperator := mkCooperator
+  darco
+  1991
+  "FBI/SDNY"
+  ["Various Lucchese trials"; "Commission cases"]
+  (Some "Time served")
+  (Some "Highest-ranking mobster to flip at time; testified in 10+ trials").
+
+Definition all_cooperators : list Cooperator :=
+  [gravano_cooperator; vitale_cooperator; massino_cooperator; darco_cooperator].
+
+(** -------------------------------------------------------------------------- *)
+(** Murder Records                                                             *)
+(** -------------------------------------------------------------------------- *)
+
+(** Albert Anastasia - Murdered in Park Sheraton barbershop *)
+Definition anastasia_murder : Murder := mkMurder
+  "Albert Anastasia"
+  (Some Boss)
+  (Some Gambino)
+  1957
+  (Some "Park Sheraton Hotel barbershop, Manhattan")
+  (Some "Vito Genovese/Carlo Gambino")
+  (Some ["Joseph Profaci crew"; "Crazy Joe Gallo"])
+  (Some true)
+  (Some "Preceded Apalachin meeting by 3 weeks").
+
+(** Paul Castellano - Murdered outside Sparks Steak House *)
+Definition castellano_murder : Murder := mkMurder
+  "Paul Castellano"
+  (Some Boss)
+  (Some Gambino)
+  1985
+  (Some "Sparks Steak House, Manhattan")
+  (Some "John Gotti")
+  (Some ["Gambino hit team"])
+  (Some false)
+  (Some "Unsanctioned hit; Gotti took over family").
+
+(** Carmine Galante - Murdered at Joe and Mary's restaurant *)
+Definition galante_murder : Murder := mkMurder
+  "Carmine Galante"
+  (Some Boss)
+  (Some Bonanno)
+  1979
+  (Some "Joe and Mary's Italian-American Restaurant, Brooklyn")
+  (Some "Commission")
+  (Some ["Bonanno crew"; "Zips"])
+  (Some true)
+  (Some "Commission-sanctioned; ended Galante's power grab").
+
+(** William Cutolo - Murdered by Colombo faction *)
+Definition cutolo_murder : Murder := mkMurder
+  "William Cutolo"
+  (Some Underboss)
+  (Some Colombo)
+  1999
+  (Some "Unknown")
+  (Some "Alphonse Persico")
+  None
+  (Some false)
+  (Some "Body found 2008; Persico convicted of ordering murder").
+
+Definition all_murders : list Murder :=
+  [anastasia_murder; castellano_murder; galante_murder; cutolo_murder].
+
+(** -------------------------------------------------------------------------- *)
+(** Blood Relations                                                            *)
+(** -------------------------------------------------------------------------- *)
+
+(** Carmine and Alphonse Persico - Brothers (Colombo) *)
+Definition persico_brothers : BloodRelation := mkBloodRelation
+  persico
+  alphonse_persico
+  Brothers.
+
+(** John and Peter Gotti - Brothers (Gambino) *)
+Definition gotti_brothers : BloodRelation := mkBloodRelation
+  gotti
+  peter_gotti
+  Brothers.
+
+(** Vincent and Louis Gigante - Brothers (Genovese) *)
+Definition gigante_brothers : BloodRelation := mkBloodRelation
+  gigante
+  louis_gigante
+  Brothers.
+
+Definition all_blood_relations : list BloodRelation :=
+  [persico_brothers; gotti_brothers; gigante_brothers].
+
+(** -------------------------------------------------------------------------- *)
+(** Imprisonment Records                                                       *)
+(** -------------------------------------------------------------------------- *)
+
+(** John Gotti - Life sentence, died in prison *)
+Definition gotti_imprisonment : Imprisonment := mkImprisonment
+  gotti
+  1992
+  (Some 2002)
+  (Some "USP Marion; USMCFP Springfield")
+  "Life without parole"
+  true.
+
+(** Vittorio Amuso - Life sentence, still imprisoned *)
+Definition amuso_imprisonment : Imprisonment := mkImprisonment
+  amuso
+  1992
+  None
+  (Some "USP Coleman")
+  "Life without parole + 455 years"
+  false.
+
+(** Carmine Persico - Life sentence, died in prison *)
+Definition persico_imprisonment : Imprisonment := mkImprisonment
+  persico
+  1986
+  (Some 2019)
+  (Some "FCI Butner")
+  "100+ years"
+  true.
+
+(** Vincent Gigante - 12 years, died in prison *)
+Definition gigante_imprisonment : Imprisonment := mkImprisonment
+  gigante
+  1997
+  (Some 2005)
+  (Some "USMCFP Springfield")
+  "12 years"
+  true.
+
+Definition all_imprisonments : list Imprisonment :=
+  [gotti_imprisonment; amuso_imprisonment; persico_imprisonment; gigante_imprisonment].
+
+(** -------------------------------------------------------------------------- *)
+(** War Records                                                                *)
+(** -------------------------------------------------------------------------- *)
+
+(** Colombo War (1991-1993) - Orena vs. Persico factions *)
+Definition colombo_war : War := mkWar
+  "Third Colombo War"
+  1991
+  1993
+  [Colombo]
+  (Some ["Orena faction"; "Persico faction"])
+  (Some 12)
+  (Some "Persico faction prevailed; Orena imprisoned").
+
+(** Banana War (1964-1968) - Bonanno succession conflict *)
+Definition banana_war : War := mkWar
+  "Banana War"
+  1964
+  1968
+  [Bonanno]
+  (Some ["Joseph Bonanno loyalists"; "Commission-backed faction"])
+  (Some 9)
+  (Some "Bonanno forced out; succeeded by Paul Sciacca then Natale Evola").
+
+(** Castellammarese War (1930-1931) - Masseria vs. Maranzano *)
+Definition castellammarese_war : War := mkWar
+  "Castellammarese War"
+  1930
+  1931
+  [Genovese; Gambino; Lucchese; Bonanno; Colombo]
+  (Some ["Joe Masseria faction"; "Salvatore Maranzano faction"])
+  (Some 60)
+  (Some "Both Masseria and Maranzano killed; Luciano established Commission").
+
+Definition all_wars : list War :=
+  [colombo_war; banana_war; castellammarese_war].
 
 (** -------------------------------------------------------------------------- *)
 (** Aggregate Membership Database                                              *)
