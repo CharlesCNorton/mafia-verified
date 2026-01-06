@@ -18,7 +18,7 @@
 (******************************************************************************)
 
 (** -------------------------------------------------------------------------- *)
-(** TODO (111 remaining)                                                       *)
+(** TODO (44 remaining)                                                        *)
 (** -------------------------------------------------------------------------- *)
 (**
 NOTE: Work in progress. Record types defined but not yet populated with data.
@@ -36,56 +36,56 @@ NOTE: Work in progress. Record types defined but not yet populated with data.
 - [x] DONE: U.S. v. Leo (2010) + guilty plea
 - [x] DONE: U.S. v. Crea/Madonna (2017) + life sentences
 - [x] DONE: U.S. v. Russo (2011, 2021)
+- [x] DONE: 2011 FBI sweep as Case record
+- [x] DONE: 2018 Bonanno/Lucchese case as Case record
+- [x] DONE: Frank Locascio (Gambino consigliere)
+- [x] DONE: Jackie D'Amico (Gambino acting boss)
+- [x] DONE: Leonard DiMaria (Gambino capo)
 
-- [ ] 1. Add 2011 FBI sweep as Case record
-- [ ] 2. Add 2018 Bonanno/Lucchese case as Case record
-- [ ] 3. Add Frank Locascio (Gambino consigliere)
-- [ ] 4. Add Jackie D'Amico (Gambino acting boss)
-- [ ] 5. Add Leonard DiMaria (Gambino capo)
-- [ ] 6. Add Charles Carneglia (Gambino soldier)
-- [ ] 7. Add Vincent Gotti (Gambino soldier)
-- [ ] 8. Add Richard Gotti (Gambino soldier)
-- [ ] 9. Add Louis Manna (Genovese consigliere)
-- [ ] 10. Add Ernest Muscarella (Genovese acting consigliere)
-- [ ] 11. Add Matthew Ianniello (Genovese capo)
-- [ ] 12. Add Lawrence Dentico (Genovese panel member)
-- [ ] 13. Add Anthony Baratta (Lucchese capo)
-- [ ] 14. Add Ralph Scopo Sr. (Colombo)
-- [ ] 15. Add Theodore Persico Jr. (Colombo capo)
-- [ ] 16. Add Joseph Cammarano Jr. (Bonanno acting boss)
-- [ ] 17. Add Gerlando Sciascia (Bonanno capo)
-- [ ] 18. Add Dominick Napolitano (Bonanno capo)
-- [ ] 19. Add Gravano CooperatorRecord
-- [ ] 20. Add Vitale CooperatorRecord
-- [ ] 21. Add Massino CooperatorRecord
-- [ ] 22. Add D'Arco CooperatorRecord
-- [ ] 23. Add Murder record: Anastasia (1957)
-- [ ] 24. Add Murder record: Castellano (1985)
-- [ ] 25. Add Murder record: Galante (1979)
-- [ ] 26. Add Murder record: Cutolo (1999)
-- [ ] 27. Add BloodRelation: Carmine/Alphonse Persico
-- [ ] 28. Add BloodRelation: John/Peter Gotti
-- [ ] 29. Add BloodRelation: Vincent/Louis Gigante
-- [ ] 30. Add Imprisonment record: Gotti
-- [ ] 31. Add Imprisonment record: Amuso
-- [ ] 32. Add Imprisonment record: Persico
-- [ ] 33. Add Imprisonment record: Gigante
-- [ ] 34. Add War record: Colombo War (1991-1993)
-- [ ] 35. Add War record: Banana War (1964-1968)
-- [ ] 36. Add War record: Castellammarese War (1930-1931)
-- [ ] 37. Add pre-1931: Salvatore Maranzano
-- [ ] 38. Add pre-1931: Joe Masseria
-- [ ] 39. Add Buffalo family boss succession
-- [ ] 40. Add Chicago Outfit boss succession
-- [ ] 41. Expand Apalachin attendees
-- [ ] 42. Complete Genovese succession chain proofs
-- [ ] 43. Complete Bonanno succession chain proofs
-- [ ] 44. Complete Colombo succession chain proofs
-- [ ] 45. Prove unique_actual_boss_at_time for all families
-- [ ] 46. Prove exactly_one_actual_boss_at_time for each family
-- [ ] 47. Add validation same person roles don't overlap
-- [ ] 48. Prove all 5 families had active bosses each decade 1931-2020
-- [ ] 49. Add actual_boss_of query function and prove uniqueness
+- [ ] 1. Add Charles Carneglia (Gambino soldier)
+- [ ] 2. Add Vincent Gotti (Gambino soldier)
+- [ ] 3. Add Richard Gotti (Gambino soldier)
+- [ ] 4. Add Louis Manna (Genovese consigliere)
+- [ ] 5. Add Ernest Muscarella (Genovese acting consigliere)
+- [ ] 6. Add Matthew Ianniello (Genovese capo)
+- [ ] 7. Add Lawrence Dentico (Genovese panel member)
+- [ ] 8. Add Anthony Baratta (Lucchese capo)
+- [ ] 9. Add Ralph Scopo Sr. (Colombo)
+- [ ] 10. Add Theodore Persico Jr. (Colombo capo)
+- [ ] 11. Add Joseph Cammarano Jr. (Bonanno acting boss)
+- [ ] 12. Add Gerlando Sciascia (Bonanno capo)
+- [ ] 13. Add Dominick Napolitano (Bonanno capo)
+- [ ] 14. Add Gravano CooperatorRecord
+- [ ] 15. Add Vitale CooperatorRecord
+- [ ] 16. Add Massino CooperatorRecord
+- [ ] 17. Add D'Arco CooperatorRecord
+- [ ] 18. Add Murder record: Anastasia (1957)
+- [ ] 19. Add Murder record: Castellano (1985)
+- [ ] 20. Add Murder record: Galante (1979)
+- [ ] 21. Add Murder record: Cutolo (1999)
+- [ ] 22. Add BloodRelation: Carmine/Alphonse Persico
+- [ ] 23. Add BloodRelation: John/Peter Gotti
+- [ ] 24. Add BloodRelation: Vincent/Louis Gigante
+- [ ] 25. Add Imprisonment record: Gotti
+- [ ] 26. Add Imprisonment record: Amuso
+- [ ] 27. Add Imprisonment record: Persico
+- [ ] 28. Add Imprisonment record: Gigante
+- [ ] 29. Add War record: Colombo War (1991-1993)
+- [ ] 30. Add War record: Banana War (1964-1968)
+- [ ] 31. Add War record: Castellammarese War (1930-1931)
+- [ ] 32. Add pre-1931: Salvatore Maranzano
+- [ ] 33. Add pre-1931: Joe Masseria
+- [ ] 34. Add Buffalo family boss succession
+- [ ] 35. Add Chicago Outfit boss succession
+- [ ] 36. Expand Apalachin attendees
+- [ ] 37. Complete Genovese succession chain proofs
+- [ ] 38. Complete Bonanno succession chain proofs
+- [ ] 39. Complete Colombo succession chain proofs
+- [ ] 40. Prove unique_actual_boss_at_time for all families
+- [ ] 41. Prove exactly_one_actual_boss_at_time for each family
+- [ ] 42. Add validation same person roles don't overlap
+- [ ] 43. Prove all 5 families had active bosses each decade 1931-2020
+- [ ] 44. Add actual_boss_of query function and prove uniqueness
 *)
 
 Require Import Coq.Lists.List.
@@ -1131,8 +1131,22 @@ Definition mannino : Member := mkMember
   None
   (Some (FBIChart "FBI" 2008)).
 
+(** Jackie D'Amico - Acting Boss 2002-2011, convicted 2009 *)
+Definition damico : Member := mkMember
+  83
+  "John D'Amico"
+  (Some "Jackie the Nose")
+  Gambino
+  Boss
+  (Some ActingBoss)
+  (mkTenure 2002 (Some 2011))
+  (Some 1937)
+  (Some 2020)
+  None
+  (Some (DOJPress "DOJ" 2009)).
+
 Definition gambino_bosses : list Member :=
-  [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti; cefalu; cali; mannino].
+  [mangano; anastasia; carlo_gambino; castellano; gotti; peter_gotti; damico; cefalu; cali; mannino].
 
 (** Gambino Underbosses *)
 
@@ -1290,8 +1304,60 @@ Definition moncada : Member := mkMember
   None
   (Some (FBIChart "FBI" 2008)).
 
+(** Frank Locascio - Consigliere 1985-1992, convicted with Gotti *)
+Definition locascio : Member := mkMember
+  82
+  "Frank Locascio"
+  (Some "Frankie Loc")
+  Gambino
+  Consigliere
+  None
+  (mkTenure 1985 (Some 1992))
+  (Some 1932)
+  (Some 2017)
+  None
+  (Some (Conviction "E.D.N.Y." "90 Cr. 1051" 1992 "Life")).
+
 Definition gambino_consiglieres : list Member :=
-  [joseph_n_gallo; arcuri; joseph_corozzo; moncada].
+  [joseph_n_gallo; arcuri; locascio; joseph_corozzo; moncada].
+
+(** Gambino Capos *)
+
+(** Leonard DiMaria - Capo, convicted 2008 Operation Old Bridge *)
+Definition dimaria : Member := mkMember
+  84
+  "Leonard DiMaria"
+  None
+  Gambino
+  Capo
+  None
+  (mkTenure 1980 (Some 2008))
+  (Some 1936)
+  (Some 2021)
+  None
+  (Some (DOJPress "DOJ" 2008)).
+
+Definition gambino_capos : list Member :=
+  [corozzo; dimaria].
+
+(** Gambino Soldiers *)
+
+(** Charles Carneglia - Soldier, convicted 2009, life sentence *)
+Definition carneglia : Member := mkMember
+  85
+  "Charles Carneglia"
+  None
+  Gambino
+  Soldier
+  None
+  (mkTenure 1977 (Some 2009))
+  (Some 1947)
+  None
+  None
+  (Some (Conviction "E.D.N.Y." "08 Cr. 76" 2009 "Life")).
+
+Definition gambino_soldiers : list Member :=
+  [carneglia].
 
 (** -------------------------------------------------------------------------- *)
 (** Lucchese Family Succession                                                 *)
@@ -2645,7 +2711,7 @@ Proof. reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 39.
+Lemma boss_count : total_documented_bosses = 40.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
