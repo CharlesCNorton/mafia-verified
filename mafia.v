@@ -52,11 +52,11 @@
 29. Assign every Crew instance to its capo
 30. Populate crew_territory for every crew
 31. Link murder_carried_out_by to Member records instead of strings
-32. Add Masseria murder (1931)
-33. Add Maranzano murder (1931)
-34. Add Dutch Schultz murder (1935)
-35. Add Eboli murder (1972)
-36. Add Napolitano murder (1981)
+32. [DONE] Add Masseria murder (1931)
+33. [DONE] Add Maranzano murder (1931)
+34. [DONE] Add Dutch Schultz murder (1935)
+35. [DONE] Add Eboli murder (1972)
+36. [DONE] Add Napolitano murder (1981)
 37. Add every documented murder up to 2025
 38. Add Gallo-Profaci War (1961-63)
 39. Add Second Colombo War (1971-75)
@@ -3806,8 +3806,69 @@ Definition cutolo_murder : Murder := mkMurder
   (Some false)
   (Some "Body found 2008; Persico convicted of ordering murder").
 
+(** Joe Masseria - Murdered ending Castellammarese War *)
+Definition masseria_murder : Murder := mkMurder
+  "Giuseppe Masseria"
+  (Some Boss)
+  (Some Genovese)
+  1931
+  (Some "Nuova Villa Tammaro, Coney Island")
+  (Some "Lucky Luciano (arranged)")
+  (Some ["Vito Genovese"; "Albert Anastasia"; "Joe Adonis"; "Bugsy Siegel"])
+  (Some true)
+  (Some "Luciano left restaurant before killers entered; ended Castellammarese War").
+
+(** Salvatore Maranzano - Murdered months after Masseria *)
+Definition maranzano_murder : Murder := mkMurder
+  "Salvatore Maranzano"
+  (Some Boss)
+  (Some Bonanno)
+  1931
+  (Some "Park Avenue office, Manhattan")
+  (Some "Lucky Luciano (arranged)")
+  (Some ["Meyer Lansky associates"; "Jewish gunmen disguised as IRS agents"])
+  (Some false)
+  (Some "Killed 5 months after Masseria; Luciano took control of Commission").
+
+(** Dutch Schultz - Murdered by Commission order *)
+Definition schultz_murder : Murder := mkMurder
+  "Dutch Schultz"
+  (Some Boss)
+  None  (* Independent *)
+  1935
+  (Some "Palace Chophouse, Newark, NJ")
+  (Some "Commission")
+  (Some ["Murder Inc."; "Charles Workman"])
+  (Some true)
+  (Some "Commission-sanctioned after Schultz threatened to kill Thomas Dewey").
+
+(** Thomas Eboli - Murdered Genovese acting boss *)
+Definition eboli_murder : Murder := mkMurder
+  "Thomas Eboli"
+  (Some Underboss)
+  (Some Genovese)
+  1972
+  (Some "Crown Heights, Brooklyn")
+  (Some "Carlo Gambino (alleged)")
+  None
+  (Some false)
+  (Some "Owed Gambino $4 million in drug debt; killed on Brooklyn street").
+
+(** Dominick Napolitano - Murdered for sponsoring FBI agent Pistone *)
+Definition napolitano_murder : Murder := mkMurder
+  "Dominick Napolitano"
+  (Some Capo)
+  (Some Bonanno)
+  1981
+  (Some "Staten Island")
+  (Some "Bonanno leadership")
+  None
+  (Some true)
+  (Some "Killed for sponsoring FBI agent Joe Pistone (Donnie Brasco); hands cut off").
+
 Definition all_murders : list Murder :=
-  [anastasia_murder; castellano_murder; galante_murder; cutolo_murder].
+  [anastasia_murder; castellano_murder; galante_murder; cutolo_murder;
+   masseria_murder; maranzano_murder; schultz_murder; eboli_murder; napolitano_murder].
 
 (** -------------------------------------------------------------------------- *)
 (** Blood Relations                                                            *)
@@ -3939,19 +4000,24 @@ Definition all_wars : list War :=
 (** Relational Proofs                                                          *)
 (** -------------------------------------------------------------------------- *)
 
-(** Count of documented boss murders. *)
-Lemma boss_murder_count : List.length all_murders = 4.
+(** Count of documented murders. *)
+Lemma murder_count : List.length all_murders = 9.
 Proof. reflexivity. Qed.
 
-(** All documented murders were of bosses (or underboss). *)
+(** All documented murders were of leadership (Boss, Underboss, or Capo). *)
 Lemma all_murders_leadership : forall m,
   In m all_murders ->
-  murder_victim_rank m = Some Boss \/ murder_victim_rank m = Some Underboss.
+  murder_victim_rank m = Some Boss \/
+  murder_victim_rank m = Some Underboss \/
+  murder_victim_rank m = Some Capo \/
+  murder_victim_rank m = None.  (* Dutch Schultz was independent *)
 Proof.
   intros m Hin. simpl in Hin.
-  destruct Hin as [H | [H | [H | [H | H]]]];
+  destruct Hin as [H | [H | [H | [H | [H | [H | [H | [H | [H | H]]]]]]]]];
     try (rewrite <- H; left; reflexivity);
-    try (rewrite <- H; right; reflexivity);
+    try (rewrite <- H; right; left; reflexivity);
+    try (rewrite <- H; right; right; left; reflexivity);
+    try (rewrite <- H; right; right; right; reflexivity);
     contradiction.
 Qed.
 
@@ -4774,4 +4840,4 @@ Definition coverage_summary : string :=
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
   "Leadership: 71 bosses, selected underbosses/consiglieres/capos. " ++
-  "Events: 4 murders, 3 blood relations, 3 wars, 2 Commission votes.".
+  "Events: 9 murders, 3 blood relations, 3 wars, 2 Commission votes.".
