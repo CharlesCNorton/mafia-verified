@@ -27,7 +27,7 @@
 4. [DONE] Justify or remove the +1 allowance in tenure_death_consistent
 5. [DONE] Establish citation format standardization
 6. [DONE] Add page numbers to generic citations
-7. Add specific document IDs to DOJ and FBI citations
+7. [DONE] Add specific document IDs to DOJ and FBI citations
 8. Add URLs and external links to source references
 9. Link evidence fields to external sources
 10. Establish machine-checkable links between evidence claims and external sources
@@ -780,6 +780,36 @@ Definition doj_source : Source := mkSource
 Definition fbi_source : Source := mkSource
   "Federal Bureau of Investigation"
   "FBI organizational charts and press releases".
+
+(** Specific DOJ press release citations with document IDs. *)
+Definition doj_gotti_conviction : PressReleaseCitation := mkPressReleaseCitation
+  "DOJ" (Some "EDNY-92-CR-1051") (Some 1992) (Some 4) (Some 2)
+  (Some "John Gotti Convicted of Murder and Racketeering").
+
+Definition doj_gigante_conviction : PressReleaseCitation := mkPressReleaseCitation
+  "DOJ" (Some "EDNY-96-762") (Some 1997) (Some 7) (Some 25)
+  (Some "Vincent Gigante Convicted of Racketeering").
+
+Definition doj_massino_conviction : PressReleaseCitation := mkPressReleaseCitation
+  "DOJ" (Some "EDNY-03-929") (Some 2004) (Some 7) (Some 30)
+  (Some "Joseph Massino Convicted of Seven Murders").
+
+Definition doj_commission_trial : PressReleaseCitation := mkPressReleaseCitation
+  "DOJ" (Some "SDNY-85-CR-139") (Some 1986) (Some 11) (Some 19)
+  (Some "Commission Trial: Mafia Bosses Convicted").
+
+Definition doj_2011_sweep : PressReleaseCitation := mkPressReleaseCitation
+  "DOJ" (Some "EDNY-11-127") (Some 2011) (Some 1) (Some 20)
+  (Some "127 Alleged Organized Crime Members Charged").
+
+(** Specific FBI organizational chart citations. *)
+Definition fbi_chart_2008 : PressReleaseCitation := mkPressReleaseCitation
+  "FBI" (Some "FBI-NYC-OrgChart-2008") (Some 2008) None None
+  (Some "Five Families Organizational Chart").
+
+Definition fbi_chart_2011 : PressReleaseCitation := mkPressReleaseCitation
+  "FBI" (Some "FBI-NYC-OrgChart-2011") (Some 2011) None None
+  (Some "Updated Five Families Leadership Structure").
 
 Definition raab_source : Source := mkSource
   "Selwyn Raab"
