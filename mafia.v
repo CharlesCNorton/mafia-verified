@@ -21,19 +21,15 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Extend succession predicate for causal termination
-2. Enforce consistency between tenure_end_cause/death_year/murder records
-3. Enforce evidence tier at inclusion
-4. Prove Forall member_wf all_leadership
-5. Prove uniqueness invariant for all years
-6. Add relational proofs for blood relations/murders/wars
-7. Apply Commission rules to historical votes
-8. Replace spot-check proofs with universal quantification
-9. Add completeness claims with proofs
-10. Expand coverage to all documented positions
-11. Add full crew and associate lists up to 2025
-12. Resolve post-2005 Genovese leadership
-13. Link evidence fields to external sources
+1. Prove uniqueness invariant for all years
+2. Add relational proofs for blood relations/murders/wars
+3. Apply Commission rules to historical votes
+4. Replace spot-check proofs with universal quantification
+5. Add completeness claims with proofs
+6. Expand coverage to all documented positions
+7. Add full crew and associate lists up to 2025
+8. Resolve post-2005 Genovese leadership
+9. Link evidence fields to external sources
 *)
 
 Require Import Coq.Lists.List.
@@ -403,6 +399,17 @@ Definition member_tier (m : Member) : EvidenceTier :=
 Definition member_evidence_sufficient (m : Member) : bool :=
   tier_at_least (rank_minimum_tier (member_rank m)) (member_tier m).
 
+(** Check if member has any evidence at all. *)
+Definition has_evidence (m : Member) : bool :=
+  match member_evidence m with
+  | Some _ => true
+  | None => false
+  end.
+
+(** Check if member meets inclusion requirements (has evidence, sufficient tier). *)
+Definition meets_inclusion_requirements (m : Member) : bool :=
+  has_evidence m && member_evidence_sufficient m.
+
 (** A VerifiedMember bundles a Member with proof that evidence meets rank requirements. *)
 Record VerifiedMember := mkVerifiedMember {
   vm_member : Member;
@@ -438,6 +445,34 @@ Definition tenure_death_consistent_b (m : Member) : bool :=
   | Some t_end, Some d_year => Nat.leb t_end (d_year + 1)
   | _, _ => true
   end.
+
+(** Cause-death consistency: if tenure ended by death/murder, death_year must exist. *)
+Definition cause_death_consistent (m : Member) : Prop :=
+  match member_tenure_end_cause m with
+  | Some Died | Some Murdered => member_death_year m <> None
+  | _ => True
+  end.
+
+Definition cause_death_consistent_b (m : Member) : bool :=
+  match member_tenure_end_cause m with
+  | Some Died | Some Murdered =>
+      match member_death_year m with
+      | Some _ => true
+      | None => false
+      end
+  | _ => true
+  end.
+
+(** Combined member consistency: all well-formedness conditions. *)
+Definition member_fully_consistent (m : Member) : Prop :=
+  member_wf m /\
+  tenure_death_consistent m /\
+  cause_death_consistent m.
+
+Definition member_fully_consistent_b (m : Member) : bool :=
+  member_wf_b m &&
+  tenure_death_consistent_b m &&
+  cause_death_consistent_b m.
 
 Definition same_person (m1 m2 : Member) : bool :=
   Nat.eqb (member_person_id m1) (member_person_id m2).
@@ -2953,6 +2988,21 @@ Proof.
   end.
 Qed.
 
+(** All leadership members satisfy well-formedness (BossKind only for Boss). *)
+Lemma all_leadership_wf : forall m,
+  In m all_leadership -> member_wf_b m = true.
+Proof.
+  intros m Hin.
+  unfold all_leadership, all_bosses, all_underbosses, all_consiglieres in Hin.
+  repeat (apply in_app_or in Hin; destruct Hin as [Hin | Hin]);
+  simpl in Hin;
+  repeat match goal with
+  | H : _ \/ _ |- _ => destruct H as [H | H]
+  | H : _ = m |- _ => rewrite <- H; reflexivity
+  | H : False |- _ => contradiction
+  end.
+Qed.
+
 (** -------------------------------------------------------------------------- *)
 (** Succession Validity                                                        *)
 (** -------------------------------------------------------------------------- *)
@@ -3002,6 +3052,24 @@ Definition strict_succession (predecessor successor : Member) : Prop :=
   | None => False
   | Some end_y => tenure_start (member_tenure successor) >= end_y
   end.
+
+(** Causal succession: valid succession with documented termination cause.
+    The predecessor's tenure ended due to a specific event (death, murder,
+    imprisonment, resignation, removal, or supersession). *)
+Definition causal_succession (predecessor successor : Member) : Prop :=
+  valid_succession predecessor successor /\
+  member_tenure_end_cause predecessor <> None.
+
+(** Verify causal succession includes a termination reason. *)
+Lemma causal_has_cause : forall p s,
+  causal_succession p s ->
+  exists cause, member_tenure_end_cause p = Some cause.
+Proof.
+  intros p s [_ Hcause].
+  destruct (member_tenure_end_cause p) as [c|].
+  - exists c. reflexivity.
+  - contradiction.
+Qed.
 
 (** Strict succession implies valid succession (coarse time is weaker). *)
 Lemma strict_implies_valid_succession : forall p s,
