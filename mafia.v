@@ -30,7 +30,7 @@
 7. [DONE] Add specific document IDs to DOJ and FBI citations
 8. [DONE] Add URLs and external links to source references
 9. [DONE] Link evidence fields to external sources
-10. Establish machine-checkable links between evidence claims and external sources
+10. [DONE] Establish machine-checkable links between evidence claims and external sources
 11. Clarify evidence tier assignment criteria
 12. Use PreciseDate for all tenure boundaries
 13. Populate member_initiation_year for all records
@@ -462,6 +462,81 @@ Definition commission_trial_link : EvidenceLink := mkEvidenceLink
    BookCite (mkBookCitation "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (342, 388)))]
   [url_pacer; url_doj_archive]
   (Some "verified").
+
+(** -------------------------------------------------------------------------- *)
+(** Machine-Checkable Evidence Verification                                    *)
+(** -------------------------------------------------------------------------- *)
+
+(** Verification status for evidence links. *)
+Inductive VerificationStatus : Type :=
+  | Verified      (* Confirmed against external source *)
+  | Pending       (* Not yet checked *)
+  | Disputed      (* Conflicting sources exist *)
+  | Unverifiable. (* Source no longer accessible *)
+
+(** Check if an evidence link has at least one citation. *)
+Definition has_citation (el : EvidenceLink) : bool :=
+  match el_citations el with
+  | [] => false
+  | _ => true
+  end.
+
+(** Check if an evidence link has at least one URL. *)
+Definition has_url (el : EvidenceLink) : bool :=
+  match el_urls el with
+  | [] => false
+  | _ => true
+  end.
+
+(** Check if evidence link is minimally documented (has citation OR URL). *)
+Definition is_documented (el : EvidenceLink) : bool :=
+  has_citation el || has_url el.
+
+(** Check if evidence link is fully documented (has citation AND URL). *)
+Definition is_fully_documented (el : EvidenceLink) : bool :=
+  has_citation el && has_url el.
+
+(** Extract docket number from court citation if present. *)
+Definition get_docket_from_citation (c : Citation) : option string :=
+  match c with
+  | CourtCite cc => Some (cc_docket cc)
+  | _ => None
+  end.
+
+(** Check if evidence docket matches citation docket (machine-checkable consistency). *)
+Definition evidence_matches_citation (e : Evidence) (c : Citation) : bool :=
+  match e, c with
+  | Conviction court docket _ _, CourtCite cc =>
+      String.eqb court (cc_court cc) && String.eqb docket (cc_docket cc)
+  | GuiltyPlea court docket _, CourtCite cc =>
+      String.eqb court (cc_court cc) && String.eqb docket (cc_docket cc)
+  | Indictment court docket _, CourtCite cc =>
+      String.eqb court (cc_court cc) && String.eqb docket (cc_docket cc)
+  | _, _ => true  (* Non-court evidence can't be cross-checked this way *)
+  end.
+
+(** Verify all citations in an evidence link are consistent with the evidence. *)
+Definition all_citations_consistent (el : EvidenceLink) : bool :=
+  List.forallb (evidence_matches_citation (el_evidence el)) (el_citations el).
+
+(** Proof: gotti_conviction_link is internally consistent. *)
+Lemma gotti_link_consistent : all_citations_consistent gotti_conviction_link = true.
+Proof. reflexivity. Qed.
+
+(** Proof: gigante_conviction_link is internally consistent. *)
+Lemma gigante_link_consistent : all_citations_consistent gigante_conviction_link = true.
+Proof. reflexivity. Qed.
+
+(** Proof: commission_trial_link is internally consistent. *)
+Lemma commission_link_consistent : all_citations_consistent commission_trial_link = true.
+Proof. reflexivity. Qed.
+
+(** All example links are fully documented (have both citations and URLs). *)
+Lemma example_links_documented :
+  is_fully_documented gotti_conviction_link = true /\
+  is_fully_documented gigante_conviction_link = true /\
+  is_fully_documented commission_trial_link = true.
+Proof. repeat split; reflexivity. Qed.
 
 (** Numeric ordering for tier comparison (lower = stronger). *)
 Definition tier_level (t : EvidenceTier) : nat :=
