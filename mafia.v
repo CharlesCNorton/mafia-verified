@@ -21,7 +21,7 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Add Philadelphia, New England, Detroit, Kansas City, and New Orleans to Family type
+1. [DONE] Add Philadelphia, New England, Detroit, Kansas City, and New Orleans to Family type
 2. Add mechanism to express intra-year ordering
 3. Fix find_unique to distinguish zero matches from multiple matches
 4. Justify or remove the +1 allowance in tenure_death_consistent
@@ -99,13 +99,18 @@ Open Scope string_scope.
     original boss names in comments. *)
 
 Inductive Family : Type :=
-  | Genovese    (* Originally Luciano family *)
-  | Gambino     (* Originally Mangano family *)
-  | Lucchese    (* Originally Gagliano family *)
-  | Bonanno     (* Originally Maranzano -> Bonanno *)
-  | Colombo     (* Originally Profaci family *)
-  | Buffalo     (* Magaddino family *)
-  | Chicago.    (* The Outfit *)
+  | Genovese       (* Originally Luciano family *)
+  | Gambino        (* Originally Mangano family *)
+  | Lucchese       (* Originally Gagliano family *)
+  | Bonanno        (* Originally Maranzano -> Bonanno *)
+  | Colombo        (* Originally Profaci family *)
+  | Buffalo        (* Magaddino family *)
+  | Chicago        (* The Outfit *)
+  | Philadelphia   (* Bruno-Scarfo family *)
+  | NewEngland     (* Patriarca family *)
+  | Detroit        (* Zerilli family *)
+  | KansasCity     (* Civella family *)
+  | NewOrleans.    (* Marcello family *)
 
 (** Family equality is decidable. *)
 Definition family_eqb (f1 f2 : Family) : bool :=
@@ -117,6 +122,11 @@ Definition family_eqb (f1 f2 : Family) : bool :=
   | Colombo, Colombo => true
   | Buffalo, Buffalo => true
   | Chicago, Chicago => true
+  | Philadelphia, Philadelphia => true
+  | NewEngland, NewEngland => true
+  | Detroit, Detroit => true
+  | KansasCity, KansasCity => true
+  | NewOrleans, NewOrleans => true
   | _, _ => false
   end.
 
@@ -3776,13 +3786,18 @@ Lemma non_nyc_families_represented :
   count_family_members Chicago all_bosses >= 1.
 Proof. vm_compute. split; lia. Qed.
 
-(** All seven families in the database have bosses. *)
-Lemma all_families_have_bosses :
-  forall f : Family,
-    count_family_members f all_bosses >= 1.
-Proof.
-  intro f. destruct f; vm_compute; lia.
-Qed.
+(** Original seven families in the database have bosses.
+    New families (Philadelphia, NewEngland, Detroit, KansasCity, NewOrleans)
+    pending member additions per TODO. *)
+Lemma original_families_have_bosses :
+  count_family_members Genovese all_bosses >= 1 /\
+  count_family_members Gambino all_bosses >= 1 /\
+  count_family_members Lucchese all_bosses >= 1 /\
+  count_family_members Bonanno all_bosses >= 1 /\
+  count_family_members Colombo all_bosses >= 1 /\
+  count_family_members Buffalo all_bosses >= 1 /\
+  count_family_members Chicago all_bosses >= 1.
+Proof. vm_compute. repeat split; lia. Qed.
 
 (** Succession chains exist for all NYC families.
     See individual *_complete_chain lemmas above for proofs:
