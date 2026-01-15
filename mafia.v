@@ -21,11 +21,10 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Add completeness claims with proofs
-2. Expand coverage to all documented positions
-3. Add full crew and associate lists up to 2025
-4. Resolve post-2005 Genovese leadership
-5. Link evidence fields to external sources
+1. Expand coverage to all documented positions
+2. Add full crew and associate lists up to 2025
+3. Resolve post-2005 Genovese leadership
+4. Link evidence fields to external sources
 *)
 
 Require Import Coq.Lists.List.
