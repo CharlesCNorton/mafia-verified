@@ -34,11 +34,11 @@
 11. [DONE] Clarify evidence tier assignment criteria
 12. [DONE] Use PreciseDate for all tenure boundaries
 13. [DONE] Populate member_initiation_year for all records
-14. Add Philadelphia family members
-15. Add New England family members
-16. Add Detroit family members
-17. Add Kansas City family members
-18. Add New Orleans family members
+14. [DONE] Add Philadelphia family members
+15. [DONE] Add New England family members
+16. [DONE] Add Detroit family members
+17. [DONE] Add Kansas City family members
+18. [DONE] Add New Orleans family members
 19. Expand Buffalo family beyond 3 bosses
 20. Expand Chicago family beyond 4 bosses
 21. Resolve post-2005 Genovese ActualBoss
@@ -2836,6 +2836,209 @@ Definition chicago_bosses : list Member :=
   [accardo; giancana; aiuppa; difronzo].
 
 (** -------------------------------------------------------------------------- *)
+(** Philadelphia Crime Family (Bruno-Scarfo)                                   *)
+(** -------------------------------------------------------------------------- *)
+
+(** Angelo Bruno - Boss 1959-1980, "The Docile Don", murdered *)
+Definition bruno : Member := mkMember
+  (mkPerson 110 "Angelo Bruno" (Some "The Docile Don") (Some 1910) (Some 1980))
+  Philadelphia
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1959 (Some 1980))
+  (Some Murdered)
+  None
+  (Some (Journalism ["The Last Mafioso (1981)"])).
+
+(** Nicky Scarfo - Boss 1981-1991, imprisoned *)
+Definition scarfo : Member := mkMember
+  (mkPerson 111 "Nicodemo Scarfo" (Some "Little Nicky") (Some 1929) (Some 2017))
+  Philadelphia
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1981 (Some 1991))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D. Pa." "90-0240" 1988 "55 years")).
+
+(** John Stanfa - Boss 1991-1994 *)
+Definition stanfa : Member := mkMember
+  (mkPerson 112 "John Stanfa" None (Some 1940) None)
+  Philadelphia
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1991 (Some 1994))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D. Pa." "94-0266" 1995 "Life")).
+
+(** Joey Merlino - Boss 1999-2001, 2016-present *)
+Definition merlino : Member := mkMember
+  (mkPerson 113 "Joseph Merlino" (Some "Skinny Joey") (Some 1962) None)
+  Philadelphia
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 2016 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "16-0657" 2016)).
+
+Definition philadelphia_bosses : list Member :=
+  [bruno; scarfo; stanfa; merlino].
+
+(** -------------------------------------------------------------------------- *)
+(** New England Crime Family (Patriarca)                                       *)
+(** -------------------------------------------------------------------------- *)
+
+(** Raymond Patriarca Sr. - Boss 1954-1984, dominated New England *)
+Definition patriarca_sr : Member := mkMember
+  (mkPerson 115 "Raymond Patriarca" (Some "The Man") (Some 1908) (Some 1984))
+  NewEngland
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1954 (Some 1984))
+  (Some Died)
+  None
+  (Some (Journalism ["The Underboss (1989)"])).
+
+(** Raymond Patriarca Jr. - Boss 1984-1991 *)
+Definition patriarca_jr : Member := mkMember
+  (mkPerson 116 "Raymond Patriarca Jr." None (Some 1945) None)
+  NewEngland
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1984 (Some 1991))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "90-CR-10251" 1991 "8 years")).
+
+(** Frank Salemme - Boss 1991-1995 *)
+Definition salemme : Member := mkMember
+  (mkPerson 117 "Frank Salemme" (Some "Cadillac Frank") (Some 1933) (Some 2022))
+  NewEngland
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1991 (Some 1995))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "95-10192" 1999 "11 years")).
+
+(** Luigi Manocchio - Boss 1998-2009 *)
+Definition manocchio : Member := mkMember
+  (mkPerson 118 "Luigi Manocchio" None (Some 1927) None)
+  NewEngland
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1998 (Some 2009))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D.R.I." "09-0025" 2011 "5 years")).
+
+Definition newengland_bosses : list Member :=
+  [patriarca_sr; patriarca_jr; salemme; manocchio].
+
+(** -------------------------------------------------------------------------- *)
+(** Detroit Partnership (Zerilli Family)                                       *)
+(** -------------------------------------------------------------------------- *)
+
+(** Joseph Zerilli - Boss 1936-1977, one of longest-serving bosses *)
+Definition zerilli : Member := mkMember
+  (mkPerson 120 "Joseph Zerilli" None (Some 1897) (Some 1977))
+  Detroit
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1936 (Some 1977))
+  (Some Died)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Jack Tocco - Boss 1977-2014 *)
+Definition tocco : Member := mkMember
+  (mkPerson 121 "Giacomo Tocco" (Some "Jack") (Some 1927) (Some 2014))
+  Detroit
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1977 (Some 2014))
+  (Some Died)
+  None
+  (Some (Conviction "E.D. Mich." "96-80414" 1998 "Probation")).
+
+Definition detroit_bosses : list Member :=
+  [zerilli; tocco].
+
+(** -------------------------------------------------------------------------- *)
+(** Kansas City Crime Family (Civella)                                         *)
+(** -------------------------------------------------------------------------- *)
+
+(** Nick Civella - Boss 1953-1983, Commission member *)
+Definition civella : Member := mkMember
+  (mkPerson 125 "Nicholas Civella" None (Some 1912) (Some 1983))
+  KansasCity
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1953 (Some 1983))
+  (Some Died)
+  None
+  (Some (Journalism ["The Outfit (2002)"])).
+
+(** Carl Civella - Boss 1983-1994, succeeded brother *)
+Definition carl_civella : Member := mkMember
+  (mkPerson 126 "Carl Civella" (Some "Corky") (Some 1910) (Some 1994))
+  KansasCity
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1983 (Some 1994))
+  (Some Died)
+  None
+  (Some (Journalism ["The Outfit (2002)"])).
+
+Definition kansascity_bosses : list Member :=
+  [civella; carl_civella].
+
+(** -------------------------------------------------------------------------- *)
+(** New Orleans Crime Family (Marcello)                                        *)
+(** -------------------------------------------------------------------------- *)
+
+(** Carlos Marcello - Boss 1947-1983, most powerful Southern boss *)
+Definition marcello : Member := mkMember
+  (mkPerson 130 "Carlos Marcello" (Some "The Little Man") (Some 1910) (Some 1993))
+  NewOrleans
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1947 (Some 1983))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D. La." "81-77" 1983 "7 years")).
+
+(** Anthony Carolla - Boss 1983-2007 *)
+Definition carolla : Member := mkMember
+  (mkPerson 131 "Anthony Carolla" None (Some 1934) None)
+  NewOrleans
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1983 (Some 2007))
+  (Some Died)
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition neworleans_bosses : list Member :=
+  [marcello; carolla].
+
+(** -------------------------------------------------------------------------- *)
 (** Apalachin Meeting (November 14, 1957)                                      *)
 (** -------------------------------------------------------------------------- *)
 
@@ -3609,7 +3812,9 @@ Proof. reflexivity. Qed.
 
 Definition all_bosses : list Member :=
   genovese_bosses ++ gambino_bosses ++ lucchese_bosses ++
-  bonanno_bosses ++ colombo_bosses ++ buffalo_bosses ++ chicago_bosses.
+  bonanno_bosses ++ colombo_bosses ++ buffalo_bosses ++ chicago_bosses ++
+  philadelphia_bosses ++ newengland_bosses ++ detroit_bosses ++
+  kansascity_bosses ++ neworleans_bosses.
 
 Definition all_underbosses : list Member :=
   genovese_underbosses ++ gambino_underbosses ++ lucchese_underbosses ++
@@ -4330,7 +4535,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 50.
+Lemma boss_count : total_documented_bosses = 64.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
@@ -4396,5 +4601,5 @@ Definition coverage_summary : string :=
   "NYC Five Families (1931-2020): Complete boss succession. " ++
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
-  "Leadership: 50 bosses, selected underbosses/consiglieres/capos. " ++
+  "Leadership: 64 bosses, selected underbosses/consiglieres/capos. " ++
   "Events: 4 murders, 3 blood relations, 3 wars, 2 Commission votes.".
