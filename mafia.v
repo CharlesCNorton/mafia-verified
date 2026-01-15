@@ -31,7 +31,7 @@
 8. [DONE] Add URLs and external links to source references
 9. [DONE] Link evidence fields to external sources
 10. [DONE] Establish machine-checkable links between evidence claims and external sources
-11. Clarify evidence tier assignment criteria
+11. [DONE] Clarify evidence tier assignment criteria
 12. Use PreciseDate for all tenure boundaries
 13. Populate member_initiation_year for all records
 14. Add Philadelphia family members
@@ -362,11 +362,53 @@ Definition url_gangland_news : URLReference := mkURLReference
   (Some "https://web.archive.org/web/*/ganglandnews.com/").
 
 (** EvidenceTier: Five-level hierarchy for evidential strength.
-    Tier 1 (Definitive): Conviction, guilty plea, self-identification under oath.
-    Tier 2 (Authoritative): Federal indictment, DOJ/FBI official docs, cooperator testimony.
-    Tier 3 (Strong): Multiple cooperators, foreign courts, murder victim records.
-    Tier 4 (Supported): Single cooperator, multiple journalistic sources.
-    Tier 5 (Claimed): Single source, inference. *)
+
+    TIER 1 - DEFINITIVE (Highest reliability):
+    Criteria: Direct court records establishing membership/role with finality.
+    - Conviction: Jury verdict or bench trial finding guilt
+    - Guilty Plea: Defendant's own admission in court proceedings
+    - Self-identification under oath: Cooperator admitting own membership
+    Why Definitive: These represent conclusive legal determinations that cannot
+    be reasonably disputed. The person either was convicted, pled guilty, or
+    admitted membership under penalty of perjury.
+
+    TIER 2 - AUTHORITATIVE (High reliability):
+    Criteria: Official government documents or sworn testimony identifying others.
+    - Federal indictment: Grand jury found probable cause; not proof but strong
+    - DOJ/FBI press releases: Official government position on organizational role
+    - Named cooperator testimony: Sworn statements identifying specific individuals
+    - Wiretap evidence: Direct surveillance capturing discussions of hierarchy
+    Why Authoritative: Government sources with institutional accountability, but
+    not yet adjudicated (indictments) or potentially biased (cooperator naming others).
+
+    TIER 3 - STRONG (Moderate-high reliability):
+    Criteria: Multiple independent sources or foreign legal proceedings.
+    - Multiple cooperators: 2+ witnesses independently naming same individual
+    - Foreign court proceedings: Italian Maxi Trial, Canadian courts
+    - Murder victim records: Deceased identified as member in legal proceedings
+    - Law enforcement reports: Internal FBI/police assessments
+    Why Strong: Corroboration reduces single-source bias, but lacks the finality
+    of US conviction or the official weight of federal indictment.
+
+    TIER 4 - SUPPORTED (Moderate reliability):
+    Criteria: Single credible source or multiple journalistic accounts.
+    - Single cooperator naming others: One witness without corroboration
+    - Multiple journalistic sources: 2+ investigative journalists agreeing
+    Why Supported: Credible but not independently verified; single cooperators
+    may have motives to exaggerate or misidentify.
+
+    TIER 5 - CLAIMED (Low reliability):
+    Criteria: Single unverified source or logical inference.
+    - Single journalistic source: One book/article making claim
+    - Inferred from context: Deduced from circumstantial evidence
+    Why Claimed: Cannot be independently verified; useful for completeness
+    but should be treated with appropriate skepticism.
+
+    ASSIGNMENT RULES:
+    - When multiple evidence types exist, use the HIGHEST tier (lowest number)
+    - Tier should reflect the BEST available evidence, not the most recent
+    - Evidence should be re-evaluated when new sources become available
+    - Disputed claims should note the dispute in documentation *)
 Inductive EvidenceTier : Type :=
   | Definitive
   | Authoritative
