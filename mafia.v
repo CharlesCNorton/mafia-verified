@@ -58,8 +58,8 @@
 35. [DONE] Add Eboli murder (1972)
 36. [DONE] Add Napolitano murder (1981)
 37. Add every documented murder up to 2025
-38. Add Gallo-Profaci War (1961-63)
-39. Add Second Colombo War (1971-75)
+38. [DONE] Add Gallo-Profaci War (1961-63)
+39. [DONE] Add Second Colombo War (1971-75)
 40. Add every documented inter-family and intra-family war
 41. Document every Commission vote with known details
 42. Add Jimmy Fratianno to cooperators
@@ -3993,8 +3993,28 @@ Definition castellammarese_war : War := mkWar
   (Some 60)
   (Some "Both Masseria and Maranzano killed; Luciano established Commission").
 
+(** Gallo-Profaci War (1961-1963) - Gallo brothers vs. Profaci *)
+Definition gallo_profaci_war : War := mkWar
+  "Gallo-Profaci War"
+  1961
+  1963
+  [Colombo]
+  (Some ["Gallo faction"; "Profaci faction"])
+  (Some 9)
+  (Some "Gallo brothers kidnapped leadership; Profaci died 1962; led to Colombo takeover").
+
+(** Second Colombo War (1971-1975) - Joe Gallo vs. Colombo loyalists *)
+Definition second_colombo_war : War := mkWar
+  "Second Colombo War"
+  1971
+  1975
+  [Colombo]
+  (Some ["Crazy Joe Gallo faction"; "Colombo loyalists"])
+  (Some 12)
+  (Some "Colombo shot 1971 (survived); Gallo murdered 1972; Persico emerged as leader").
+
 Definition all_wars : list War :=
-  [colombo_war; banana_war; castellammarese_war].
+  [castellammarese_war; gallo_profaci_war; second_colombo_war; banana_war; colombo_war].
 
 (** -------------------------------------------------------------------------- *)
 (** Relational Proofs                                                          *)
@@ -4036,7 +4056,7 @@ Proof.
 Qed.
 
 (** Count of documented wars. *)
-Lemma war_count : List.length all_wars = 3.
+Lemma war_count : List.length all_wars = 5.
 Proof. reflexivity. Qed.
 
 (** The Castellammarese War involved all five founding families. *)
@@ -4840,4 +4860,4 @@ Definition coverage_summary : string :=
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
   "Leadership: 71 bosses, selected underbosses/consiglieres/capos. " ++
-  "Events: 9 murders, 3 blood relations, 3 wars, 2 Commission votes.".
+  "Events: 9 murders, 3 blood relations, 5 wars, 2 Commission votes.".
