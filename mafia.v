@@ -21,27 +21,23 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Model Bonanno expulsion period (DiGregorio/Sciacca)
-2. Expand Apalachin attendees to non-NYC families
-3. Add Buffalo family boss succession chain
-4. Add Chicago Outfit boss succession chain
-5. Replace List.find with uniqueness-safe query
-6. Fix vote_passes to require strict majority
-7. Fix murder_unanimous to require quorum
-8. Strengthen valid_succession to exclude FrontBoss
-9. Extend succession predicate for causal termination
-10. Enforce consistency between tenure_end_cause/death_year/murder records
-11. Enforce evidence tier at inclusion
-12. Prove Forall member_wf all_leadership
-13. Prove uniqueness invariant for all years
-14. Add relational proofs for blood relations/murders/wars
-15. Apply Commission rules to historical votes
-16. Replace spot-check proofs with universal quantification
-17. Add completeness claims with proofs
-18. Expand coverage to all documented positions
-19. Add full crew and associate lists up to 2025
-20. Resolve post-2005 Genovese leadership
-21. Link evidence fields to external sources
+1. Replace List.find with uniqueness-safe query
+2. Fix vote_passes to require strict majority
+3. Fix murder_unanimous to require quorum
+4. Strengthen valid_succession to exclude FrontBoss
+5. Extend succession predicate for causal termination
+6. Enforce consistency between tenure_end_cause/death_year/murder records
+7. Enforce evidence tier at inclusion
+8. Prove Forall member_wf all_leadership
+9. Prove uniqueness invariant for all years
+10. Add relational proofs for blood relations/murders/wars
+11. Apply Commission rules to historical votes
+12. Replace spot-check proofs with universal quantification
+13. Add completeness claims with proofs
+14. Expand coverage to all documented positions
+15. Add full crew and associate lists up to 2025
+16. Resolve post-2005 Genovese leadership
+17. Link evidence fields to external sources
 *)
 
 Require Import Coq.Lists.List.
@@ -1603,6 +1599,38 @@ Definition lucchese_capos : list Member :=
 (** Bonanno Family Succession                                                  *)
 (** -------------------------------------------------------------------------- *)
 
+(** During the Banana War (1964-1968), Joseph Bonanno was expelled by the
+    Commission. The Commission installed rival bosses to run the family:
+    - Gaspar DiGregorio (1964-1966): Commission-backed, ineffective
+    - Paul Sciacca (1966-1971): Succeeded DiGregorio
+    Joseph Bonanno's tenure officially ended in 1969 when he retired to Arizona. *)
+
+(** Gaspar DiGregorio - Commission-backed boss during Banana War *)
+Definition digregorio : Member := mkMember
+  (mkPerson 100 "Gaspar DiGregorio" None (Some 1905) (Some 1970))
+  Bonanno
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1964 (Some 1967))
+  (Some Removed)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Paul Sciacca - Boss 1966-1968, succeeded DiGregorio.
+    Note: Some sources extend his tenure to 1971, but Evola emerged as
+    the compromise leader by 1968, effectively ending Sciacca's authority. *)
+Definition sciacca : Member := mkMember
+  (mkPerson 101 "Paul Sciacca" None (Some 1908) (Some 1986))
+  Bonanno
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1966 (Some 1969))
+  (Some Superseded)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
 (** Natale Evola - Boss 1968-1973 *)
 Definition evola : Member := mkMember
   (mkPerson 57 "Natale Evola" None (Some 1907) (Some 1973))
@@ -1688,7 +1716,7 @@ Definition mancuso : Member := mkMember
   (Some (DOJPress "DOJ" 2005)).
 
 Definition bonanno_bosses : list Member :=
-  [bonanno; evola; rastelli_early; galante_boss; rastelli; massino; basciano; mancuso].
+  [bonanno; digregorio; sciacca; evola; rastelli_early; galante_boss; rastelli; massino; basciano; mancuso].
 
 (** Bonanno Underbosses *)
 
@@ -2045,6 +2073,107 @@ Definition colombo_capos : list Member :=
   [scopo; theodore_persico].
 
 (** -------------------------------------------------------------------------- *)
+(** Buffalo Family (Magaddino Family)                                          *)
+(** -------------------------------------------------------------------------- *)
+
+(** Stefano Magaddino - Boss 1922-1974, original Commission member.
+    Attended Apalachin 1957. One of the longest-serving bosses. *)
+Definition magaddino : Member := mkMember
+  (mkPerson 102 "Stefano Magaddino" (Some "The Undertaker") (Some 1891) (Some 1974))
+  Buffalo
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1922 (Some 1975))
+  (Some Died)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Joseph Todaro Sr. - Boss 1974-1984, succeeded Magaddino *)
+Definition todaro_sr : Member := mkMember
+  (mkPerson 104 "Joseph Todaro" (Some "Joe T") (Some 1923) (Some 2012))
+  Buffalo
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1974 (Some 1985))
+  (Some Resigned)
+  None
+  (Some (Journalism ["Gangland News"])).
+
+(** Leonard Falzone - Boss 1984-2006 *)
+Definition falzone : Member := mkMember
+  (mkPerson 105 "Leonard Falzone" None (Some 1918) (Some 2006))
+  Buffalo
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1984 (Some 2007))
+  (Some Died)
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition buffalo_bosses : list Member :=
+  [magaddino; todaro_sr; falzone].
+
+(** -------------------------------------------------------------------------- *)
+(** Chicago Outfit                                                             *)
+(** -------------------------------------------------------------------------- *)
+
+(** Tony Accardo - Boss 1947-1957, then consigliere. One of the most
+    successful mob bosses, died of natural causes at 86. *)
+Definition accardo : Member := mkMember
+  (mkPerson 106 "Anthony Accardo" (Some "Big Tuna") (Some 1906) (Some 1992))
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1947 (Some 1958))
+  (Some Resigned)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Sam Giancana - Boss 1957-1966. Did not personally attend Apalachin
+    but sent representative. Murdered 1975. *)
+Definition giancana : Member := mkMember
+  (mkPerson 103 "Sam Giancana" (Some "Momo") (Some 1908) (Some 1975))
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1957 (Some 1967))
+  (Some Removed)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Joseph Aiuppa - Boss 1971-1986, convicted in Strawman cases *)
+Definition aiuppa : Member := mkMember
+  (mkPerson 107 "Joseph Aiuppa" (Some "Joey Doves") (Some 1907) (Some 1997))
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1971 (Some 1986))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "K.D. Nev." "Strawman" 1986 "28 years")).
+
+(** John DiFronzo - Boss 1996-2014 *)
+Definition difronzo : Member := mkMember
+  (mkPerson 108 "John DiFronzo" (Some "No Nose") (Some 1928) (Some 2018))
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1996 (Some 2015))
+  (Some Died)
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition chicago_bosses : list Member :=
+  [accardo; giancana; aiuppa; difronzo].
+
+(** -------------------------------------------------------------------------- *)
 (** Apalachin Meeting (November 14, 1957)                                      *)
 (** -------------------------------------------------------------------------- *)
 
@@ -2063,6 +2192,7 @@ Definition apalachin_attendees : list Member :=
   ; tommy_lucchese     (* Lucchese *)
   ; bonanno            (* Bonanno *)
   ; profaci            (* Colombo/Profaci *)
+  ; magaddino          (* Buffalo - original Commission member *)
   ].
 
 (** Key theorem: Apalachin attendees were active bosses in 1957. *)
@@ -2072,7 +2202,7 @@ Lemma apalachin_attendees_active :
 Proof.
   intros m Hin.
   simpl in Hin.
-  destruct Hin as [H | [H | [H | [H | [H | H]]]]];
+  destruct Hin as [H | [H | [H | [H | [H | [H | H]]]]]];
     try (rewrite <- H; reflexivity);
     try contradiction.
 Qed.
@@ -2774,7 +2904,7 @@ Definition all_wars : list War :=
 
 Definition all_bosses : list Member :=
   genovese_bosses ++ gambino_bosses ++ lucchese_bosses ++
-  bonanno_bosses ++ colombo_bosses.
+  bonanno_bosses ++ colombo_bosses ++ buffalo_bosses ++ chicago_bosses.
 
 Definition all_underbosses : list Member :=
   genovese_underbosses ++ gambino_underbosses ++ lucchese_underbosses ++
@@ -2916,8 +3046,20 @@ Lemma corallo_amuso_succession : valid_succession corallo amuso.
 Proof. unfold valid_succession, corallo, amuso. simpl. repeat split; lia. Qed.
 
 (** Bonanno family succession chain *)
+(** Note: During the Banana War (1964-1968), two parallel lines existed:
+    - Bonanno loyalists (led by Bill Bonanno)
+    - Commission-backed faction (DiGregorio -> Sciacca -> Evola)
+    The Commission line ultimately prevailed. *)
+
 Lemma bonanno_evola_succession : valid_succession bonanno evola.
 Proof. unfold valid_succession, bonanno, evola. simpl. repeat split; lia. Qed.
+
+(** Commission-backed succession during Banana War *)
+Lemma digregorio_sciacca_succession : valid_succession digregorio sciacca.
+Proof. unfold valid_succession, digregorio, sciacca. simpl. repeat split; lia. Qed.
+
+Lemma sciacca_evola_succession : valid_succession sciacca evola.
+Proof. unfold valid_succession, sciacca, evola. simpl. repeat split; lia. Qed.
 
 Lemma evola_galante_succession : valid_succession evola galante_boss.
 Proof. unfold valid_succession, evola, galante_boss. simpl. repeat split; lia. Qed.
@@ -3010,6 +3152,40 @@ Proof.
   - apply profaci_magliocco_succession.
   - apply magliocco_colombo_succession.
   - apply colombo_persico_succession.
+Qed.
+
+(** Buffalo family succession chain *)
+Lemma magaddino_todaro_succession : valid_succession magaddino todaro_sr.
+Proof. unfold valid_succession, magaddino, todaro_sr. simpl. repeat split; lia. Qed.
+
+Lemma todaro_falzone_succession : valid_succession todaro_sr falzone.
+Proof. unfold valid_succession, todaro_sr, falzone. simpl. repeat split; lia. Qed.
+
+Lemma buffalo_complete_chain :
+  valid_chain [magaddino; todaro_sr; falzone].
+Proof.
+  simpl. repeat split.
+  - apply magaddino_todaro_succession.
+  - apply todaro_falzone_succession.
+Qed.
+
+(** Chicago Outfit succession chain *)
+Lemma accardo_giancana_succession : valid_succession accardo giancana.
+Proof. unfold valid_succession, accardo, giancana. simpl. repeat split; lia. Qed.
+
+Lemma giancana_aiuppa_succession : valid_succession giancana aiuppa.
+Proof. unfold valid_succession, giancana, aiuppa. simpl. repeat split; lia. Qed.
+
+Lemma aiuppa_difronzo_succession : valid_succession aiuppa difronzo.
+Proof. unfold valid_succession, aiuppa, difronzo. simpl. repeat split; lia. Qed.
+
+Lemma chicago_complete_chain :
+  valid_chain [accardo; giancana; aiuppa; difronzo].
+Proof.
+  simpl. repeat split.
+  - apply accardo_giancana_succession.
+  - apply giancana_aiuppa_succession.
+  - apply aiuppa_difronzo_succession.
 Qed.
 
 (** -------------------------------------------------------------------------- *)
@@ -3253,7 +3429,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 41.
+Lemma boss_count : total_documented_bosses = 50.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
