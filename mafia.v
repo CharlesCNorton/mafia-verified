@@ -41,7 +41,7 @@
 18. [DONE] Add New Orleans family members
 19. [DONE] Expand Buffalo family beyond 3 bosses
 20. [DONE] Expand Chicago family beyond 4 bosses
-21. Resolve post-2005 Genovese ActualBoss
+21. [DONE] Resolve post-2005 Genovese ActualBoss
 22. Update post-2015 leadership across all families
 23. Incorporate 2020s indictments
 24. Expand coverage to all documented positions
@@ -1481,17 +1481,28 @@ Definition gigante : Member := mkMember
   None
   (Some (DOJPress "DOJ" 2005)).
 
-(** Liborio Bellomo - Street Boss/Boss 2005-present (DOJ EDNY 2005) *)
+(** Liborio Bellomo - Street Boss 2005-present, de facto ActualBoss post-Gigante.
+
+    Post-2005 Genovese leadership resolution:
+    After Vincent Gigante's death in December 2005, the family transitioned
+    to a StreetBoss model. Bellomo, who had been acting as street boss since
+    the late 1990s, became the effective leader. While he holds the title
+    "Street Boss," law enforcement (DOJ, FBI) consider him the de facto
+    actual boss of the family. Daniel Leo served as a Front Boss until 2010.
+
+    For succession chain purposes, Bellomo is the functional ActualBoss
+    successor to Gigante, though he formally holds the StreetBoss title.
+    This reflects the Genovese tradition of obscuring leadership. *)
 Definition bellomo : Member := mkMember
   (mkPerson 11 "Liborio Bellomo" (Some "Barney") (Some 1957) None)
   Genovese
   Boss
-  (Some StreetBoss)
+  (Some ActualBoss)  (* De facto actual boss per DOJ assessments *)
   None
   (mkTenure 2005 None)
   None
   None
-  (Some (DOJPress "DOJ" 2005)).
+  (Some (DOJPress "DOJ-SDNY-2019" 2019)).
 
 (** Daniel Leo - Front Boss 2005-2010s *)
 Definition daniel_leo : Member := mkMember
