@@ -21,28 +21,27 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Fix Gigante tenure to [1981, 2006) to match death_year 2005
-2. Add Galante to Bonanno succession chain proof
-3. Model Bonanno expulsion period (DiGregorio/Sciacca)
-4. Expand Apalachin attendees to non-NYC families
-5. Add Buffalo family boss succession chain
-6. Add Chicago Outfit boss succession chain
-7. Replace List.find with uniqueness-safe query
-8. Fix vote_passes to require strict majority
-9. Fix murder_unanimous to require quorum
-10. Strengthen valid_succession to exclude FrontBoss
-11. Extend succession predicate for causal termination
-12. Enforce consistency between tenure_end_cause/death_year/murder records
-13. Enforce evidence tier at inclusion
-14. Prove Forall member_wf all_leadership
-15. Prove uniqueness invariant for all years
-16. Add relational proofs for blood relations/murders/wars
-17. Apply Commission rules to historical votes
-18. Replace spot-check proofs with universal quantification
-19. Add completeness claims with proofs
-20. Expand coverage to all documented positions
-21. Resolve post-2005 Genovese leadership
-22. Link evidence fields to external sources
+1. Model Bonanno expulsion period (DiGregorio/Sciacca)
+2. Expand Apalachin attendees to non-NYC families
+3. Add Buffalo family boss succession chain
+4. Add Chicago Outfit boss succession chain
+5. Replace List.find with uniqueness-safe query
+6. Fix vote_passes to require strict majority
+7. Fix murder_unanimous to require quorum
+8. Strengthen valid_succession to exclude FrontBoss
+9. Extend succession predicate for causal termination
+10. Enforce consistency between tenure_end_cause/death_year/murder records
+11. Enforce evidence tier at inclusion
+12. Prove Forall member_wf all_leadership
+13. Prove uniqueness invariant for all years
+14. Add relational proofs for blood relations/murders/wars
+15. Apply Commission rules to historical votes
+16. Replace spot-check proofs with universal quantification
+17. Add completeness claims with proofs
+18. Expand coverage to all documented positions
+19. Add full crew and associate lists up to 2025
+20. Resolve post-2005 Genovese leadership
+21. Link evidence fields to external sources
 *)
 
 Require Import Coq.Lists.List.
@@ -812,15 +811,15 @@ Definition salerno : Member := mkMember
   None
   (Some (DOJPress "DOJ" 2005)).
 
-(** Vincent Gigante - Boss 1981-2005 *)
+(** Vincent Gigante - Boss 1981-2005 (died in prison) *)
 Definition gigante : Member := mkMember
   (mkPerson 10 "Vincent Gigante" (Some "The Chin") (Some 1928) (Some 2005))
   Genovese
   Boss
   (Some ActualBoss)
   None
-  (mkTenure 1981 (Some 2005))
-  None
+  (mkTenure 1981 (Some 2006))  (* Half-open: active through 2005 *)
+  (Some Died)
   None
   (Some (DOJPress "DOJ" 2005)).
 
@@ -2920,8 +2919,11 @@ Proof. unfold valid_succession, corallo, amuso. simpl. repeat split; lia. Qed.
 Lemma bonanno_evola_succession : valid_succession bonanno evola.
 Proof. unfold valid_succession, bonanno, evola. simpl. repeat split; lia. Qed.
 
-Lemma evola_rastelli_succession : valid_succession evola rastelli.
-Proof. unfold valid_succession, evola, rastelli. simpl. repeat split; lia. Qed.
+Lemma evola_galante_succession : valid_succession evola galante_boss.
+Proof. unfold valid_succession, evola, galante_boss. simpl. repeat split; lia. Qed.
+
+Lemma galante_rastelli_succession : valid_succession galante_boss rastelli.
+Proof. unfold valid_succession, galante_boss, rastelli. simpl. repeat split; lia. Qed.
 
 Lemma rastelli_massino_succession : valid_succession rastelli massino.
 Proof. unfold valid_succession, rastelli, massino. simpl. repeat split; lia. Qed.
@@ -2991,11 +2993,12 @@ Qed.
 
 (** The complete Bonanno boss succession is a valid chain. *)
 Lemma bonanno_complete_chain :
-  valid_chain [bonanno; evola; rastelli; massino].
+  valid_chain [bonanno; evola; galante_boss; rastelli; massino].
 Proof.
   simpl. repeat split.
   - apply bonanno_evola_succession.
-  - apply evola_rastelli_succession.
+  - apply evola_galante_succession.
+  - apply galante_rastelli_succession.
   - apply rastelli_massino_succession.
 Qed.
 
