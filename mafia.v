@@ -25,7 +25,7 @@
 2. [DONE] Add mechanism to express intra-year ordering
 3. [DONE] Fix find_unique to distinguish zero matches from multiple matches
 4. [DONE] Justify or remove the +1 allowance in tenure_death_consistent
-5. Establish citation format standardization
+5. [DONE] Establish citation format standardization
 6. Add page numbers to generic citations
 7. Add specific document IDs to DOJ and FBI citations
 8. Add URLs and external links to source references
@@ -244,10 +244,77 @@ Qed.
 (** Source Attribution and Evidence Tiers                                      *)
 (** -------------------------------------------------------------------------- *)
 
+(** Citation Format Standards:
+
+    COURT CASES:
+    - Format: "Court Abbrev." "Docket Number" (Year)
+    - Example: "E.D.N.Y." "90 Cr. 1051" (1992)
+    - Court abbreviations:
+      * S.D.N.Y. = Southern District of New York
+      * E.D.N.Y. = Eastern District of New York
+      * D.N.J. = District of New Jersey
+      * N.D. Ill. = Northern District of Illinois
+
+    DOJ PRESS RELEASES:
+    - Format: "DOJ-DISTRICT-YEAR-NUMBER" or descriptive ID
+    - Example: "DOJ-EDNY-2005-123"
+
+    FBI DOCUMENTS:
+    - Format: "FBI-TYPE-YEAR" with document type
+    - Example: "FBI-OrgChart-2008"
+
+    BOOKS:
+    - Format: "Author Last Name, Title (Year), pp. X-Y"
+    - Example: "Raab, Five Families (2005), pp. 123-145"
+
+    NEWSPAPER/JOURNALISM:
+    - Format: "Publication, Article Title (Date)"
+    - Example: "NY Times, Mob Boss Convicted (June 15, 1992)"
+
+    COOPERATOR TESTIMONY:
+    - Format: "Witness Name, Case Name (Year)"
+    - Example: "Gravano, U.S. v. Gotti (1992)"
+*)
+
 Record Source := mkSource {
   source_name : string;
   source_reference : string
 }.
+
+(** Structured citation for court cases with all required fields. *)
+Record CourtCitation := mkCourtCitation {
+  cc_court : string;        (* e.g., "E.D.N.Y." *)
+  cc_docket : string;       (* e.g., "90 Cr. 1051" *)
+  cc_year : nat;            (* e.g., 1992 *)
+  cc_case_name : option string  (* e.g., "United States v. Gotti" *)
+}.
+
+(** Structured citation for books with page references. *)
+Record BookCitation := mkBookCitation {
+  bc_author : string;       (* e.g., "Selwyn Raab" *)
+  bc_title : string;        (* e.g., "Five Families" *)
+  bc_year : nat;            (* e.g., 2005 *)
+  bc_publisher : option string;
+  bc_pages : option (nat * nat)  (* start page, end page *)
+}.
+
+(** Structured citation for press releases. *)
+Record PressReleaseCitation := mkPressReleaseCitation {
+  prc_agency : string;      (* e.g., "DOJ" or "FBI" *)
+  prc_id : option string;   (* release ID if known *)
+  prc_year : option nat;    (* year of release *)
+  prc_month : option nat;   (* month if known, 1-12 *)
+  prc_day : option nat;     (* day if known, 1-31 *)
+  prc_title : option string
+}.
+
+(** Union type for all citation formats. *)
+Inductive Citation : Type :=
+  | CourtCite : CourtCitation -> Citation
+  | BookCite : BookCitation -> Citation
+  | PressCite : PressReleaseCitation -> Citation
+  | WebCite : string -> string -> Citation  (* URL, access date *)
+  | GenericCite : string -> Citation.       (* fallback for unstructured *)
 
 (** EvidenceTier: Five-level hierarchy for evidential strength.
     Tier 1 (Definitive): Conviction, guilty plea, self-identification under oath.
