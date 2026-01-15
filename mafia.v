@@ -28,7 +28,7 @@
 5. [DONE] Establish citation format standardization
 6. [DONE] Add page numbers to generic citations
 7. [DONE] Add specific document IDs to DOJ and FBI citations
-8. Add URLs and external links to source references
+8. [DONE] Add URLs and external links to source references
 9. Link evidence fields to external sources
 10. Establish machine-checkable links between evidence claims and external sources
 11. Clarify evidence tier assignment criteria
@@ -315,6 +315,51 @@ Inductive Citation : Type :=
   | PressCite : PressReleaseCitation -> Citation
   | WebCite : string -> string -> Citation  (* URL, access date *)
   | GenericCite : string -> Citation.       (* fallback for unstructured *)
+
+(** URL reference record for external links. *)
+Record URLReference := mkURLReference {
+  url_link : string;
+  url_title : option string;
+  url_access_date : string;  (* format: "YYYY-MM-DD" *)
+  url_archived : option string  (* archive.org link if available *)
+}.
+
+(** Standard external URL references for primary sources. *)
+
+(** PACER/Court records *)
+Definition url_pacer : URLReference := mkURLReference
+  "https://pacer.uscourts.gov/"
+  (Some "Public Access to Court Electronic Records")
+  "2025-01-15"
+  None.
+
+(** DOJ Press Release Archive *)
+Definition url_doj_archive : URLReference := mkURLReference
+  "https://www.justice.gov/archives/news"
+  (Some "DOJ Press Release Archive")
+  "2025-01-15"
+  (Some "https://web.archive.org/web/*/justice.gov/archives/news").
+
+(** FBI Records: The Vault *)
+Definition url_fbi_vault : URLReference := mkURLReference
+  "https://vault.fbi.gov/"
+  (Some "FBI Records: The Vault")
+  "2025-01-15"
+  None.
+
+(** National Archives - Organized Crime Records *)
+Definition url_nara_crime : URLReference := mkURLReference
+  "https://www.archives.gov/research/organized-crime"
+  (Some "National Archives Organized Crime Research")
+  "2025-01-15"
+  None.
+
+(** Gangland News (Jerry Capeci) *)
+Definition url_gangland_news : URLReference := mkURLReference
+  "https://ganglandnews.com/"
+  (Some "Gangland News - This Week in Gang Land")
+  "2025-01-15"
+  (Some "https://web.archive.org/web/*/ganglandnews.com/").
 
 (** EvidenceTier: Five-level hierarchy for evidential strength.
     Tier 1 (Definitive): Conviction, guilty plea, self-identification under oath.
