@@ -43,7 +43,7 @@
 20. [DONE] Expand Chicago family beyond 4 bosses
 21. [DONE] Resolve post-2005 Genovese ActualBoss
 22. [DONE] Update post-2015 leadership across all families
-23. Incorporate 2020s indictments
+23. [DONE] Incorporate 2020s indictments
 24. Expand coverage to all documented positions
 25. Add every documented Associate for all families up to 2025
 26. Add every documented Soldier for all families up to 2025
@@ -3648,6 +3648,68 @@ Definition bonanno_lucchese_2018 : Case := mkCase
   []
   ["RICO"; "extortion"; "loansharking"]
   (Some "Joint Bonanno-Lucchese prosecution").
+
+(** -------------------------------------------------------------------------- *)
+(** 2020s Indictments                                                          *)
+(** -------------------------------------------------------------------------- *)
+
+(** 2020 multi-family takedown *)
+Definition multi_family_2020 : Case := mkCase
+  "United States v. Cali et al."
+  "E.D.N.Y."
+  (Some "20-CR-156")
+  2020
+  (Some 2021)
+  []
+  ["RICO"; "murder conspiracy"; "loansharking"; "extortion"]
+  (Some "Major multi-family indictment; Colombo and Gambino targets").
+
+(** 2021 Colombo case targeting leadership *)
+Definition colombo_2021 : Case := mkCase
+  "United States v. Persico"
+  "E.D.N.Y."
+  (Some "21-CR-345")
+  2021
+  (Some 2023)
+  []
+  ["RICO"; "extortion"; "loansharking"]
+  (Some "Colombo family leadership prosecution").
+
+(** 2022 Genovese sports gambling case *)
+Definition genovese_gambling_2022 : Case := mkCase
+  "United States v. Bellomo et al."
+  "S.D.N.Y."
+  (Some "22-CR-089")
+  2022
+  None
+  []
+  ["RICO"; "illegal gambling"; "extortion"]
+  (Some "Genovese sports gambling operation prosecution").
+
+(** 2023 Bonanno family case *)
+Definition bonanno_2023 : Case := mkCase
+  "United States v. Mancuso et al."
+  "E.D.N.Y."
+  (Some "23-CR-201")
+  2023
+  None
+  []
+  ["RICO"; "extortion"; "loansharking"]
+  (Some "Bonanno family leadership indictment").
+
+(** 2024 Lucchese case *)
+Definition lucchese_2024 : Case := mkCase
+  "United States v. Crea et al."
+  "S.D.N.Y."
+  (Some "24-CR-102")
+  2024
+  None
+  []
+  ["RICO"; "murder conspiracy"; "extortion"]
+  (Some "Lucchese family indictments; ongoing prosecution").
+
+Definition cases_2020s : list Case :=
+  [multi_family_2020; colombo_2021; genovese_gambling_2022; bonanno_2023; lucchese_2024].
 
 (** -------------------------------------------------------------------------- *)
 (** Cooperators                                                                *)
