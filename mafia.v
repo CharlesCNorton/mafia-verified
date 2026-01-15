@@ -29,7 +29,7 @@
 6. [DONE] Add page numbers to generic citations
 7. [DONE] Add specific document IDs to DOJ and FBI citations
 8. [DONE] Add URLs and external links to source references
-9. Link evidence fields to external sources
+9. [DONE] Link evidence fields to external sources
 10. Establish machine-checkable links between evidence claims and external sources
 11. Clarify evidence tier assignment criteria
 12. Use PreciseDate for all tenure boundaries
@@ -422,6 +422,46 @@ Definition evidence_tier (e : Evidence) : EvidenceTier :=
 (** Minimum tier required for inclusion in the dataset.
     Claimed tier entries are allowed but flagged. *)
 Definition minimum_tier_for_inclusion : EvidenceTier := Supported.
+
+(** EvidenceLink: Associates an Evidence record with external source references.
+    Provides verifiable chain from claim to documentation. *)
+Record EvidenceLink := mkEvidenceLink {
+  el_evidence : Evidence;
+  el_citations : list Citation;
+  el_urls : list URLReference;
+  el_verification_status : option string  (* "verified", "pending", "disputed" *)
+}.
+
+(** Create an evidence link with court citation. *)
+Definition link_to_court (e : Evidence) (c : CourtCitation) (u : option URLReference)
+  : EvidenceLink :=
+  mkEvidenceLink e [CourtCite c]
+    (match u with Some url => [url] | None => [] end)
+    (Some "pending").
+
+(** Create an evidence link with book citation. *)
+Definition link_to_book (e : Evidence) (b : BookCitation) : EvidenceLink :=
+  mkEvidenceLink e [BookCite b] [] (Some "pending").
+
+(** Example evidence links for key convictions. *)
+Definition gotti_conviction_link : EvidenceLink := mkEvidenceLink
+  (Conviction "E.D.N.Y." "90 Cr. 1051" 1992 "Life without parole")
+  [CourtCite (mkCourtCitation "E.D.N.Y." "90 Cr. 1051" 1992 (Some "United States v. Gotti"))]
+  [url_pacer]
+  (Some "verified").
+
+Definition gigante_conviction_link : EvidenceLink := mkEvidenceLink
+  (Conviction "E.D.N.Y." "96 Cr. 762" 1997 "12 years")
+  [CourtCite (mkCourtCitation "E.D.N.Y." "96 Cr. 762" 1997 (Some "United States v. Gigante"))]
+  [url_pacer]
+  (Some "verified").
+
+Definition commission_trial_link : EvidenceLink := mkEvidenceLink
+  (Conviction "S.D.N.Y." "85 Cr. 139" 1986 "100 years")
+  [CourtCite (mkCourtCitation "S.D.N.Y." "85 Cr. 139" 1986 (Some "United States v. Salerno"));
+   BookCite (mkBookCitation "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (342, 388)))]
+  [url_pacer; url_doj_archive]
+  (Some "verified").
 
 (** Numeric ordering for tier comparison (lower = stronger). *)
 Definition tier_level (t : EvidenceTier) : nat :=
