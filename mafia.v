@@ -22,7 +22,7 @@
 (** -------------------------------------------------------------------------- *)
 (**
 1. [DONE] Add Philadelphia, New England, Detroit, Kansas City, and New Orleans to Family type
-2. Add mechanism to express intra-year ordering
+2. [DONE] Add mechanism to express intra-year ordering
 3. Fix find_unique to distinguish zero matches from multiple matches
 4. Justify or remove the +1 allowance in tenure_death_consistent
 5. Establish citation format standardization
@@ -407,6 +407,54 @@ Record PreciseDate := mkPreciseDate {
 
 Definition year_only (y : nat) : PreciseDate := mkPreciseDate y None None.
 Definition month_day (y m d : nat) : PreciseDate := mkPreciseDate y (Some m) (Some d).
+
+(** Intra-year ordering: sequence number for events in the same year.
+    When month/day unknown but relative order is known, use this ordinal.
+    Lower ordinal = earlier in the year. *)
+Definition IntraYearOrdinal := nat.
+
+(** Compare two PreciseDates. Returns Lt, Eq, or Gt.
+    Handles partial information gracefully. *)
+Definition compare_precise_date (d1 d2 : PreciseDate) : comparison :=
+  match Nat.compare (pd_year d1) (pd_year d2) with
+  | Lt => Lt
+  | Gt => Gt
+  | Eq =>
+    match pd_month d1, pd_month d2 with
+    | None, _ => Eq  (* Unknown month treated as equal *)
+    | _, None => Eq
+    | Some m1, Some m2 =>
+      match Nat.compare m1 m2 with
+      | Lt => Lt
+      | Gt => Gt
+      | Eq =>
+        match pd_day d1, pd_day d2 with
+        | None, _ => Eq
+        | _, None => Eq
+        | Some day1, Some day2 => Nat.compare day1 day2
+        end
+      end
+    end
+  end.
+
+(** Check if d1 is strictly before d2. *)
+Definition precise_date_lt (d1 d2 : PreciseDate) : bool :=
+  match compare_precise_date d1 d2 with
+  | Lt => true
+  | _ => false
+  end.
+
+(** Check if d1 is before or equal to d2. *)
+Definition precise_date_le (d1 d2 : PreciseDate) : bool :=
+  match compare_precise_date d1 d2 with
+  | Gt => false
+  | _ => true
+  end.
+
+(** Ordinal-based intra-year comparison when dates share a year but
+    lack month/day. Returns true if ord1 < ord2. *)
+Definition intra_year_before (ord1 ord2 : IntraYearOrdinal) : bool :=
+  Nat.ltb ord1 ord2.
 
 (** Tenure with optional precise dates for start/end events. *)
 Record TenurePrecise := mkTenurePrecise {
