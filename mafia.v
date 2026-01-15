@@ -21,23 +21,19 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Replace List.find with uniqueness-safe query
-2. Fix vote_passes to require strict majority
-3. Fix murder_unanimous to require quorum
-4. Strengthen valid_succession to exclude FrontBoss
-5. Extend succession predicate for causal termination
-6. Enforce consistency between tenure_end_cause/death_year/murder records
-7. Enforce evidence tier at inclusion
-8. Prove Forall member_wf all_leadership
-9. Prove uniqueness invariant for all years
-10. Add relational proofs for blood relations/murders/wars
-11. Apply Commission rules to historical votes
-12. Replace spot-check proofs with universal quantification
-13. Add completeness claims with proofs
-14. Expand coverage to all documented positions
-15. Add full crew and associate lists up to 2025
-16. Resolve post-2005 Genovese leadership
-17. Link evidence fields to external sources
+1. Extend succession predicate for causal termination
+2. Enforce consistency between tenure_end_cause/death_year/murder records
+3. Enforce evidence tier at inclusion
+4. Prove Forall member_wf all_leadership
+5. Prove uniqueness invariant for all years
+6. Add relational proofs for blood relations/murders/wars
+7. Apply Commission rules to historical votes
+8. Replace spot-check proofs with universal quantification
+9. Add completeness claims with proofs
+10. Expand coverage to all documented positions
+11. Add full crew and associate lists up to 2025
+12. Resolve post-2005 Genovese leadership
+13. Link evidence fields to external sources
 *)
 
 Require Import Coq.Lists.List.
@@ -535,17 +531,18 @@ Definition vote_well_formed (v : CommissionVote) : bool :=
 Definition has_quorum (v : CommissionVote) : bool :=
   Nat.leb commission_quorum (total_votes v).
 
-(** A vote passes with majority support and quorum. *)
+(** A vote passes with strict majority (more than half of votes cast) and quorum. *)
 Definition vote_passes (v : CommissionVote) : bool :=
   vote_well_formed v &&
   has_quorum v &&
-  Nat.ltb (votes_against v) (votes_for v).
+  Nat.ltb (total_votes v) (2 * votes_for v).  (* for > total/2, i.e., 2*for > total *)
 
-(** Murder sanctions require unanimous consent among those voting.
+(** Murder sanctions require unanimous consent among those voting AND quorum.
     Unanimous means: all who voted, voted yes (no against, no abstain). *)
 Definition murder_unanimous (v : CommissionVote) : bool :=
   match vote_action v with
   | SanctionMurder =>
+      has_quorum v &&
       Nat.eqb (votes_against v) 0 &&
       Nat.eqb (vote_abstain v) 0 &&
       Nat.leb 1 (votes_for v)
@@ -2969,12 +2966,27 @@ Qed.
 
     We define two succession predicates:
     - valid_succession: allows same-year transition (overlap at year level)
-    - strict_succession: requires successor start >= predecessor end (no overlap) *)
+    - strict_succession: requires successor start >= predecessor end (no overlap)
+
+    Both predicates now require ActualBoss (not FrontBoss/ActingBoss/StreetBoss). *)
+
+(** Check if member is an ActualBoss (for succession chain purposes). *)
+Definition is_actual_boss (m : Member) : bool :=
+  match member_rank m with
+  | Boss => match member_boss_kind m with
+            | Some ActualBoss => true
+            | None => true  (* Pre-modern era bosses without explicit kind *)
+            | _ => false
+            end
+  | _ => false
+  end.
 
 Definition valid_succession (predecessor successor : Member) : Prop :=
   member_family predecessor = member_family successor /\
   member_rank predecessor = Boss /\
   member_rank successor = Boss /\
+  is_actual_boss predecessor = true /\
+  is_actual_boss successor = true /\
   match tenure_end (member_tenure predecessor) with
   | None => False
   | Some end_y => tenure_start (member_tenure successor) >= end_y - 1
@@ -2984,6 +2996,8 @@ Definition strict_succession (predecessor successor : Member) : Prop :=
   member_family predecessor = member_family successor /\
   member_rank predecessor = Boss /\
   member_rank successor = Boss /\
+  is_actual_boss predecessor = true /\
+  is_actual_boss successor = true /\
   match tenure_end (member_tenure predecessor) with
   | None => False
   | Some end_y => tenure_start (member_tenure successor) >= end_y
@@ -2993,7 +3007,7 @@ Definition strict_succession (predecessor successor : Member) : Prop :=
 Lemma strict_implies_valid_succession : forall p s,
   strict_succession p s -> valid_succession p s.
 Proof.
-  intros p s [Hfam [Hrank1 [Hrank2 Htime]]].
+  intros p s [Hfam [Hrank1 [Hrank2 [Hactual1 [Hactual2 Htime]]]]].
   unfold valid_succession. repeat split; auto.
   destruct (tenure_end (member_tenure p)) as [end_y|]; [|contradiction].
   lia.
@@ -3013,8 +3027,10 @@ Proof. unfold valid_succession, luciano, costello. simpl. repeat split; lia. Qed
 Lemma costello_vito_succession : valid_succession costello vito_genovese.
 Proof. unfold valid_succession, costello, vito_genovese. simpl. repeat split; lia. Qed.
 
-Lemma vito_lombardo_succession : valid_succession vito_genovese lombardo.
-Proof. unfold valid_succession, vito_genovese, lombardo. simpl. repeat split; lia. Qed.
+(** Note: Lombardo was FrontBoss, skipped in ActualBoss succession chain.
+    Vito Genovese -> Gigante is the ActualBoss succession. *)
+Lemma vito_gigante_succession : valid_succession vito_genovese gigante.
+Proof. unfold valid_succession, vito_genovese, gigante. simpl. repeat split; lia. Qed.
 
 (** Gambino family succession chain *)
 Lemma mangano_anastasia_succession : valid_succession mangano anastasia.
@@ -3116,21 +3132,18 @@ Proof.
 Qed.
 
 (** Additional Genovese succession lemmas *)
-(** Note: Salerno (FrontBoss) and Gigante (ActualBoss) overlapped 1981-1987.
-    Succession chain tracks ActualBoss transitions only. Lombardo -> Gigante
-    reflects the actual power transition. *)
-Lemma lombardo_gigante_succession : valid_succession lombardo gigante.
-Proof. unfold valid_succession, lombardo, gigante. simpl. repeat split; lia. Qed.
+(** Note: Salerno (FrontBoss) and Lombardo (FrontBoss) are excluded from
+    the ActualBoss succession chain. The chain tracks only ActualBoss. *)
 
-(** The complete Genovese boss succession is a valid chain (actual bosses only). *)
+(** The complete Genovese boss succession is a valid chain (actual bosses only).
+    Note: Lombardo and Salerno (FrontBosses) excluded from chain. *)
 Lemma genovese_complete_chain :
-  valid_chain [luciano; costello; vito_genovese; lombardo; gigante].
+  valid_chain [luciano; costello; vito_genovese; gigante].
 Proof.
   simpl. repeat split.
   - apply luciano_costello_succession.
   - apply costello_vito_succession.
-  - apply vito_lombardo_succession.
-  - apply lombardo_gigante_succession.
+  - apply vito_gigante_succession.
 Qed.
 
 (** The complete Bonanno boss succession is a valid chain. *)
@@ -3246,9 +3259,39 @@ Proof. reflexivity. Qed.
 (** Query Functions                                                            *)
 (** -------------------------------------------------------------------------- *)
 
-(** Find actual boss for a family in a given year. Returns first match. *)
+(** find_unique: Returns Some x only if exactly one element satisfies p.
+    Returns None if zero or multiple matches exist. *)
+Definition find_unique {A : Type} (p : A -> bool) (l : list A) : option A :=
+  match List.filter p l with
+  | [x] => Some x
+  | _ => None
+  end.
+
+(** find_unique returns Some only when exactly one match exists. *)
+Lemma find_unique_spec : forall {A : Type} (p : A -> bool) (l : list A) (x : A),
+  find_unique p l = Some x ->
+  List.filter p l = [x].
+Proof.
+  intros A p l x H.
+  unfold find_unique in H.
+  destruct (List.filter p l) as [|y ys] eqn:Hf.
+  - discriminate.
+  - destruct ys.
+    + injection H as H. subst. reflexivity.
+    + discriminate.
+Qed.
+
+(** Find actual boss for a family in a given year. Returns first match.
+    NOTE: Use actual_boss_of_unique for uniqueness-checked queries. *)
 Definition actual_boss_of (ms : list Member) (f : Family) (y : year) : option Member :=
   List.find (fun m =>
+    family_eqb (member_family m) f &&
+    is_actual_boss_in_year m y
+  ) ms.
+
+(** Uniqueness-safe version: Returns Some only if exactly one actual boss exists. *)
+Definition actual_boss_of_unique (ms : list Member) (f : Family) (y : year) : option Member :=
+  find_unique (fun m =>
     family_eqb (member_family m) f &&
     is_actual_boss_in_year m y
   ) ms.
