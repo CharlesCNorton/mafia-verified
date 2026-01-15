@@ -62,9 +62,9 @@
 39. [DONE] Add Second Colombo War (1971-75)
 40. Add every documented inter-family and intra-family war
 41. Document every Commission vote with known details
-42. Add Jimmy Fratianno to cooperators
-43. Add Henry Hill to cooperators
-44. Add Michael Franzese to cooperators
+42. [DONE] Add Jimmy Fratianno to cooperators
+43. [DONE] Add Henry Hill to cooperators
+44. [DONE] Add Michael Franzese to cooperators
 45. Add every documented cooperator up to 2025
 46. Add Pizza Connection case (1985-87)
 47. Add Mafia Cops case (2006)
@@ -3751,8 +3751,69 @@ Definition darco_cooperator : Cooperator := mkCooperator
   (Some "Time served")
   (Some "Highest-ranking mobster to flip at time; testified in 10+ trials").
 
+(** Jimmy Fratianno - Los Angeles family, first made man to become witness *)
+Definition fratianno : Member := mkMember
+  (mkPerson 160 "Aladena Fratianno" (Some "Jimmy the Weasel") (Some 1913) (Some 1993))
+  Chicago  (* LA was under Chicago *)
+  Boss
+  (Some ActingBoss)
+  None
+  (mkTenure 1976 (Some 1977))
+  None
+  None
+  (Some (CooperatorSelf "Aladena Fratianno" "Various trials" 1977)).
+
+Definition fratianno_cooperator : Cooperator := mkCooperator
+  fratianno
+  1977
+  "FBI/LAPD"
+  ["U.S. v. Tieri"; "Various LA trials"; "Bompensiero murder trial"]
+  (Some "Witness protection")
+  (Some "First made member to become federal witness; testified against 5 families").
+
+(** Henry Hill - Lucchese associate, Goodfellas subject *)
+Definition henry_hill : Member := mkMember
+  (mkPerson 161 "Henry Hill" None (Some 1943) (Some 2012))
+  Lucchese
+  Associate
+  None
+  None
+  (mkTenure 1955 (Some 1980))
+  None
+  None
+  (Some (Journalism ["Wiseguy (1985)"])).
+
+Definition hill_cooperator : Cooperator := mkCooperator
+  henry_hill
+  1980
+  "FBI/EDNY"
+  ["Lufthansa heist trial"; "Boston College point-shaving trial"]
+  (Some "Witness protection")
+  (Some "Subject of Goodfellas; testified against Burke and Vario crews").
+
+(** Michael Franzese - Colombo capo, left life voluntarily *)
+Definition michael_franzese : Member := mkMember
+  (mkPerson 162 "Michael Franzese" (Some "The Yuppie Don") (Some 1951) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1975 (Some 1986))
+  (Some Resigned)
+  None
+  (Some (GuiltyPlea "E.D.N.Y." "86-CR-0389" 1986)).
+
+Definition franzese_cooperator : Cooperator := mkCooperator
+  michael_franzese
+  1986
+  "FBI/EDNY"
+  ["Own trial"; "Limited cooperation"]
+  (Some "10 years")
+  (Some "Highest-earning mobster in 1980s; left family voluntarily; limited cooperation").
+
 Definition all_cooperators : list Cooperator :=
-  [gravano_cooperator; vitale_cooperator; massino_cooperator; darco_cooperator].
+  [gravano_cooperator; vitale_cooperator; massino_cooperator; darco_cooperator;
+   fratianno_cooperator; hill_cooperator; franzese_cooperator].
 
 (** -------------------------------------------------------------------------- *)
 (** Murder Records                                                             *)
