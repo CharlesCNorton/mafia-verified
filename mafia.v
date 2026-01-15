@@ -23,7 +23,7 @@
 (**
 1. [DONE] Add Philadelphia, New England, Detroit, Kansas City, and New Orleans to Family type
 2. [DONE] Add mechanism to express intra-year ordering
-3. Fix find_unique to distinguish zero matches from multiple matches
+3. [DONE] Fix find_unique to distinguish zero matches from multiple matches
 4. Justify or remove the +1 allowance in tenure_death_consistent
 5. Establish citation format standardization
 6. Add page numbers to generic citations
@@ -3514,11 +3514,30 @@ Proof. reflexivity. Qed.
 (** Query Functions                                                            *)
 (** -------------------------------------------------------------------------- *)
 
-(** find_unique: Returns Some x only if exactly one element satisfies p.
-    Returns None if zero or multiple matches exist. *)
-Definition find_unique {A : Type} (p : A -> bool) (l : list A) : option A :=
+(** Result type for find_unique_info: distinguishes zero, one, or many matches. *)
+Inductive FindResult (A : Type) : Type :=
+  | NoMatch : FindResult A
+  | UniqueMatch : A -> FindResult A
+  | MultipleMatches : A -> A -> list A -> FindResult A.  (* first two + rest *)
+
+Arguments NoMatch {A}.
+Arguments UniqueMatch {A} _.
+Arguments MultipleMatches {A} _ _ _.
+
+(** find_unique_info: Returns detailed result distinguishing zero/one/many. *)
+Definition find_unique_info {A : Type} (p : A -> bool) (l : list A) : FindResult A :=
   match List.filter p l with
-  | [x] => Some x
+  | [] => NoMatch
+  | [x] => UniqueMatch x
+  | x :: y :: rest => MultipleMatches x y rest
+  end.
+
+(** find_unique: Returns Some x only if exactly one element satisfies p.
+    Returns None if zero or multiple matches exist.
+    Use find_unique_info for distinguishing zero vs multiple. *)
+Definition find_unique {A : Type} (p : A -> bool) (l : list A) : option A :=
+  match find_unique_info p l with
+  | UniqueMatch x => Some x
   | _ => None
   end.
 
@@ -3528,13 +3547,42 @@ Lemma find_unique_spec : forall {A : Type} (p : A -> bool) (l : list A) (x : A),
   List.filter p l = [x].
 Proof.
   intros A p l x H.
-  unfold find_unique in H.
+  unfold find_unique, find_unique_info in H.
   destruct (List.filter p l) as [|y ys] eqn:Hf.
   - discriminate.
   - destruct ys.
     + injection H as H. subst. reflexivity.
     + discriminate.
 Qed.
+
+(** Check if result indicates no matches. *)
+Definition is_no_match {A : Type} (r : FindResult A) : bool :=
+  match r with
+  | NoMatch => true
+  | _ => false
+  end.
+
+(** Check if result indicates exactly one match. *)
+Definition is_unique_match {A : Type} (r : FindResult A) : bool :=
+  match r with
+  | UniqueMatch _ => true
+  | _ => false
+  end.
+
+(** Check if result indicates multiple matches. *)
+Definition is_multiple_matches {A : Type} (r : FindResult A) : bool :=
+  match r with
+  | MultipleMatches _ _ _ => true
+  | _ => false
+  end.
+
+(** Get count from FindResult. *)
+Definition find_result_count {A : Type} (r : FindResult A) : nat :=
+  match r with
+  | NoMatch => 0
+  | UniqueMatch _ => 1
+  | MultipleMatches _ _ rest => 2 + List.length rest
+  end.
 
 (** Find actual boss for a family in a given year. Returns first match.
     NOTE: Use actual_boss_of_unique for uniqueness-checked queries. *)
