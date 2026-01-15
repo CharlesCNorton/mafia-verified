@@ -24,7 +24,7 @@
 1. [DONE] Add Philadelphia, New England, Detroit, Kansas City, and New Orleans to Family type
 2. [DONE] Add mechanism to express intra-year ordering
 3. [DONE] Fix find_unique to distinguish zero matches from multiple matches
-4. Justify or remove the +1 allowance in tenure_death_consistent
+4. [DONE] Justify or remove the +1 allowance in tenure_death_consistent
 5. Establish citation format standardization
 6. Add page numbers to generic citations
 7. Add specific document IDs to DOJ and FBI citations
@@ -540,7 +540,20 @@ Definition member_wf_b (m : Member) : bool :=
          end
   end.
 
-(** Temporal consistency: tenure_end should not exceed death_year. *)
+(** Temporal consistency: tenure_end should not exceed death_year + 1.
+
+    Justification for the +1 allowance:
+    We use half-open interval semantics where tenure_end is the FIRST YEAR
+    the member is NOT active. If someone died in year Y, they were active
+    through Y, so tenure_end = Y + 1.
+
+    Example: Carlo Gambino died in 1976.
+    - death_year = 1976
+    - tenure_end = 1977 (first year not active)
+    - Constraint: 1977 <= 1976 + 1 = 1977 ✓
+
+    Without the +1, we would require tenure_end <= death_year, which would
+    force tenure_end = 1976, incorrectly implying he wasn't active in 1976. *)
 Definition tenure_death_consistent (m : Member) : Prop :=
   match tenure_end (member_tenure m), member_death_year m with
   | Some t_end, Some d_year => t_end <= d_year + 1
