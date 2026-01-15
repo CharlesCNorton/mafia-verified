@@ -40,7 +40,7 @@
 17. [DONE] Add Kansas City family members
 18. [DONE] Add New Orleans family members
 19. [DONE] Expand Buffalo family beyond 3 bosses
-20. Expand Chicago family beyond 4 bosses
+20. [DONE] Expand Chicago family beyond 4 bosses
 21. Resolve post-2005 Genovese ActualBoss
 22. Update post-2015 leadership across all families
 23. Incorporate 2020s indictments
@@ -2847,6 +2847,30 @@ Definition aiuppa : Member := mkMember
   None
   (Some (Conviction "K.D. Nev." "Strawman" 1986 "28 years")).
 
+(** Sam Battaglia - Boss 1966-1967, brief tenure before imprisonment *)
+Definition battaglia : Member := mkMember
+  (mkPerson 145 "Sam Battaglia" (Some "Teets") (Some 1908) (Some 1973))
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1966 (Some 1967))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.D. Ill." "67-cr-123" 1967 "15 years")).
+
+(** Jackie Cerone - Boss 1986-1996 *)
+Definition cerone : Member := mkMember
+  (mkPerson 146 "Jackie Cerone" (Some "Jackie the Lackey") (Some 1914) (Some 1996))
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 1986 (Some 1996))
+  (Some Died)
+  None
+  (Some (Conviction "N.D. Ill." "Strawman" 1986 "28 years")).
+
 (** John DiFronzo - Boss 1996-2014 *)
 Definition difronzo : Member := mkMember
   (mkPerson 108 "John DiFronzo" (Some "No Nose") (Some 1928) (Some 2018))
@@ -2859,8 +2883,20 @@ Definition difronzo : Member := mkMember
   None
   (Some (Journalism ["Gangland News"])).
 
+(** Salvatore DeLaurentis - Boss 2014-present *)
+Definition delaurentis : Member := mkMember
+  (mkPerson 147 "Salvatore DeLaurentis" (Some "Solly D") (Some 1938) None)
+  Chicago
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 2014 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
 Definition chicago_bosses : list Member :=
-  [accardo; giancana; aiuppa; difronzo].
+  [accardo; giancana; battaglia; aiuppa; cerone; difronzo; delaurentis].
 
 (** -------------------------------------------------------------------------- *)
 (** Philadelphia Crime Family (Bruno-Scarfo)                                   *)
@@ -4562,7 +4598,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 65.
+Lemma boss_count : total_documented_bosses = 68.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
@@ -4628,5 +4664,5 @@ Definition coverage_summary : string :=
   "NYC Five Families (1931-2020): Complete boss succession. " ++
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
-  "Leadership: 65 bosses, selected underbosses/consiglieres/capos. " ++
+  "Leadership: 68 bosses, selected underbosses/consiglieres/capos. " ++
   "Events: 4 murders, 3 blood relations, 3 wars, 2 Commission votes.".
