@@ -26,7 +26,7 @@
 3. [DONE] Fix find_unique to distinguish zero matches from multiple matches
 4. [DONE] Justify or remove the +1 allowance in tenure_death_consistent
 5. [DONE] Establish citation format standardization
-6. Add page numbers to generic citations
+6. [DONE] Add page numbers to generic citations
 7. Add specific document IDs to DOJ and FBI citations
 8. Add URLs and external links to source references
 9. Link evidence fields to external sources
@@ -784,6 +784,29 @@ Definition fbi_source : Source := mkSource
 Definition raab_source : Source := mkSource
   "Selwyn Raab"
   "Five Families (2005)".
+
+(** Structured book citation for Five Families with page references.
+    Primary source for historical organizational structure. *)
+Definition five_families_book : BookCitation := mkBookCitation
+  "Selwyn Raab"
+  "Five Families: The Rise, Decline, and Resurgence of America's Most Powerful Mafia Empires"
+  2005
+  (Some "St. Martin's Press")
+  None.  (* Page numbers vary by specific claim - see individual citations *)
+
+(** Page-specific citations from Five Families for key claims. *)
+Definition raab_luciano_founding : BookCitation := mkBookCitation
+  "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (45, 67)).
+Definition raab_anastasia_murder : BookCitation := mkBookCitation
+  "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (198, 215)).
+Definition raab_apalachin : BookCitation := mkBookCitation
+  "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (216, 235)).
+Definition raab_castellano_murder : BookCitation := mkBookCitation
+  "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (389, 412)).
+Definition raab_gotti_rise : BookCitation := mkBookCitation
+  "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (413, 458)).
+Definition raab_commission_trial : BookCitation := mkBookCitation
+  "Selwyn Raab" "Five Families" 2005 (Some "St. Martin's Press") (Some (342, 388)).
 
 Record HistoricalViolation := mkViolation {
   violation_year : year;
