@@ -42,7 +42,7 @@
 19. [DONE] Expand Buffalo family beyond 3 bosses
 20. [DONE] Expand Chicago family beyond 4 bosses
 21. [DONE] Resolve post-2005 Genovese ActualBoss
-22. Update post-2015 leadership across all families
+22. [DONE] Update post-2015 leadership across all families
 23. Incorporate 2020s indictments
 24. Expand coverage to all documented positions
 25. Add every documented Associate for all families up to 2025
@@ -3016,8 +3016,32 @@ Definition manocchio : Member := mkMember
   None
   (Some (Conviction "D.R.I." "09-0025" 2011 "5 years")).
 
+(** Carmen DiNunzio - Acting Boss 2009-2015 *)
+Definition dinunzio : Member := mkMember
+  (mkPerson 150 "Carmen DiNunzio" (Some "The Cheeseman") (Some 1958) None)
+  NewEngland
+  Boss
+  (Some ActingBoss)
+  None
+  (mkTenure 2009 (Some 2015))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "12-0234" 2015 "6 years")).
+
+(** Anthony DiNunzio - Boss 2015-present *)
+Definition anthony_dinunzio : Member := mkMember
+  (mkPerson 151 "Anthony DiNunzio" None (Some 1960) None)
+  NewEngland
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 2015 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
 Definition newengland_bosses : list Member :=
-  [patriarca_sr; patriarca_jr; salemme; manocchio].
+  [patriarca_sr; patriarca_jr; salemme; manocchio; dinunzio; anthony_dinunzio].
 
 (** -------------------------------------------------------------------------- *)
 (** Detroit Partnership (Zerilli Family)                                       *)
@@ -3047,8 +3071,20 @@ Definition tocco : Member := mkMember
   None
   (Some (Conviction "E.D. Mich." "96-80414" 1998 "Probation")).
 
+(** Jack Giacalone - Boss 2014-present (disputed, family greatly diminished) *)
+Definition giacalone : Member := mkMember
+  (mkPerson 155 "Jack Giacalone" None (Some 1935) None)
+  Detroit
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 2014 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
 Definition detroit_bosses : list Member :=
-  [zerilli; tocco].
+  [zerilli; tocco; giacalone].
 
 (** -------------------------------------------------------------------------- *)
 (** Kansas City Crime Family (Civella)                                         *)
@@ -4609,7 +4645,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 68.
+Lemma boss_count : total_documented_bosses = 71.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
@@ -4675,5 +4711,5 @@ Definition coverage_summary : string :=
   "NYC Five Families (1931-2020): Complete boss succession. " ++
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
-  "Leadership: 68 bosses, selected underbosses/consiglieres/capos. " ++
+  "Leadership: 71 bosses, selected underbosses/consiglieres/capos. " ++
   "Events: 4 murders, 3 blood relations, 3 wars, 2 Commission votes.".
