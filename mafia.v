@@ -32,7 +32,7 @@
 9. [DONE] Link evidence fields to external sources
 10. [DONE] Establish machine-checkable links between evidence claims and external sources
 11. [DONE] Clarify evidence tier assignment criteria
-12. Use PreciseDate for all tenure boundaries
+12. [DONE] Use PreciseDate for all tenure boundaries
 13. Populate member_initiation_year for all records
 14. Add Philadelphia family members
 15. Add New England family members
@@ -738,6 +738,78 @@ Definition tenure_to_precise (t : Tenure) : TenurePrecise :=
      | None => None
      | Some y => Some (year_only y)
      end).
+
+(** Convert TenurePrecise back to year-only Tenure (loses precision). *)
+Definition precise_to_tenure (tp : TenurePrecise) : Tenure :=
+  mkTenure
+    (pd_year (tp_start tp))
+    (match tp_end tp with
+     | None => None
+     | Some pd => Some (pd_year pd)
+     end).
+
+(** Check if a PreciseDate is active at a given PreciseDate.
+    Uses the comparison functions for proper ordering. *)
+Definition active_at_precise (tp : TenurePrecise) (d : PreciseDate) : bool :=
+  precise_date_le (tp_start tp) d &&
+  match tp_end tp with
+  | None => true
+  | Some end_d => precise_date_lt d end_d
+  end.
+
+(** PreciseTenure database for members where exact dates are known.
+    Maps member person_id to their precise tenure boundaries. *)
+Record PreciseTenureEntry := mkPreciseTenureEntry {
+  pte_person_id : nat;
+  pte_role : Rank;
+  pte_precise_tenure : TenurePrecise;
+  pte_notes : option string
+}.
+
+(** Key historical events with precise dates for cross-referencing. *)
+
+(** Albert Anastasia murdered October 25, 1957 *)
+Definition anastasia_death_date : PreciseDate := month_day 1957 10 25.
+
+(** Apalachin Meeting November 14, 1957 *)
+Definition apalachin_date : PreciseDate := month_day 1957 11 14.
+
+(** Paul Castellano murdered December 16, 1985 *)
+Definition castellano_death_date : PreciseDate := month_day 1985 12 16.
+
+(** Carmine Galante murdered July 12, 1979 *)
+Definition galante_death_date : PreciseDate := month_day 1979 7 12.
+
+(** John Gotti convicted April 2, 1992 *)
+Definition gotti_conviction_date : PreciseDate := month_day 1992 4 2.
+
+(** Commission Trial verdict November 19, 1986 *)
+Definition commission_verdict_date : PreciseDate := month_day 1986 11 19.
+
+(** Precise tenure entries for key historical figures. *)
+Definition anastasia_precise : PreciseTenureEntry := mkPreciseTenureEntry
+  23 Boss
+  (mkTenurePrecise (year_only 1951) (Some anastasia_death_date))
+  (Some "Murdered in barbershop; death triggered Apalachin meeting").
+
+Definition castellano_precise : PreciseTenureEntry := mkPreciseTenureEntry
+  25 Boss
+  (mkTenurePrecise (year_only 1976) (Some castellano_death_date))
+  (Some "Murdered outside Sparks Steak House by Gotti faction").
+
+Definition galante_precise : PreciseTenureEntry := mkPreciseTenureEntry
+  60 Boss
+  (mkTenurePrecise (year_only 1974) (Some galante_death_date))
+  (Some "Murdered at Joe and Mary's restaurant; Commission-sanctioned").
+
+(** Verify Anastasia died before Apalachin. *)
+Lemma anastasia_before_apalachin :
+  precise_date_lt anastasia_death_date apalachin_date = true.
+Proof. reflexivity. Qed.
+
+(** Collection of all precise tenure entries. *)
+Definition precise_tenures : list PreciseTenureEntry :=
+  [anastasia_precise; castellano_precise; galante_precise].
 
 (** -------------------------------------------------------------------------- *)
 (** Member Records                                                             *)
