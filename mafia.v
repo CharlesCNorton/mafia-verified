@@ -66,9 +66,9 @@
 43. [DONE] Add Henry Hill to cooperators
 44. [DONE] Add Michael Franzese to cooperators
 45. Add every documented cooperator up to 2025
-46. Add Pizza Connection case (1985-87)
-47. Add Mafia Cops case (2006)
-48. Add Family Secrets case (2007)
+46. [DONE] Add Pizza Connection case (1985-87)
+47. [DONE] Add Mafia Cops case (2006)
+48. [DONE] Add Family Secrets case (2007)
 49. Add every documented RICO case up to 2025
 50. Document every blood relation among members
 51. Document every cross-family marriage tie
@@ -3710,6 +3710,47 @@ Definition lucchese_2024 : Case := mkCase
 
 Definition cases_2020s : list Case :=
   [multi_family_2020; colombo_2021; genovese_gambling_2022; bonanno_2023; lucchese_2024].
+
+(** -------------------------------------------------------------------------- *)
+(** Additional Major Cases                                                     *)
+(** -------------------------------------------------------------------------- *)
+
+(** Pizza Connection Trial (1985-1987) - Heroin trafficking through pizza parlors *)
+Definition pizza_connection : Case := mkCase
+  "United States v. Badalamenti (Pizza Connection)"
+  "S.D.N.Y."
+  (Some "84 Cr. 236")
+  1985
+  (Some 1987)
+  []
+  ["RICO"; "heroin trafficking"; "money laundering"]
+  (Some "22 defendants; $1.6B heroin operation; Sicilian-American connection").
+
+(** Mafia Cops Case (2005-2006) - NYPD detectives working for Lucchese *)
+Definition mafia_cops : Case := mkCase
+  "United States v. Eppolito"
+  "E.D.N.Y."
+  (Some "05 Cr. 192")
+  2005
+  (Some 2006)
+  []
+  ["RICO"; "murder conspiracy"; "obstruction of justice"]
+  (Some "Detectives Eppolito and Caracappa convicted; worked for Lucchese family").
+
+(** Family Secrets Trial (2007) - Chicago Outfit murders *)
+Definition family_secrets : Case := mkCase
+  "United States v. Calabrese (Family Secrets)"
+  "N.D. Ill."
+  (Some "02 CR 1050")
+  2005
+  (Some 2007)
+  []
+  ["RICO"; "18 murders"; "extortion"; "gambling"]
+  (Some "Chicago Outfit prosecution; 18 previously unsolved murders; Calabrese cooperated").
+
+Definition major_cases : list Case :=
+  [commission_trial; pizza_connection; gotti_case; gigante_case;
+   mafia_cops; family_secrets; massino_case].
 
 (** -------------------------------------------------------------------------- *)
 (** Cooperators                                                                *)
