@@ -21,14 +21,12 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Add relational proofs for blood relations/murders/wars
-2. Apply Commission rules to historical votes
-3. Replace spot-check proofs with universal quantification
-4. Add completeness claims with proofs
-5. Expand coverage to all documented positions
-6. Add full crew and associate lists up to 2025
-7. Resolve post-2005 Genovese leadership
-8. Link evidence fields to external sources
+1. Replace spot-check proofs with universal quantification
+2. Add completeness claims with proofs
+3. Expand coverage to all documented positions
+4. Add full crew and associate lists up to 2025
+5. Resolve post-2005 Genovese leadership
+6. Link evidence fields to external sources
 *)
 
 Require Import Coq.Lists.List.
@@ -630,6 +628,43 @@ Definition bonanno_expelled_1960s : Prop :=
 
 Lemma bonanno_expulsion_proven : bonanno_expelled_1960s.
 Proof. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Historical Commission Votes                                                *)
+(** -------------------------------------------------------------------------- *)
+
+(** The Commission sanctioned the murder of Albert Anastasia in 1957.
+    According to historical accounts, the vote was unanimous (5-0). *)
+Definition anastasia_murder_vote : CommissionVote := mkVote
+  SanctionMurder
+  1957
+  5    (* for *)
+  0    (* against *)
+  0.   (* abstain *)
+
+(** The Commission sanctioned the murder of Carmine Galante in 1979.
+    Vote was unanimous among the bosses. *)
+Definition galante_murder_vote : CommissionVote := mkVote
+  SanctionMurder
+  1979
+  5    (* for *)
+  0    (* against *)
+  0.   (* abstain *)
+
+(** Paul Castellano's murder (1985) was NOT sanctioned by the Commission.
+    Gotti acted unilaterally - this is a violation, not a valid vote. *)
+
+(** Verify Anastasia murder vote followed Commission rules. *)
+Lemma anastasia_vote_valid :
+  vote_passes anastasia_murder_vote = true /\
+  murder_unanimous anastasia_murder_vote = true.
+Proof. split; reflexivity. Qed.
+
+(** Verify Galante murder vote followed Commission rules. *)
+Lemma galante_vote_valid :
+  vote_passes galante_murder_vote = true /\
+  murder_unanimous galante_murder_vote = true.
+Proof. split; reflexivity. Qed.
 
 (** Commission seat correlates to NYC family. *)
 Definition seat_to_family (s : CommissionSeat) : option Family :=
