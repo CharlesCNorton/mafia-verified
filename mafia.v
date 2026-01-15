@@ -39,7 +39,7 @@
 16. [DONE] Add Detroit family members
 17. [DONE] Add Kansas City family members
 18. [DONE] Add New Orleans family members
-19. Expand Buffalo family beyond 3 bosses
+19. [DONE] Expand Buffalo family beyond 3 bosses
 20. Expand Chicago family beyond 4 bosses
 21. Resolve post-2005 Genovese ActualBoss
 22. Update post-2015 leadership across all families
@@ -2775,8 +2775,35 @@ Definition falzone : Member := mkMember
   None
   (Some (Journalism ["Gangland News"])).
 
+(** Joseph Todaro Jr. - Boss 2006-present, succeeded Falzone *)
+Definition todaro_jr : Member := mkMember
+  (mkPerson 140 "Joseph Todaro Jr." None (Some 1951) None)
+  Buffalo
+  Boss
+  (Some ActualBoss)
+  None
+  (mkTenure 2006 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+(** Angelo Massaro - Underboss under Magaddino *)
+Definition massaro : Member := mkMember
+  (mkPerson 141 "Angelo Massaro" None (Some 1900) (Some 1970))
+  Buffalo
+  Underboss
+  None
+  None
+  (mkTenure 1950 (Some 1970))
+  (Some Died)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
 Definition buffalo_bosses : list Member :=
-  [magaddino; todaro_sr; falzone].
+  [magaddino; todaro_sr; falzone; todaro_jr].
+
+Definition buffalo_underbosses : list Member :=
+  [massaro].
 
 (** -------------------------------------------------------------------------- *)
 (** Chicago Outfit                                                             *)
@@ -3818,7 +3845,7 @@ Definition all_bosses : list Member :=
 
 Definition all_underbosses : list Member :=
   genovese_underbosses ++ gambino_underbosses ++ lucchese_underbosses ++
-  bonanno_underbosses ++ colombo_underbosses.
+  bonanno_underbosses ++ colombo_underbosses ++ buffalo_underbosses.
 
 Definition all_consiglieres : list Member :=
   genovese_consiglieres ++ gambino_consiglieres ++ lucchese_consiglieres ++
@@ -4535,7 +4562,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 64.
+Lemma boss_count : total_documented_bosses = 65.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
@@ -4601,5 +4628,5 @@ Definition coverage_summary : string :=
   "NYC Five Families (1931-2020): Complete boss succession. " ++
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
-  "Leadership: 64 bosses, selected underbosses/consiglieres/capos. " ++
+  "Leadership: 65 bosses, selected underbosses/consiglieres/capos. " ++
   "Events: 4 murders, 3 blood relations, 3 wars, 2 Commission votes.".
