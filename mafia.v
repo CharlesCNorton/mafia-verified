@@ -2924,8 +2924,45 @@ Definition frank_salerno : Member := mkMember
   None
   (Some (Journalism ["FBI surveillance 2020"])).
 
+(** Paul Vario - Capo, Goodfellas subject, died in prison *)
+Definition vario : Member := mkMember
+  (mkPerson 410 "Paul Vario" None (Some 1914) (Some 1988))
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 1960 (Some 1984))
+  (Some Imprisoned)
+  (Some 1988)
+  (Some (Conviction "E.D.N.Y." "84-CR-XXX" 1984 "6 years")).
+
+(** Michael Taccetta - Acting Boss NJ faction, 1993 conviction *)
+Definition taccetta : Member := mkMember
+  (mkPerson 411 "Michael Taccetta" (Some "Mad Dog") (Some 1947) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 1993))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D.N.J." "93-CR-XXX" 1993 "Life")).
+
+(** Anthony Accetturo - Capo NJ faction, became informant *)
+Definition accetturo : Member := mkMember
+  (mkPerson 412 "Anthony Accetturo" (Some "Tumac") (Some 1938) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 1976 (Some 1993))
+  None
+  None
+  (Some (CooperatorSelf "Anthony Accetturo" "NJ trials" 1993)).
+
 Definition lucchese_capos : list Member :=
-  [baratta; crea_jr; truscello; castellucci; corso; joseph_perna; zappola; frank_salerno].
+  [baratta; crea_jr; truscello; castellucci; corso; joseph_perna; zappola; frank_salerno;
+   vario; taccetta; accetturo].
 
 (** Lucchese Soldiers *)
 
@@ -3352,9 +3389,48 @@ Definition zummo : Member := mkMember
   None
   (Some (GuiltyPlea "E.D.N.Y." "17-CR-XXX" 2017)).
 
+(** Benjamin Ruggiero - Soldier, Donnie Brasco subject *)
+Definition lefty_ruggiero : Member := mkMember
+  (mkPerson 413 "Benjamin Ruggiero" (Some "Lefty") (Some 1926) (Some 1994))
+  Bonanno
+  Soldier
+  None
+  None
+  (mkTenure 1960 (Some 1982))
+  (Some Imprisoned)
+  (Some 1994)
+  (Some (Conviction "S.D.N.Y." "82-CR-XXX" 1982 "20 years")).
+
+(** Salvatore Catalano - Capo, Pizza Connection, 45 years *)
+Definition catalano : Member := mkMember
+  (mkPerson 414 "Salvatore Catalano" (Some "Toto") (Some 1941) (Some 2023))
+  Bonanno
+  Capo
+  None
+  None
+  (mkTenure 1975 (Some 1987))
+  (Some Imprisoned)
+  (Some 2023)
+  (Some (Conviction "S.D.N.Y." "84-CR-236" 1987 "45 years")).
+
+(** Anthony Urso - Acting Boss, 2004 conviction *)
+Definition urso : Member := mkMember
+  (mkPerson 415 "Anthony Urso" (Some "Tony Green") (Some 1948) None)
+  Bonanno
+  Capo
+  None
+  None
+  (mkTenure 1995 (Some 2004))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "04-CR-XXX" 2004 "Life")).
+
 Definition bonanno_capos : list Member :=
   [sciascia; napolitano; cammarano; zancocchio; sabella; anthony_pipitone;
-   asaro; giallanzo; zummo].
+   asaro; giallanzo; zummo; catalano; urso].
+
+Definition bonanno_soldiers_historical : list Member :=
+  [lefty_ruggiero].
 
 (** Bonanno Soldiers *)
 
@@ -3467,6 +3543,7 @@ Definition ragano : Member := mkMember
   (Some (GuiltyPlea "E.D.N.Y." "21-CR-XXX" 2022)).
 
 Definition bonanno_soldiers : list Member :=
+  bonanno_soldiers_historical ++
   [tropiano; miniero; santapaolo; armetta; vito_pipitone;
    padavona; palmaccio; festa; ragano].
 
@@ -3755,8 +3832,33 @@ Definition joseph_amato : Member := mkMember
   None
   (Some (Indictment "S.D.N.Y." "19-CR-XXX" 2019)).
 
+(** Joel Cacace - Consigliere/Acting Boss, 2003 conviction *)
+Definition cacace : Member := mkMember
+  (mkPerson 420 "Joel Cacace" (Some "Joe Waverly") (Some 1941) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2003))
+  (Some Imprisoned)
+  None
+  (Some (GuiltyPlea "E.D.N.Y." "03-CR-XXX" 2004)).
+
+(** Gregory Scarpa Jr. - Acting Capo, son of "Grim Reaper" *)
+Definition scarpa_jr : Member := mkMember
+  (mkPerson 422 "Gregory Scarpa Jr." None (Some 1952) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 1995))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "95-CR-XXX" 1999 "40 years")).
+
 Definition colombo_capos : list Member :=
-  [scopo; theodore_persico; ferrara; ricciardo; calabro; anthony_russo_capo; joseph_amato].
+  [scopo; theodore_persico; ferrara; ricciardo; calabro; anthony_russo_capo; joseph_amato;
+   cacace; scarpa_jr].
 
 (** Colombo Soldiers *)
 
