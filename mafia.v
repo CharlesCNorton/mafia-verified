@@ -1866,10 +1866,22 @@ Definition macario : Member := mkMember
   None
   (Some (GuiltyPlea "E.D.N.Y." "22-CR-428" 2024)).
 
+(** Peter Savino - Soldier, wore wire against Gigante *)
+Definition savino : Member := mkMember
+  (mkPerson 428 "Peter Savino" (Some "Blackheart") (Some 1940) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 1975 (Some 1987))
+  None
+  None
+  (Some (CooperatorSelf "Peter Savino" "Gigante case" 1987)).
+
 Definition genovese_soldiers : list Member :=
   [chierchio; messina; campanella; celso; albanese; carmine_russo;
    mikey_coppola; depiro; ralph_coppola; moscatiello; ragusa;
-   alberti; thomas_cafaro; falcetti; macario].
+   alberti; thomas_cafaro; falcetti; macario; savino].
 
 (** Genovese Capos - 2020s *)
 
@@ -1995,9 +2007,46 @@ Definition tuzzo : Member := mkMember
   None
   (Some (Indictment "S.D.N.Y." "02-CR-69" 2002)).
 
+(** Louis Manna - Consigliere, plotted against Gotti, 80 years *)
+Definition manna : Member := mkMember
+  (mkPerson 425 "Louis Manna" (Some "Bobby") (Some 1929) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 1975 (Some 1989))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D.N.J." "89-CR-XXX" 1989 "80 years")).
+
+(** Venero Mangano - Underboss, Windows Case 1991 *)
+Definition mangano_genovese : Member := mkMember
+  (mkPerson 426 "Venero Mangano" (Some "Benny Eggs") (Some 1921) (Some 2000))
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 1975 (Some 1991))
+  (Some Imprisoned)
+  (Some 2000)
+  (Some (Conviction "S.D.N.Y." "88-CR-810" 1991 "15 years")).
+
+(** Alphonse Malangone - Capo, waterfront racketeering *)
+Definition malangone : Member := mkMember
+  (mkPerson 427 "Alphonse Malangone" (Some "Allie Shades") (Some 1935) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 1980 (Some 2000))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "00-CR-XXX" 2000)).
+
 Definition genovese_capos : list Member :=
   [ianniello; dentico; calisi; balsamo; romanello; polito;
-   ianniello_capo; louis_dinapoli; fiumara; provenzano; longo; tuzzo].
+   ianniello_capo; louis_dinapoli; fiumara; provenzano; longo; tuzzo;
+   manna; mangano_genovese; malangone].
 
 (** -------------------------------------------------------------------------- *)
 (** Gambino Family Succession                                                  *)
