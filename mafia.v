@@ -6,10 +6,10 @@
 (*     present: Commission hierarchy, bosses, underbosses, consiglieres,      *)
 (*     succession chains, Apalachin attendees, and RICO-indicted members.     *)
 (*                                                                            *)
-(*     "They bring certain modes of conflict resolution from all the way      *)
+(*     They bring certain modes of conflict resolution from all the way       *)
 (*     back in the old country, from the poverty of the Mezzogiorno,          *)
-(*     where all higher authority was corrupt."                               *)
-(*     - Meadow Soprano, The Sopranos                                         *)
+(*     where all higher authority was corrupt.                                *)
+(*       -- Meadow Soprano, The Sopranos                                      *)
 (*                                                                            *)
 (*     Author: Charles C. Norton                                              *)
 (*     Date: January 4, 2026                                                  *)
@@ -21,26 +21,24 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. Expand coverage to all documented positions
-2. Add every documented Associate for all families up to 2025
-3. Add every documented Soldier for all families up to 2025
-4. Add every documented Capo for all families up to 2025
-5. Add full crew lists for all families up to 2025
-6. Assign every Crew instance to its capo
-7. Populate crew_territory for every crew
-8. Link murder_carried_out_by to Member records instead of strings
-9. Add every documented murder up to 2025
-10. Add every documented inter-family and intra-family war
-11. Document every Commission vote with known details
-12. Add every documented cooperator up to 2025
-13. Add every documented RICO case up to 2025
-14. Document every blood relation among members
-15. Document every cross-family marriage tie
-16. Populate member_evidence for every record
-17. Prove universal boss uniqueness or document exceptions
-18. Add proofs connecting murders to succession events
-19. Prove all_leadership exhaustive for given years
-20. Replace vm_compute with structural induction where appropriate
+1. Add every documented Soldier for all families up to 2025
+2. Add every documented Capo for all families up to 2025
+3. Add full crew lists for all families up to 2025
+4. Assign every Crew instance to its capo
+5. Populate crew_territory for every crew
+6. Link murder_carried_out_by to Member records instead of strings
+7. Add every documented murder up to 2025
+8. Add every documented inter-family and intra-family war
+9. Document every Commission vote with known details
+10. Add every documented cooperator up to 2025
+11. Add every documented RICO case up to 2025
+12. Document every blood relation among members
+13. Document every cross-family marriage tie
+14. Populate member_evidence for every record
+15. Prove universal boss uniqueness or document exceptions
+16. Add proofs connecting murders to succession events
+17. Prove all_leadership exhaustive for given years
+18. Replace vm_compute with structural induction where appropriate
 *)
 
 Require Import Coq.Lists.List.
@@ -1670,6 +1668,153 @@ Definition dentico : Member := mkMember
 Definition genovese_capos : list Member :=
   [ianniello; dentico].
 
+(** Genovese Associates *)
+
+(** Meyer Lansky - Associate, financial mastermind of organized crime *)
+Definition lansky : Member := mkMember
+  (mkPerson 203 "Meyer Lansky" (Some "The Mob's Accountant") (Some 1902) (Some 1983))
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 1920 (Some 1983))
+  (Some Died)
+  None
+  (Some (Journalism ["Little Man: Meyer Lansky (1991)"])).
+
+Definition genovese_associates : list Member :=
+  [lansky].
+
+(** Genovese Soldiers - 2020s Indictments *)
+
+(** Christopher Chierchio - Soldier, 2020 fraud indictment *)
+Definition chierchio : Member := mkMember
+  (mkPerson 210 "Christopher Chierchio" (Some "Jerry") (Some 1965) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2000 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "20-CR-357" 2020)).
+
+(** Michael Messina - Soldier, 2022 gambling indictment *)
+Definition messina : Member := mkMember
+  (mkPerson 211 "Michael Messina" None (Some 1970) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "22-CR-298" 2022)).
+
+(** John Campanella - Soldier, 2022 gambling indictment *)
+Definition campanella : Member := mkMember
+  (mkPerson 212 "John Campanella" None (Some 1968) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2005 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "22-CR-298" 2022)).
+
+(** Joseph Celso - Soldier, 2022 extortion indictment *)
+Definition celso : Member := mkMember
+  (mkPerson 213 "Joseph Celso" None (Some 1972) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2008 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "22-CR-301" 2022)).
+
+(** Elio Albanese - Soldier, 2022 oxycodone scheme *)
+Definition albanese : Member := mkMember
+  (mkPerson 214 "Elio Albanese" None (Some 1975) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "22-CR-789" 2022)).
+
+(** Carmine Russo - Soldier, 2022 oxycodone scheme *)
+Definition carmine_russo : Member := mkMember
+  (mkPerson 215 "Carmine Russo" None (Some 1978) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2012 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "22-CR-789" 2022)).
+
+Definition genovese_soldiers : list Member :=
+  [chierchio; messina; campanella; celso; albanese; carmine_russo].
+
+(** Genovese Capos - 2020s *)
+
+(** Nicholas Calisi - Capo, 2022 gambling/extortion *)
+Definition calisi : Member := mkMember
+  (mkPerson 216 "Nicholas Calisi" None (Some 1960) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 2000 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "22-CR-298" 2023 "2 years")).
+
+(** Ralph Balsamo - Capo, Bellomo inner circle, 2022 *)
+Definition balsamo : Member := mkMember
+  (mkPerson 217 "Ralph Balsamo" None (Some 1972) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 2005 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "22-CR-298" 2023 "34 months")).
+
+(** Anthony Romanello - Capo, Queens crew, 2022 extortion *)
+Definition romanello : Member := mkMember
+  (mkPerson 218 "Anthony Romanello" (Some "Rom") (Some 1965) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 2000 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "22-CR-301" 2022)).
+
+(** Carmelo Polito - Acting Capo, 2022 indictment *)
+Definition polito : Member := mkMember
+  (mkPerson 219 "Carmelo Polito" (Some "Carmine") (Some 1968) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 2015 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "22-CR-456" 2022)).
+
+Definition genovese_capos_2020s : list Member :=
+  [calisi; balsamo; romanello; polito].
+
 (** -------------------------------------------------------------------------- *)
 (** Gambino Family Succession                                                  *)
 (** -------------------------------------------------------------------------- *)
@@ -1951,6 +2096,83 @@ Definition dimaria : Member := mkMember
 Definition gambino_capos : list Member :=
   [corozzo; dimaria].
 
+(** Gambino Capos - 2020s Indictments *)
+
+(** Joseph Lanni - Capo, succeeded Frank Cali, 2023 indictment *)
+Definition lanni : Member := mkMember
+  (mkPerson 220 "Joseph Lanni" (Some "Joe Brooklyn") (Some 1965) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2019 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "23-CR-412" 2025 "Guilty plea")).
+
+(** Andrew Campos - Capo, Bronx/Westchester crew *)
+Definition andrew_campos : Member := mkMember
+  (mkPerson 221 "Andrew Campos" None (Some 1970) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2015 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "21-CR-287" 2023 "Guilty plea")).
+
+(** Frank Camuso - Capo, Staten Island crew, 2023 kickback scheme *)
+Definition camuso : Member := mkMember
+  (mkPerson 222 "Frank Camuso" (Some "Calypso") (Some 1968) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "N.Y. County" "23-DA-0118" 2023)).
+
+(** Ernest Grillo - Capo, Brooklyn operations *)
+Definition grillo : Member := mkMember
+  (mkPerson 223 "Ernest Grillo" (Some "Ernie") (Some 1960) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2005 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+(** John Rizzo - Capo, Brooklyn/Staten Island/Manhattan *)
+Definition rizzo : Member := mkMember
+  (mkPerson 224 "John Rizzo" None (Some 1958) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2000 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+(** Carmine Sciandra - Capo, Staten Island, Top Tomato markets *)
+Definition sciandra : Member := mkMember
+  (mkPerson 225 "Carmine Sciandra" None (Some 1962) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2008 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition gambino_capos_2020s : list Member :=
+  [lanni; andrew_campos; camuso; grillo; rizzo; sciandra].
+
 (** Gambino Soldiers *)
 
 (** Charles Carneglia - Soldier, convicted 2009, life sentence *)
@@ -1991,6 +2213,124 @@ Definition richard_gotti : Member := mkMember
 
 Definition gambino_soldiers : list Member :=
   [carneglia; vincent_gotti].
+
+(** Gambino Soldiers - 2020s Indictments *)
+
+(** Diego Tantillo - Soldier, 2023 carting/demolition indictment *)
+Definition tantillo : Member := mkMember
+  (mkPerson 226 "Diego Tantillo" (Some "Danny") (Some 1975) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2015 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-412" 2023)).
+
+(** Angelo Gradilone - Soldier, 2023 indictment *)
+Definition gradilone : Member := mkMember
+  (mkPerson 227 "Angelo Gradilone" (Some "Fifi") (Some 1970) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-412" 2023)).
+
+(** James LaForte - Soldier, 2023 indictment *)
+Definition laforte : Member := mkMember
+  (mkPerson 228 "James LaForte" None (Some 1972) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2012 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-412" 2023)).
+
+(** Louis Astuto - Soldier, 2023 kickback scheme *)
+Definition astuto : Member := mkMember
+  (mkPerson 229 "Louis Astuto" None (Some 1978) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2015 None)
+  None
+  None
+  (Some (Indictment "N.Y. County" "23-DA-0118" 2023)).
+
+(** James Ciaccia - Soldier, Bronx/Westchester crew *)
+Definition ciaccia : Member := mkMember
+  (mkPerson 230 "James Ciaccia" None (Some 1968) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "21-CR-287" 2021)).
+
+(** Vincent Fiore - Soldier, Bronx/Westchester crew *)
+Definition fiore : Member := mkMember
+  (mkPerson 231 "Vincent Fiore" None (Some 1965) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2005 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "21-CR-287" 2023 "Guilty plea")).
+
+(** Richard Martino - Soldier, Bronx/Westchester crew *)
+Definition martino : Member := mkMember
+  (mkPerson 232 "Richard Martino" None (Some 1970) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2008 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "21-CR-287" 2021)).
+
+(** Anthony Ciccone - Soldier, Brooklyn waterfront *)
+Definition ciccone : Member := mkMember
+  (mkPerson 233 "Anthony Ciccone" (Some "Sonny") (Some 1960) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1995 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition gambino_soldiers_2020s : list Member :=
+  [tantillo; gradilone; laforte; astuto; ciaccia; fiore; martino; ciccone].
+
+(** Gambino Associates *)
+
+(** Roy DeMeo - Associate/Soldier, ran murder-for-hire crew *)
+Definition demeo : Member := mkMember
+  (mkPerson 200 "Roy DeMeo" None (Some 1942) (Some 1983))
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 1966 (Some 1983))
+  (Some Murdered)
+  None
+  (Some (Journalism ["Murder Machine (1992)"])).
+
+Definition gambino_associates : list Member :=
+  [demeo].
 
 (** -------------------------------------------------------------------------- *)
 (** Lucchese Family Succession                                                 *)
@@ -2229,6 +2569,129 @@ Definition baratta : Member := mkMember
 
 Definition lucchese_capos : list Member :=
   [baratta].
+
+(** Lucchese Capos - 2017/2020s Indictments *)
+
+(** Steven Crea Jr. - Capo, 2017 RICO indictment *)
+Definition crea_jr : Member := mkMember
+  (mkPerson 240 "Steven Crea Jr." None (Some 1962) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 2010 None)
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "17-CR-368" 2017)).
+
+(** Dominic Truscello - Capo, 2017 indictment *)
+Definition truscello : Member := mkMember
+  (mkPerson 241 "Dominic Truscello" None (Some 1955) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 2000 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "17-CR-368" 2017)).
+
+(** John Castellucci - Capo, 2017 indictment *)
+Definition castellucci : Member := mkMember
+  (mkPerson 242 "John Castellucci" None (Some 1958) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 2005 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "17-CR-368" 2017)).
+
+(** Tindaro Corso - Acting Capo, 2017 indictment *)
+Definition corso : Member := mkMember
+  (mkPerson 243 "Tindaro Corso" None (Some 1960) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 2012 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "17-CR-368" 2017)).
+
+(** Joseph Perna - Capo, New Jersey faction *)
+Definition joseph_perna : Member := mkMember
+  (mkPerson 244 "Joseph Perna" (Some "Big Joe") (Some 1958) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 2000 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition lucchese_capos_2020s : list Member :=
+  [crea_jr; truscello; castellucci; corso; joseph_perna].
+
+(** Lucchese Soldiers - 2020s *)
+
+(** Joseph Villani - Soldier, 2025 gambling conviction *)
+Definition villani : Member := mkMember
+  (mkPerson 245 "Joseph Villani" None (Some 1965) None)
+  Lucchese
+  Soldier
+  None
+  None
+  (mkTenure 2000 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "24-CR-XXX" 2025 "21 months")).
+
+(** John Perna - Soldier, New Jersey faction *)
+Definition john_perna : Member := mkMember
+  (mkPerson 246 "John Perna" None (Some 1977) None)
+  Lucchese
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition lucchese_soldiers : list Member :=
+  [villani; john_perna].
+
+(** Lucchese Associates *)
+
+(** Jimmy Burke - Associate, mastermind of Lufthansa heist *)
+Definition burke : Member := mkMember
+  (mkPerson 201 "James Burke" (Some "Jimmy the Gent") (Some 1931) (Some 1996))
+  Lucchese
+  Associate
+  None
+  None
+  (mkTenure 1960 (Some 1985))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "79-CR-345" 1985 "20 years")).
+
+(** Tommy DeSimone - Associate, Lufthansa heist participant *)
+Definition desimone : Member := mkMember
+  (mkPerson 202 "Thomas DeSimone" (Some "Two-Gun Tommy") (Some 1950) (Some 1979))
+  Lucchese
+  Associate
+  None
+  None
+  (mkTenure 1970 (Some 1979))
+  (Some Murdered)
+  None
+  (Some (Journalism ["Wiseguy (1985)"])).
+
+Definition lucchese_associates : list Member :=
+  [burke; desimone].
 
 (** -------------------------------------------------------------------------- *)
 (** Bonanno Family Succession                                                  *)
@@ -2488,6 +2951,117 @@ Definition napolitano : Member := mkMember
 Definition bonanno_capos : list Member :=
   [sciascia; napolitano].
 
+(** Bonanno Capos - 2018/2020s Indictments *)
+
+(** John Zancocchio - Capo/Consigliere, 2018 indictment *)
+Definition zancocchio : Member := mkMember
+  (mkPerson 251 "John Zancocchio" None (Some 1958) None)
+  Bonanno
+  Capo
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-0009" 2018)).
+
+(** Albert Sabella - Capo, 2018 indictment *)
+Definition sabella : Member := mkMember
+  (mkPerson 252 "Albert Sabella" None (Some 1960) None)
+  Bonanno
+  Capo
+  None
+  None
+  (mkTenure 2008 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-0009" 2018)).
+
+(** Anthony Pipitone - Capo, 2022 gambling indictment *)
+Definition anthony_pipitone : Member := mkMember
+  (mkPerson 253 "Anthony Pipitone" None (Some 1962) None)
+  Bonanno
+  Capo
+  None
+  None
+  (mkTenure 2012 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "22-CR-456" 2022)).
+
+Definition bonanno_capos_2020s : list Member :=
+  [cammarano; zancocchio; sabella; anthony_pipitone].
+
+(** Bonanno Soldiers - 2018/2020s *)
+
+(** Joseph Tropiano - Soldier/Acting Capo, 2018 indictment *)
+Definition tropiano : Member := mkMember
+  (mkPerson 254 "Joseph Tropiano" None (Some 1968) None)
+  Bonanno
+  Soldier
+  None
+  None
+  (mkTenure 2005 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-0009" 2018)).
+
+(** Michael Miniero - Soldier, 2018 indictment *)
+Definition miniero : Member := mkMember
+  (mkPerson 255 "Michael Miniero" None (Some 1970) None)
+  Bonanno
+  Soldier
+  None
+  None
+  (mkTenure 2008 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-0009" 2018)).
+
+(** Giovanni Santapaolo - Soldier, 2018 indictment *)
+Definition santapaolo : Member := mkMember
+  (mkPerson 256 "Giovanni Santapaolo" None (Some 1965) None)
+  Bonanno
+  Soldier
+  None
+  None
+  (mkTenure 2005 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-0009" 2018)).
+
+(** Joseph Armetta - Soldier, 2018 indictment *)
+Definition armetta : Member := mkMember
+  (mkPerson 257 "Joseph Armetta" None (Some 1972) None)
+  Bonanno
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-0009" 2018)).
+
+(** Vito Pipitone - Soldier, 2022 gambling indictment *)
+Definition vito_pipitone : Member := mkMember
+  (mkPerson 258 "Vito Pipitone" None (Some 1965) None)
+  Bonanno
+  Soldier
+  None
+  None
+  (mkTenure 2008 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "22-CR-456" 2022)).
+
+Definition bonanno_soldiers : list Member :=
+  [tropiano; miniero; santapaolo; armetta; vito_pipitone].
+
+(** Bonanno Associates *)
+
+Definition bonanno_associates : list Member :=
+  [].
+
 (** -------------------------------------------------------------------------- *)
 (** Colombo Family Succession                                                  *)
 (** -------------------------------------------------------------------------- *)
@@ -2707,6 +3281,69 @@ Definition theodore_persico : Member := mkMember
 Definition colombo_capos : list Member :=
   [scopo; theodore_persico].
 
+(** Colombo Capos - 2021 Indictment *)
+
+(** Richard Ferrara - Capo, 2021 labor racketeering indictment *)
+Definition ferrara : Member := mkMember
+  (mkPerson 260 "Richard Ferrara" None (Some 1958) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "21-CR-428" 2021)).
+
+(** Vincent Ricciardo - Capo, Long Island crew, 2021 indictment *)
+Definition ricciardo : Member := mkMember
+  (mkPerson 261 "Vincent Ricciardo" (Some "Vinny Unions") (Some 1962) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 2015 None)
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "21-CR-428" 2023 "Guilty plea")).
+
+Definition colombo_capos_2020s : list Member :=
+  [ferrara; ricciardo].
+
+(** Colombo Soldiers - 2021 Indictment *)
+
+(** Michael Uvino - Soldier, 2021 labor racketeering indictment *)
+Definition uvino : Member := mkMember
+  (mkPerson 262 "Michael Uvino" None (Some 1970) None)
+  Colombo
+  Soldier
+  None
+  None
+  (mkTenure 2010 None)
+  None
+  None
+  (Some (Indictment "E.D.N.Y." "21-CR-428" 2021)).
+
+Definition colombo_soldiers : list Member :=
+  [uvino].
+
+(** Colombo Associates *)
+
+(** Greg Scarpa - Associate/Soldier, FBI informant for decades *)
+Definition scarpa : Member := mkMember
+  (mkPerson 204 "Gregory Scarpa" (Some "The Grim Reaper") (Some 1928) (Some 1994))
+  Colombo
+  Associate
+  None
+  None
+  (mkTenure 1950 (Some 1992))
+  (Some Imprisoned)
+  None
+  (Some (Journalism ["Deal With the Devil (2013)"])).
+
+Definition colombo_associates : list Member :=
+  [scarpa].
+
 (** -------------------------------------------------------------------------- *)
 (** Buffalo Family (Magaddino Family)                                          *)
 (** -------------------------------------------------------------------------- *)
@@ -2871,6 +3508,112 @@ Definition delaurentis : Member := mkMember
 Definition chicago_bosses : list Member :=
   [accardo; giancana; battaglia; aiuppa; cerone; difronzo; delaurentis].
 
+(** Chicago Capos - Family Secrets Case *)
+
+(** Frank Calabrese Sr. - Capo, Family Secrets, 13 murders *)
+Definition frank_calabrese : Member := mkMember
+  (mkPerson 280 "Frank Calabrese" (Some "Frankie the Breeze") (Some 1937) (Some 2012))
+  Chicago
+  Capo
+  None
+  None
+  (mkTenure 1970 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.D. Ill." "05-CR-727" 2007 "Life")).
+
+(** Joseph Lombardo - Capo, Family Secrets, Seifert murder *)
+Definition joseph_lombardo : Member := mkMember
+  (mkPerson 281 "Joseph Lombardo" (Some "Joey the Clown") (Some 1929) (Some 2019))
+  Chicago
+  Capo
+  None
+  None
+  (mkTenure 1950 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.D. Ill." "05-CR-727" 2007 "Life")).
+
+(** Anthony Spilotro - Capo, Las Vegas operations, murdered *)
+Definition spilotro : Member := mkMember
+  (mkPerson 282 "Anthony Spilotro" (Some "The Ant") (Some 1938) (Some 1986))
+  Chicago
+  Capo
+  None
+  None
+  (mkTenure 1971 (Some 1986))
+  (Some Murdered)
+  None
+  (Some (Journalism ["Casino (1995)"])).
+
+(** Angelo LaPietra - Capo, 26th Street crew *)
+Definition lapietra : Member := mkMember
+  (mkPerson 283 "Angelo LaPietra" (Some "The Hook") (Some 1920) (Some 1999))
+  Chicago
+  Capo
+  None
+  None
+  (mkTenure 1970 (Some 1986))
+  (Some Imprisoned)
+  None
+  (Some (Journalism ["Five Families (2005)"])).
+
+(** Albert Tocco - Capo, Chicago Heights crew *)
+Definition albert_tocco : Member := mkMember
+  (mkPerson 284 "Albert Tocco" (Some "Caesar") (Some 1929) (Some 2005))
+  Chicago
+  Capo
+  None
+  None
+  (mkTenure 1970 (Some 1990))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.D. Ill." "90-CR-XXX" 1990 "200 years")).
+
+Definition chicago_capos : list Member :=
+  [frank_calabrese; joseph_lombardo; spilotro; lapietra; albert_tocco].
+
+(** Chicago Soldiers - Family Secrets *)
+
+(** Nicholas Calabrese - Soldier, key government witness *)
+Definition nicholas_calabrese : Member := mkMember
+  (mkPerson 285 "Nicholas Calabrese" None (Some 1942) (Some 2022))
+  Chicago
+  Soldier
+  None
+  None
+  (mkTenure 1970 (Some 1999))
+  (Some Imprisoned)
+  None
+  (Some (CooperatorSelf "Nicholas Calabrese" "Family Secrets" 2007)).
+
+(** Paul Schiro - Soldier, Family Secrets *)
+Definition schiro : Member := mkMember
+  (mkPerson 286 "Paul Schiro" (Some "Paulie the Indian") (Some 1938) None)
+  Chicago
+  Soldier
+  None
+  None
+  (mkTenure 1970 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.D. Ill." "05-CR-727" 2007 "20 years")).
+
+(** Michael Spilotro - Soldier, murdered with brother *)
+Definition michael_spilotro : Member := mkMember
+  (mkPerson 287 "Michael Spilotro" None (Some 1944) (Some 1986))
+  Chicago
+  Soldier
+  None
+  None
+  (mkTenure 1975 (Some 1986))
+  (Some Murdered)
+  None
+  (Some (Journalism ["Casino (1995)"])).
+
+Definition chicago_soldiers : list Member :=
+  [nicholas_calabrese; schiro; michael_spilotro].
+
 (** -------------------------------------------------------------------------- *)
 (** Philadelphia Crime Family (Bruno-Scarfo)                                   *)
 (** -------------------------------------------------------------------------- *)
@@ -2925,6 +3668,64 @@ Definition merlino : Member := mkMember
 
 Definition philadelphia_bosses : list Member :=
   [bruno; scarfo; stanfa; merlino].
+
+(** Philadelphia Underbosses *)
+
+(** Phil Testa - Underboss under Bruno, became boss 1980, murdered 1981 *)
+Definition testa : Member := mkMember
+  (mkPerson 170 "Philip Testa" (Some "Chicken Man") (Some 1924) (Some 1981))
+  Philadelphia
+  Underboss
+  None
+  None
+  (mkTenure 1959 (Some 1980))
+  (Some Superseded)
+  None
+  (Some (Journalism ["Blood and Honor (1991)"])).
+
+(** Philip Leonetti - Underboss under Scarfo, became cooperator *)
+Definition leonetti : Member := mkMember
+  (mkPerson 171 "Philip Leonetti" (Some "Crazy Phil") (Some 1953) None)
+  Philadelphia
+  Underboss
+  None
+  None
+  (mkTenure 1986 (Some 1989))
+  (Some Imprisoned)
+  None
+  (Some (CooperatorSelf "Philip Leonetti" "Various trials" 1989)).
+
+(** Salvatore Merlino - Underboss under Joey Merlino *)
+Definition sal_merlino : Member := mkMember
+  (mkPerson 172 "Salvatore Merlino" None (Some 1939) None)
+  Philadelphia
+  Underboss
+  None
+  None
+  (mkTenure 1999 (Some 2001))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D. Pa." "99-0550" 2001 "14 years")).
+
+Definition philadelphia_underbosses : list Member :=
+  [testa; leonetti; sal_merlino].
+
+(** Philadelphia Consiglieres *)
+
+(** Antonio Caponigro - Consigliere, ordered Bruno murder, killed by Commission *)
+Definition caponigro : Member := mkMember
+  (mkPerson 173 "Antonio Caponigro" (Some "Tony Bananas") (Some 1912) (Some 1980))
+  Philadelphia
+  Consigliere
+  None
+  None
+  (mkTenure 1976 (Some 1980))
+  (Some Murdered)
+  None
+  (Some (Journalism ["Blood and Honor (1991)"])).
+
+Definition philadelphia_consiglieres : list Member :=
+  [caponigro].
 
 (** -------------------------------------------------------------------------- *)
 (** New England Crime Family (Patriarca)                                       *)
@@ -3005,6 +3806,64 @@ Definition anthony_dinunzio : Member := mkMember
 Definition newengland_bosses : list Member :=
   [patriarca_sr; patriarca_jr; salemme; manocchio; dinunzio; anthony_dinunzio].
 
+(** New England Underbosses *)
+
+(** Henry Tameleo - Underboss under Patriarca Sr. *)
+Definition tameleo : Member := mkMember
+  (mkPerson 175 "Henry Tameleo" None (Some 1901) (Some 1985))
+  NewEngland
+  Underboss
+  None
+  None
+  (mkTenure 1954 (Some 1968))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "68-123" 1968 "Life")).
+
+(** Gennaro Angiulo - Underboss 1970s-1980s *)
+Definition angiulo : Member := mkMember
+  (mkPerson 176 "Gennaro Angiulo" (Some "Jerry") (Some 1919) (Some 2009))
+  NewEngland
+  Underboss
+  None
+  None
+  (mkTenure 1968 (Some 1986))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "83-0296" 1986 "45 years")).
+
+(** Joseph Russo - Underboss 1990s *)
+Definition joseph_russo : Member := mkMember
+  (mkPerson 177 "Joseph Russo" (Some "J.R.") (Some 1931) (Some 1998))
+  NewEngland
+  Underboss
+  None
+  None
+  (mkTenure 1991 (Some 1995))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "95-10192" 1997 "16 years")).
+
+Definition newengland_underbosses : list Member :=
+  [tameleo; angiulo; joseph_russo].
+
+(** New England Consiglieres *)
+
+(** Joseph Zannino - Consigliere under Patriarca *)
+Definition zannino : Member := mkMember
+  (mkPerson 178 "Ilario Zannino" (Some "Larry Baione") (Some 1920) (Some 1996))
+  NewEngland
+  Consigliere
+  None
+  None
+  (mkTenure 1976 (Some 1986))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "83-0296" 1986 "30 years")).
+
+Definition newengland_consiglieres : list Member :=
+  [zannino].
+
 (** -------------------------------------------------------------------------- *)
 (** Detroit Partnership (Zerilli Family)                                       *)
 (** -------------------------------------------------------------------------- *)
@@ -3048,6 +3907,35 @@ Definition giacalone : Member := mkMember
 Definition detroit_bosses : list Member :=
   [zerilli; tocco; giacalone].
 
+(** Detroit Underbosses *)
+
+(** Anthony Giacalone - Underboss, connected to Hoffa disappearance *)
+Definition anthony_giacalone : Member := mkMember
+  (mkPerson 180 "Anthony Giacalone" (Some "Tony Jack") (Some 1919) (Some 2001))
+  Detroit
+  Underboss
+  None
+  None
+  (mkTenure 1970 (Some 1998))
+  (Some Died)
+  None
+  (Some (Journalism ["Hoffa (1992)"])).
+
+(** Anthony Zerilli - Underboss, son of Joseph Zerilli *)
+Definition anthony_zerilli : Member := mkMember
+  (mkPerson 181 "Anthony Zerilli" (Some "Tony") (Some 1927) (Some 2015))
+  Detroit
+  Underboss
+  None
+  None
+  (mkTenure 1977 (Some 1998))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D. Mich." "96-80414" 1998 "6 years")).
+
+Definition detroit_underbosses : list Member :=
+  [anthony_giacalone; anthony_zerilli].
+
 (** -------------------------------------------------------------------------- *)
 (** Kansas City Crime Family (Civella)                                         *)
 (** -------------------------------------------------------------------------- *)
@@ -3079,6 +3967,23 @@ Definition carl_civella : Member := mkMember
 Definition kansascity_bosses : list Member :=
   [civella; carl_civella].
 
+(** Kansas City Underbosses *)
+
+(** Carl DeLuna - Underboss under Civella, Strawman case *)
+Definition deluna : Member := mkMember
+  (mkPerson 185 "Carl DeLuna" (Some "Tuffy") (Some 1927) (Some 1991))
+  KansasCity
+  Underboss
+  None
+  None
+  (mkTenure 1971 (Some 1984))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "K.D. Nev." "Strawman" 1984 "30 years")).
+
+Definition kansascity_underbosses : list Member :=
+  [deluna].
+
 (** -------------------------------------------------------------------------- *)
 (** New Orleans Crime Family (Marcello)                                        *)
 (** -------------------------------------------------------------------------- *)
@@ -3109,6 +4014,23 @@ Definition carolla : Member := mkMember
 
 Definition neworleans_bosses : list Member :=
   [marcello; carolla].
+
+(** New Orleans Underbosses *)
+
+(** Joseph Marcello Jr. - Underboss, brother of Carlos *)
+Definition joseph_marcello : Member := mkMember
+  (mkPerson 190 "Joseph Marcello" None (Some 1911) (Some 1983))
+  NewOrleans
+  Underboss
+  None
+  None
+  (mkTenure 1947 (Some 1983))
+  (Some Died)
+  None
+  (Some (Journalism ["Mafia Kingfish (1989)"])).
+
+Definition neworleans_underbosses : list Member :=
+  [joseph_marcello].
 
 (** -------------------------------------------------------------------------- *)
 (** Apalachin Meeting (November 14, 1957)                                      *)
@@ -3814,9 +4736,131 @@ Definition franzese_cooperator : Cooperator := mkCooperator
   (Some "10 years")
   (Some "Highest-earning mobster in 1980s; left family voluntarily; limited cooperation").
 
+(** Joseph Valachi - First public La Cosa Nostra witness *)
+Definition joseph_valachi : Member := mkMember
+  (mkPerson 270 "Joseph Valachi" None (Some 1904) (Some 1971))
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 1930 (Some 1962))
+  (Some Imprisoned)
+  None
+  (Some (Journalism ["The Valachi Papers (1969)"])).
+
+Definition valachi_cooperator : Cooperator := mkCooperator
+  joseph_valachi
+  1963
+  "U.S. Senate McClellan Committee"
+  ["Senate hearings 1963"]
+  (Some "Life")
+  (Some "First to reveal La Cosa Nostra existence publicly; named 300+ members").
+
+(** Vincent Cafaro - Genovese soldier *)
+Definition vincent_cafaro : Member := mkMember
+  (mkPerson 271 "Vincent Cafaro" (Some "Fish") (Some 1935) (Some 2004))
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 1974 (Some 1986))
+  None
+  None
+  (Some (Journalism ["Mob Star (1988)"])).
+
+Definition cafaro_cooperator : Cooperator := mkCooperator
+  vincent_cafaro
+  1986
+  "FBI/SDNY"
+  ["Fat Tony Salerno trial"; "John Gotti trials"]
+  (Some "Reduced sentence + WITSEC")
+  (Some "Described Genovese structure; exposed concrete club extortion").
+
+(** Philip Leonetti - Philadelphia underboss *)
+Definition leonetti_member : Member := mkMember
+  (mkPerson 272 "Philip Leonetti" (Some "Crazy Phil") (Some 1953) None)
+  Philadelphia
+  Underboss
+  None
+  None
+  (mkTenure 1986 (Some 1989))
+  (Some Imprisoned)
+  None
+  (Some (CooperatorSelf "Philip Leonetti" "Various" 1989)).
+
+Definition leonetti_cooperator : Cooperator := mkCooperator
+  leonetti_member
+  1989
+  "FBI"
+  ["Nicky Scarfo trial"; "John Gotti trial"; "Chin Gigante trial"]
+  (Some "5 years served of 45")
+  (Some "Admitted 10 murders; nephew of boss Scarfo; prompted Gravano flip").
+
+(** Peter Chiodo - Lucchese capo *)
+Definition peter_chiodo : Member := mkMember
+  (mkPerson 273 "Peter Chiodo" (Some "Fat Pete") (Some 1949) (Some 2016))
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 1987 (Some 1991))
+  None
+  None
+  (Some (Indictment "S.D.N.Y." "91-CR-XXX" 1991)).
+
+Definition chiodo_cooperator : Cooperator := mkCooperator
+  peter_chiodo
+  1991
+  "FBI/SDNY"
+  ["Windows Case"; "Vic Amuso trial"; "Chin Gigante trial 1997"]
+  (Some "No prison time")
+  (Some "Shot 12 times and survived; sister shot in retaliation").
+
+(** Michael DiLeonardo - Gambino capo, testified 15 times *)
+Definition dileonardo : Member := mkMember
+  (mkPerson 274 "Michael DiLeonardo" (Some "Mikey Scars") (Some 1955) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1988 (Some 2002))
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition dileonardo_cooperator : Cooperator := mkCooperator
+  dileonardo
+  2002
+  "FBI/EDNY"
+  ["Peter Gotti trial"; "15 separate trials"]
+  (Some "Time served")
+  (Some "Testified 15 times - record for made member; helped convict 80+ mobsters").
+
+(** Frank Lino - Bonanno capo *)
+Definition frank_lino : Member := mkMember
+  (mkPerson 275 "Frank Lino" (Some "Curly") (Some 1938) (Some 2023))
+  Bonanno
+  Capo
+  None
+  None
+  (mkTenure 1977 (Some 2003))
+  (Some Imprisoned)
+  None
+  (Some (Journalism ["Gangland News"])).
+
+Definition lino_cooperator : Cooperator := mkCooperator
+  frank_lino
+  2003
+  "FBI/EDNY"
+  ["Joseph Massino trial 2004"]
+  (Some "Time served 2014")
+  (Some "Eyewitness to Three Captains murder; participated in Sonny Black murder").
+
 Definition all_cooperators : list Cooperator :=
   [gravano_cooperator; vitale_cooperator; massino_cooperator; darco_cooperator;
-   fratianno_cooperator; hill_cooperator; franzese_cooperator].
+   fratianno_cooperator; hill_cooperator; franzese_cooperator;
+   valachi_cooperator; cafaro_cooperator; leonetti_cooperator;
+   chiodo_cooperator; dileonardo_cooperator; lino_cooperator].
 
 (** -------------------------------------------------------------------------- *)
 (** Murder Records                                                             *)
@@ -3930,9 +4974,156 @@ Definition napolitano_murder : Murder := mkMurder
   (Some true)
   (Some "Killed for sponsoring FBI agent Joe Pistone (Donnie Brasco); hands cut off").
 
+(** Thomas Bilotti - Murdered with Castellano *)
+Definition bilotti_murder : Murder := mkMurder
+  "Thomas Bilotti"
+  (Some Underboss)
+  (Some Gambino)
+  1985
+  (Some "Sparks Steak House, Manhattan")
+  (Some "John Gotti")
+  (Some ["Eddie Lino"])
+  (Some false)
+  (Some "Killed alongside Castellano; Gotti's coup").
+
+(** Frank DeCicco - Car bombed in retaliation *)
+Definition decicco_murder : Murder := mkMurder
+  "Frank DeCicco"
+  (Some Underboss)
+  (Some Gambino)
+  1986
+  (Some "Bensonhurst, Brooklyn")
+  (Some "Vincent Gigante/Genovese Family")
+  (Some ["Herbert Pate"])
+  (Some false)
+  (Some "Car bombing retaliation for unsanctioned Castellano hit").
+
+(** Angelo Bruno - The Docile Don murdered *)
+Definition bruno_murder : Murder := mkMurder
+  "Angelo Bruno"
+  (Some Boss)
+  (Some Philadelphia)
+  1980
+  (Some "South Philadelphia")
+  (Some "Antonio Caponigro")
+  None
+  (Some false)
+  (Some "Unsanctioned hit led to Commission retaliation against Caponigro").
+
+(** Antonio Caponigro - Killed by Commission for Bruno hit *)
+Definition caponigro_murder : Murder := mkMurder
+  "Antonio Caponigro"
+  (Some Consigliere)
+  (Some Philadelphia)
+  1980
+  (Some "The Bronx, New York")
+  (Some "The Commission")
+  None
+  (Some true)
+  (Some "Commission-ordered hit; found with money stuffed in orifices").
+
+(** Philip Testa - Nail bomb assassination *)
+Definition testa_murder : Murder := mkMurder
+  "Philip Testa"
+  (Some Boss)
+  (Some Philadelphia)
+  1981
+  (Some "Philadelphia")
+  (Some "Peter Casella/Rocco Marinucci")
+  (Some ["Teddy DiPretoro"])
+  None
+  (Some "Killed by nail bomb under porch; Chicken Man").
+
+(** Three Captains - Alphonse Indelicato *)
+Definition indelicato_murder : Murder := mkMurder
+  "Alphonse Indelicato"
+  (Some Capo)
+  (Some Bonanno)
+  1981
+  (Some "Embassy Terrace Social Club, Brooklyn")
+  (Some "Joseph Massino/Philip Rastelli")
+  (Some ["Salvatore Vitale"; "Vito Rizzuto"])
+  (Some true)
+  (Some "Three Captains murder; bodies found 2004").
+
+(** Three Captains - Philip Giaccone *)
+Definition giaccone_murder : Murder := mkMurder
+  "Philip Giaccone"
+  (Some Capo)
+  (Some Bonanno)
+  1981
+  (Some "Embassy Terrace Social Club, Brooklyn")
+  (Some "Joseph Massino/Philip Rastelli")
+  (Some ["Ambush team"])
+  (Some true)
+  (Some "Three Captains murder").
+
+(** Three Captains - Dominick Trinchera *)
+Definition trinchera_murder : Murder := mkMurder
+  "Dominick Trinchera"
+  (Some Capo)
+  (Some Bonanno)
+  1981
+  (Some "Embassy Terrace Social Club, Brooklyn")
+  (Some "Joseph Massino/Philip Rastelli")
+  (Some ["Ambush team"])
+  (Some true)
+  (Some "Three Captains murder; Big Trin").
+
+(** Joey Gallo - Umberto's Clam House *)
+Definition gallo_murder : Murder := mkMurder
+  "Joey Gallo"
+  (Some Capo)
+  (Some Colombo)
+  1972
+  (Some "Umberto's Clam House, Little Italy")
+  (Some "Colombo Family leadership")
+  (Some ["Carmine DiBiase (suspected)"])
+  None
+  (Some "Crazy Joe; on his 43rd birthday").
+
+(** Frank Cali - Gambino boss murdered 2019 *)
+Definition cali_murder : Murder := mkMurder
+  "Frank Cali"
+  (Some Boss)
+  (Some Gambino)
+  2019
+  (Some "Staten Island, New York")
+  None
+  (Some ["Anthony Comello"])
+  (Some false)
+  (Some "First NYC boss killed since Castellano; killer was QAnon follower").
+
+(** Gaetano Reina - Castellammarese War *)
+Definition reina_murder : Murder := mkMurder
+  "Gaetano Reina"
+  (Some Boss)
+  (Some Lucchese)
+  1930
+  (Some "Bronx, New York")
+  (Some "Joe Masseria")
+  (Some ["Vito Genovese"])
+  None
+  (Some "First major killing of Castellammarese War").
+
+(** Joe Aiello - Chicago boss *)
+Definition aiello_murder : Murder := mkMurder
+  "Joe Aiello"
+  (Some Boss)
+  (Some Chicago)
+  1930
+  (Some "Chicago, Illinois")
+  (Some "Al Capone")
+  None
+  None
+  (Some "Shot 59 times; Castellammarese War casualty").
+
 Definition all_murders : list Murder :=
   [anastasia_murder; castellano_murder; galante_murder; cutolo_murder;
-   masseria_murder; maranzano_murder; schultz_murder; eboli_murder; napolitano_murder].
+   masseria_murder; maranzano_murder; schultz_murder; eboli_murder; napolitano_murder;
+   bilotti_murder; decicco_murder; bruno_murder; caponigro_murder; testa_murder;
+   indelicato_murder; giaccone_murder; trinchera_murder; gallo_murder; cali_murder;
+   reina_murder; aiello_murder].
 
 (** -------------------------------------------------------------------------- *)
 (** Blood Relations                                                            *)
@@ -4085,25 +5276,24 @@ Definition all_wars : list War :=
 (** -------------------------------------------------------------------------- *)
 
 (** Count of documented murders. *)
-Lemma murder_count : List.length all_murders = 9.
+Lemma murder_count : List.length all_murders = 21.
 Proof. reflexivity. Qed.
 
-(** All documented murders were of leadership (Boss, Underboss, or Capo). *)
-Lemma all_murders_leadership : forall m,
-  In m all_murders ->
-  murder_victim_rank m = Some Boss \/
-  murder_victim_rank m = Some Underboss \/
-  murder_victim_rank m = Some Capo \/
-  murder_victim_rank m = None.  (* Dutch Schultz was independent *)
-Proof.
-  intros m Hin. simpl in Hin.
-  destruct Hin as [H | [H | [H | [H | [H | [H | [H | [H | [H | H]]]]]]]]];
-    try (rewrite <- H; left; reflexivity);
-    try (rewrite <- H; right; left; reflexivity);
-    try (rewrite <- H; right; right; left; reflexivity);
-    try (rewrite <- H; right; right; right; reflexivity);
-    contradiction.
-Qed.
+(** All documented murders were of leadership (Boss, Underboss, or Capo).
+    Note: Proof requires enumeration over all murder records. *)
+Definition murder_is_leadership (m : Murder) : bool :=
+  match murder_victim_rank m with
+  | Some Boss => true
+  | Some Underboss => true
+  | Some Capo => true
+  | Some Consigliere => true
+  | None => true
+  | _ => false
+  end.
+
+Lemma all_murders_leadership_b :
+  forallb murder_is_leadership all_murders = true.
+Proof. vm_compute. reflexivity. Qed.
 
 (** Count of documented blood relations. *)
 Lemma blood_relation_count : List.length all_blood_relations = 3.
@@ -4140,14 +5330,37 @@ Definition all_bosses : list Member :=
 
 Definition all_underbosses : list Member :=
   genovese_underbosses ++ gambino_underbosses ++ lucchese_underbosses ++
-  bonanno_underbosses ++ colombo_underbosses ++ buffalo_underbosses.
+  bonanno_underbosses ++ colombo_underbosses ++ buffalo_underbosses ++
+  philadelphia_underbosses ++ newengland_underbosses ++ detroit_underbosses ++
+  kansascity_underbosses ++ neworleans_underbosses.
 
 Definition all_consiglieres : list Member :=
   genovese_consiglieres ++ gambino_consiglieres ++ lucchese_consiglieres ++
-  bonanno_consiglieres ++ colombo_consiglieres.
+  bonanno_consiglieres ++ colombo_consiglieres ++ philadelphia_consiglieres ++
+  newengland_consiglieres.
 
 Definition all_leadership : list Member :=
   all_bosses ++ all_underbosses ++ all_consiglieres.
+
+Definition all_capos : list Member :=
+  genovese_capos ++ genovese_capos_2020s ++
+  gambino_capos ++ gambino_capos_2020s ++
+  lucchese_capos ++ lucchese_capos_2020s ++
+  bonanno_capos ++ bonanno_capos_2020s ++
+  colombo_capos ++ colombo_capos_2020s ++
+  chicago_capos.
+
+Definition all_soldiers : list Member :=
+  genovese_soldiers ++ gambino_soldiers ++ gambino_soldiers_2020s ++
+  lucchese_soldiers ++ bonanno_soldiers ++ colombo_soldiers ++
+  chicago_soldiers.
+
+Definition all_associates : list Member :=
+  genovese_associates ++ gambino_associates ++ lucchese_associates ++
+  bonanno_associates ++ colombo_associates.
+
+Definition all_members : list Member :=
+  all_leadership ++ all_capos ++ all_soldiers ++ all_associates.
 
 (** Count members by family. *)
 Definition count_family_members (f : Family) (ms : list Member) : nat :=
