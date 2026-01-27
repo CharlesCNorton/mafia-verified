@@ -3211,10 +3211,132 @@ Definition carnesi : Member := mkMember
   None
   (Some (Journalism ["Gangland News"])).
 
+(** Salvatore Aurello - Capo, became cooperator 2010 *)
+Definition aurello : Member := mkMember
+  (mkPerson 800 "Salvatore Aurello" (Some "Sally Dogs") (Some 1970) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2005 (Some 2010))
+  None
+  None
+  (Some (CooperatorSelf "Salvatore Aurello" "Gambino trials" 2010)).
+
+(** John Gambino Jr. - Capo, Cherry Hill *)
+Definition john_gambino_jr : Member := mkMember
+  (mkPerson 801 "John Gambino Jr." None (Some 1965) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2000 None)
+  None
+  None
+  (Some (Journalism ["Gangland News"])).
+
+(** Frank Cali - Capo, then boss, murdered 2019 *)
+Definition frank_cali : Member := mkMember
+  (mkPerson 802 "Frank Cali" (Some "Franky Boy") (Some 1965) (Some 2019))
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2000 (Some 2015))
+  (Some Superseded)
+  (Some 2019)
+  (Some (Journalism ["Gangland News"])).
+
+(** Gene Gotti Sr. - Capo, brother of John, heroin *)
+Definition gene_gotti_sr : Member := mkMember
+  (mkPerson 803 "Eugene Gotti" None (Some 1946) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 1989))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "89-CR-XXX" 1989 "50 years")).
+
+(** Jack D'Amico - Capo, acting boss candidate *)
+Definition damico_gambino : Member := mkMember
+  (mkPerson 804 "Jackie D'Amico" (Some "Jackie Nose") (Some 1937) (Some 2020))
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1980 (Some 2008))
+  (Some Imprisoned)
+  (Some 2020)
+  (Some (GuiltyPlea "E.D.N.Y." "08-CR-XXX" 2011)).
+
+(** Carmine Agnello - Capo, son-in-law of John Gotti *)
+Definition agnello : Member := mkMember
+  (mkPerson 805 "Carmine Agnello" None (Some 1960) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2001))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "01-CR-XXX" 2001 "9 years")).
+
+(** Michael Paradiso - Capo, 2008 conviction *)
+Definition paradiso : Member := mkMember
+  (mkPerson 806 "Michael Paradiso" None (Some 1950) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "08-CR-XXX" 2008 "RICO")).
+
+(** Thomas Cacciopoli - Capo, 2008 conviction *)
+Definition cacciopoli : Member := mkMember
+  (mkPerson 807 "Thomas Cacciopoli" None (Some 1955) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1995 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "08-CR-XXX" 2008 "RICO")).
+
+(** Bartolomeo Vernace - Capo, 2013 murder conviction *)
+Definition bartolomeo_vernace : Member := mkMember
+  (mkPerson 808 "Bartolomeo Vernace" None (Some 1950) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2013))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "13-CR-XXX" 2013 "Life")).
+
+(** John Burke - Capo, 2011 conviction *)
+Definition john_burke : Member := mkMember
+  (mkPerson 809 "John Burke" None (Some 1955) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "11-CR-XXX" 2011 "RICO")).
+
 Definition gambino_capos : list Member :=
   [corozzo; dimaria; lanni; andrew_campos; camuso; grillo; rizzo; sciandra; ruggiero;
    thomas_gambino; joseph_gambino; gurino; failla; daniel_marino; john_gambino;
-   bilotti; squitieri; dileonardo_capo; vallario].
+   bilotti; squitieri; dileonardo_capo; vallario; aurello; john_gambino_jr;
+   frank_cali; gene_gotti_sr; damico_gambino; agnello; paradiso; cacciopoli;
+   bartolomeo_vernace; john_burke].
 
 (** Angelo Ruggiero - Soldier, Gotti loyalist, heroin *)
 Definition angelo_ruggiero_soldier : Member := mkMember
@@ -3952,11 +4074,35 @@ Definition cerrella : Member := mkMember
   None
   (Some (Conviction "S.D.N.Y." "17-CR-XXX" 2019 "RICO")).
 
+(** Peter Chiodo - Capo, survived shooting, cooperator *)
+Definition chiodo : Member := mkMember
+  (mkPerson 801 "Peter Chiodo" (Some "Fat Pete") (Some 1951) None)
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 1991))
+  None
+  None
+  (Some (CooperatorSelf "Peter Chiodo" "Lucchese trial" 1991)).
+
+(** Frank Federico - Capo, killed by Casso *)
+Definition federico : Member := mkMember
+  (mkPerson 802 "Frank Federico" None (Some 1940) (Some 1991))
+  Lucchese
+  Capo
+  None
+  None
+  (mkTenure 1980 (Some 1991))
+  (Some Murdered)
+  (Some 1991)
+  (Some (Journalism ["Gaspipe (2012)"])).
+
 Definition lucchese_capos : list Member :=
   [baratta; crea_jr; truscello; castellucci; corso; joseph_perna; zappola; frank_salerno;
    vario; taccetta; accetturo; giuseppe_dinapoli; louis_dinapoli; furnari;
    frank_manzo; thomas_mix; ralph_cuomo; john_baudanza; pennisi;
-   cersani; michael_madonna_sr; castelle; cerrella; migliore].
+   cersani; michael_madonna_sr; cerrella; chiodo; federico; vincent_dinapoli].
 
 (** Lucchese Soldiers *)
 
@@ -4200,11 +4346,60 @@ Definition tangorra : Member := mkMember
   None
   (Some (Conviction "D.N.J." "05-CR-XXX" 2005 "RICO")).
 
+(** Alphonse D'Arco - Soldier/Acting Boss, key cooperator *)
+Definition alphonse_darco : Member := mkMember
+  (mkPerson 800 "Alphonse D'Arco" (Some "Little Al") (Some 1932) (Some 2019))
+  Lucchese
+  Soldier
+  None
+  None
+  (mkTenure 1970 (Some 1991))
+  None
+  (Some 2019)
+  (Some (CooperatorSelf "Alphonse D'Arco" "Lucchese trial" 1991)).
+
+(** Joseph Martinelli - Soldier, Bronx crew *)
+Definition martinelli : Member := mkMember
+  (mkPerson 805 "Joseph Martinelli" None (Some 1950) None)
+  Lucchese
+  Soldier
+  None
+  None
+  (mkTenure 1985 (Some 2005))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "05-CR-XXX" 2005 "RICO")).
+
+(** Patrick Dellorusso - Soldier, 2017 murder conviction *)
+Definition dellorusso : Member := mkMember
+  (mkPerson 806 "Patrick Dellorusso" None (Some 1960) None)
+  Lucchese
+  Soldier
+  None
+  None
+  (mkTenure 1995 (Some 2017))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "17-CR-368" 2019 "Life")).
+
+(** Terrence Caldwell - Soldier, 2019 heroin *)
+Definition caldwell : Member := mkMember
+  (mkPerson 807 "Terrence Caldwell" None (Some 1970) None)
+  Lucchese
+  Soldier
+  None
+  None
+  (mkTenure 2005 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "19-CR-XXX" 2019 "RICO")).
+
 Definition lucchese_soldiers : list Member :=
   [villani; john_perna; londonio; grado; capelli;
    facciolo; raucci; pappadio; frank_smith; george_zappola; bevacqua;
    castorina; farese; joseph_laforte; spinelli; matthew_madonna_jr;
-   truscello_jr; martin_taccetta; ricciardi; tangorra].
+   truscello_jr; martin_taccetta; ricciardi; tangorra;
+   alphonse_darco; migliore; martinelli; dellorusso; caldwell; castelle].
 
 (** Lucchese Associates *)
 
@@ -5555,11 +5750,96 @@ Definition ralph_lombardo : Member := mkMember
   None
   (Some (GuiltyPlea "E.D.N.Y." "19-CR-XXX" 2019)).
 
+(** Thomas Gioeli - Capo/Acting Boss, 2011 conviction *)
+Definition gioeli_capo : Member := mkMember
+  (mkPerson 810 "Thomas Gioeli" (Some "Tommy Shots") (Some 1952) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "08-CR-XXX" 2012 "18 years")).
+
+(** Anthony Russo Sr. - Capo, father of Andy *)
+Definition anthony_russo_sr : Member := mkMember
+  (mkPerson 811 "Anthony Russo Sr." None (Some 1920) (Some 2001))
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1970 (Some 2001))
+  (Some Died)
+  (Some 2001)
+  (Some (Journalism ["Gangland News"])).
+
+(** Salvatore Sparaco - Capo, 2008 conviction *)
+Definition sparaco : Member := mkMember
+  (mkPerson 812 "Salvatore Sparaco" None (Some 1955) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "08-CR-XXX" 2008 "RICO")).
+
+(** Charles Panarella - Capo, 2011 conviction *)
+Definition panarella : Member := mkMember
+  (mkPerson 813 "Charles Panarella" None (Some 1950) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "11-CR-XXX" 2011 "RICO")).
+
+(** Reynold Maragni - Capo, 2011 conviction *)
+Definition maragni : Member := mkMember
+  (mkPerson 815 "Reynold Maragni" None (Some 1955) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "11-CR-XXX" 2011 "RICO")).
+
+(** Joseph Campanella - Capo, 2011 conviction *)
+Definition joseph_campanella : Member := mkMember
+  (mkPerson 816 "Joseph Campanella" None (Some 1950) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "11-CR-XXX" 2011 "RICO")).
+
+(** Anthony Frascone - Capo, 2012 conviction *)
+Definition frascone : Member := mkMember
+  (mkPerson 817 "Anthony Frascone" None (Some 1955) None)
+  Colombo
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2012))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "08-CR-XXX" 2012 "25 years")).
+
 Definition colombo_capos : list Member :=
   [scopo; theodore_persico; ferrara; ricciardo; calabro; anthony_russo_capo; joseph_amato;
    cacace; scarpa_jr; salvatore_profaci; joseph_russo_colombo; michael_sessa;
    benedetto_aloi; vincent_aloi; mcintosh; william_cutolo_jr; alphonse_persico_jr;
-   delucia; ralph_lombardo].
+   delucia; ralph_lombardo; gioeli_capo; anthony_russo_sr; sparaco; panarella;
+   deross; maragni; joseph_campanella; frascone].
 
 (** Colombo Soldiers *)
 
