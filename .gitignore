@@ -4,3 +4,13 @@
 *.glob
 *.aux
 .*.aux
+*.v.d
+.coqdeps.d
+.lia.cache
+.nia.cache
+_CoqProject.conf
+.coq-native/
+*.cmi
+*.cmo
+*.cmx
+*.o
