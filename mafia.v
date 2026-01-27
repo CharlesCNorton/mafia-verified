@@ -21,64 +21,26 @@
 (** TODO                                                                       *)
 (** -------------------------------------------------------------------------- *)
 (**
-1. [DONE] Add Philadelphia, New England, Detroit, Kansas City, and New Orleans to Family type
-2. [DONE] Add mechanism to express intra-year ordering
-3. [DONE] Fix find_unique to distinguish zero matches from multiple matches
-4. [DONE] Justify or remove the +1 allowance in tenure_death_consistent
-5. [DONE] Establish citation format standardization
-6. [DONE] Add page numbers to generic citations
-7. [DONE] Add specific document IDs to DOJ and FBI citations
-8. [DONE] Add URLs and external links to source references
-9. [DONE] Link evidence fields to external sources
-10. [DONE] Establish machine-checkable links between evidence claims and external sources
-11. [DONE] Clarify evidence tier assignment criteria
-12. [DONE] Use PreciseDate for all tenure boundaries
-13. [DONE] Populate member_initiation_year for all records
-14. [DONE] Add Philadelphia family members
-15. [DONE] Add New England family members
-16. [DONE] Add Detroit family members
-17. [DONE] Add Kansas City family members
-18. [DONE] Add New Orleans family members
-19. [DONE] Expand Buffalo family beyond 3 bosses
-20. [DONE] Expand Chicago family beyond 4 bosses
-21. [DONE] Resolve post-2005 Genovese ActualBoss
-22. [DONE] Update post-2015 leadership across all families
-23. [DONE] Incorporate 2020s indictments
-24. Expand coverage to all documented positions
-25. Add every documented Associate for all families up to 2025
-26. Add every documented Soldier for all families up to 2025
-27. Add every documented Capo for all families up to 2025
-28. Add full crew lists for all families up to 2025
-29. Assign every Crew instance to its capo
-30. Populate crew_territory for every crew
-31. Link murder_carried_out_by to Member records instead of strings
-32. [DONE] Add Masseria murder (1931)
-33. [DONE] Add Maranzano murder (1931)
-34. [DONE] Add Dutch Schultz murder (1935)
-35. [DONE] Add Eboli murder (1972)
-36. [DONE] Add Napolitano murder (1981)
-37. Add every documented murder up to 2025
-38. [DONE] Add Gallo-Profaci War (1961-63)
-39. [DONE] Add Second Colombo War (1971-75)
-40. Add every documented inter-family and intra-family war
-41. Document every Commission vote with known details
-42. [DONE] Add Jimmy Fratianno to cooperators
-43. [DONE] Add Henry Hill to cooperators
-44. [DONE] Add Michael Franzese to cooperators
-45. Add every documented cooperator up to 2025
-46. [DONE] Add Pizza Connection case (1985-87)
-47. [DONE] Add Mafia Cops case (2006)
-48. [DONE] Add Family Secrets case (2007)
-49. Add every documented RICO case up to 2025
-50. Document every blood relation among members
-51. Document every cross-family marriage tie
-52. Populate member_evidence for every record
-53. [DONE] Verify cause_death_consistent for all members
-54. [DONE] Verify member_fully_consistent for entire database
-55. Prove universal boss uniqueness or document exceptions
-56. Add proofs connecting murders to succession events
-57. Prove all_leadership exhaustive for given years
-58. Replace vm_compute with structural induction where appropriate
+1. Expand coverage to all documented positions
+2. Add every documented Associate for all families up to 2025
+3. Add every documented Soldier for all families up to 2025
+4. Add every documented Capo for all families up to 2025
+5. Add full crew lists for all families up to 2025
+6. Assign every Crew instance to its capo
+7. Populate crew_territory for every crew
+8. Link murder_carried_out_by to Member records instead of strings
+9. Add every documented murder up to 2025
+10. Add every documented inter-family and intra-family war
+11. Document every Commission vote with known details
+12. Add every documented cooperator up to 2025
+13. Add every documented RICO case up to 2025
+14. Document every blood relation among members
+15. Document every cross-family marriage tie
+16. Populate member_evidence for every record
+17. Prove universal boss uniqueness or document exceptions
+18. Add proofs connecting murders to succession events
+19. Prove all_leadership exhaustive for given years
+20. Replace vm_compute with structural induction where appropriate
 *)
 
 Require Import Coq.Lists.List.
