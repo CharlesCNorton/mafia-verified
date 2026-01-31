@@ -39,6 +39,43 @@
 16. Add proofs connecting murders to succession events
 17. Prove all_leadership exhaustive for given years
 18. Replace vm_compute with structural induction where appropriate
+19. Expand Philadelphia family beyond bosses (add underbosses, consiglieres, capos)
+20. Expand New England family beyond bosses (add underbosses, consiglieres, capos)
+21. Expand Detroit family beyond bosses (add underbosses, consiglieres, capos)
+22. Expand Kansas City family beyond bosses (add underbosses, consiglieres, capos)
+23. Expand New Orleans family beyond bosses (add underbosses, consiglieres, capos)
+24. Upgrade generic Journalism evidence citations to specific book/page references
+25. Add Apalachin attendee records for all 58 identified participants
+26. Add Commission meeting records beyond 1957 Apalachin
+27. Link murder_ordered_by to Member records via person_id (not strings)
+28. Add foreign key validation predicates for person_ids across records
+29. Replace raw nat lists in CrossFamilyRelation.cfr_members with typed references
+30. Add well-formedness predicate ensuring all person_ids in Crew exist in member database
+31. Add validation that murder_victim_family matches actual victim's family if known
+32. Apply PreciseDate to all tenure boundaries (most currently use year_only)
+33. Use intra-year ordering for same-year succession events (e.g., 1957 Anastasia/Gambino)
+34. Populate precise_tenures database for all leadership transitions
+35. Add month/day precision to all documented murders
+36. Add precise dates for all RICO case indictments and verdicts
+37. Prove universal boss uniqueness via decision procedure over 1931-2025 range
+38. Prove succession chain completeness (no year gaps in ActualBoss coverage)
+39. Prove all_bosses covers every year from 1931-2025 for each NYC family
+40. Prove FrontBoss/ActingBoss periods have corresponding ActualBoss documented
+41. Prove Commission seat holders were active bosses at time of membership
+42. Add exhaustiveness proof for all_leadership across documented years
+43. Prove tenure intervals are well-formed (start < end when end exists)
+44. Prove no person_id collisions across different individuals
+45. Ensure all Boss records have at least Strong tier evidence
+46. Ensure all Underboss records have at least Strong tier evidence
+47. Ensure all Consigliere records have at least Strong tier evidence
+48. Add verification_status to all EvidenceLink records
+49. Cross-reference DOJ press release IDs against official archives
+50. Add archive.org snapshots for all URL references
+51. Factor out family-specific lists into a Family -> list Member function
+52. Add indexed lookup by person_id with O(1) access
+53. Add reverse lookup from person_id to all Member records for that person
+54. Create canonical person database separate from role assignments
+55. Add time-indexed boss lookup function with proof of correctness
 *)
 
 Require Import Coq.Lists.List.
