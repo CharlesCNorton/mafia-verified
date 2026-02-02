@@ -1766,8 +1766,203 @@ Definition adonis : Member := mkMember
   (Some 1971)
   (Some (Journalism ["Five Families (2005)"])).
 
+(** Frank Cognetta - Associate, UFCW officer, SDNY 2018-2019 *)
+Definition cognetta : Member := mkMember
+  (mkPerson 907 "Frank Cognetta" None (Some 1960) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (GuiltyPlea "S.D.N.Y." "18-CR-XXX" 2019)).
+
+(** Vincent D'Acunto Jr. - Associate, SDNY 2018-2019 *)
+Definition dacunto : Member := mkMember
+  (mkPerson 908 "Vincent D'Acunto Jr." None (Some 1965) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (GuiltyPlea "S.D.N.Y." "18-CR-XXX" 2019)).
+
+(** Michael Palazzolo - Associate, SDNY 2014-2015 *)
+Definition michael_palazzolo : Member := mkMember
+  (mkPerson 909 "Michael Palazzolo" None (Some 1960) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2015))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "14-CR-XXX" 2015 "RICO")).
+
+(** Salvatore Rubino - Associate, EDNY 2022-2024, "Sal the Shoemaker" *)
+Definition salvatore_rubino : Member := mkMember
+  (mkPerson 910 "Salvatore Rubino" (Some "Sal the Shoemaker") (Some 1955) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 1990 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "22-CR-XXX" 2024 "RICO")).
+
+(** Joseph Rutigliano - Associate, EDNY 2022 *)
+Definition rutigliano : Member := mkMember
+  (mkPerson 911 "Joseph Rutigliano" None (Some 1965) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2022))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "22-CR-XXX" 2022)).
+
+(** Michael Poli - Associate, SDNY 2022-2023 *)
+Definition michael_poli : Member := mkMember
+  (mkPerson 912 "Michael Poli" None (Some 1970) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "22-CR-XXX" 2023 "RICO")).
+
+(** Thomas Poli - Associate, SDNY 2022-2023 *)
+Definition thomas_poli : Member := mkMember
+  (mkPerson 913 "Thomas Poli" None (Some 1972) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "22-CR-XXX" 2023 "RICO")).
+
+(** Mark Feuer - Associate, EDNY 2022 *)
+Definition mark_feuer : Member := mkMember
+  (mkPerson 914 "Mark Feuer" None (Some 1970) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2022))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "22-CR-XXX" 2022)).
+
+(** Ty Geas - Associate, SDNY 2011, life sentence, Bruno murder *)
+Definition ty_geas : Member := mkMember
+  (mkPerson 915 "Ty Geas" None (Some 1968) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2003 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "11-CR-XXX" 2011 "Life")).
+
+(** Frankie Roche - Associate, SDNY 2011, 14 years, Bruno murder triggerman *)
+Definition frankie_roche : Member := mkMember
+  (mkPerson 916 "Frankie Roche" None (Some 1970) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2003 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "11-CR-XXX" 2011 "14 years")).
+
+(** John Bologna - Associate, SDNY 2011, cooperator *)
+Definition john_bologna : Member := mkMember
+  (mkPerson 917 "John Bologna" None (Some 1965) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2011))
+  None
+  None
+  (Some (CooperatorSelf "John Bologna" "Bruno murder" 2011)).
+
+(** Domenick Pucillo - Associate, NJ AG 2016-2019, 10 years *)
+Definition pucillo : Member := mkMember
+  (mkPerson 918 "Domenick Pucillo" None (Some 1960) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.J. AG" "16-XXX" 2019 "10 years")).
+
+(** Robert Spagnola - Associate, NJ AG 2016-2019, 5 years *)
+Definition spagnola : Member := mkMember
+  (mkPerson 919 "Robert Spagnola" None (Some 1965) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "N.J. AG" "16-XXX" 2019 "5 years")).
+
+(** Nunzio LaGrasso - Associate, D.N.J. 2014-2015, 28 months *)
+Definition lagrasso : Member := mkMember
+  (mkPerson 920 "Nunzio LaGrasso" None (Some 1960) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2015))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D.N.J." "14-CR-XXX" 2015 "28 months")).
+
+(** Albert Cernadas - Associate, D.N.J. 2014-2015 *)
+Definition cernadas : Member := mkMember
+  (mkPerson 921 "Albert Cernadas" None (Some 1965) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2015))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D.N.J." "14-CR-XXX" 2015 "RICO")).
+
+(** John Breheney - Associate, D.N.J. 2015, "Fu" *)
+Definition breheney : Member := mkMember
+  (mkPerson 922 "John Breheney" (Some "Fu") (Some 1960) None)
+  Genovese
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2015))
+  (Some Imprisoned)
+  None
+  (Some (GuiltyPlea "D.N.J." "15-CR-XXX" 2015)).
+
 Definition genovese_associates : list Member :=
-  [lansky; siegel; buchalter].
+  [lansky; siegel; buchalter; cognetta; dacunto; michael_palazzolo;
+   salvatore_rubino; rutigliano; michael_poli; thomas_poli; mark_feuer;
+   ty_geas; frankie_roche; john_bologna; pucillo; spagnola;
+   lagrasso; cernadas; breheney].
 
 (** Genovese Soldiers - 2020s Indictments *)
 
@@ -2171,6 +2366,42 @@ Definition delligatti : Member := mkMember
   None
   (Some (Conviction "S.D.N.Y." "17-CR-XXX" 2019 "RICO")).
 
+(** Felix Tranghese - Soldier, Springfield crew, cooperator 2010 *)
+Definition tranghese : Member := mkMember
+  (mkPerson 900 "Felix Tranghese" None (Some 1945) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 1980 (Some 2010))
+  None
+  None
+  (Some (CooperatorSelf "Felix Tranghese" "Bruno murder" 2010)).
+
+(** Emilio Fusco - Soldier, Springfield crew, Bruno murder *)
+Definition emilio_fusco : Member := mkMember
+  (mkPerson 901 "Emilio Fusco" None (Some 1963) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2000 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "11-CR-XXX" 2014 "Life")).
+
+(** Fotios Geas - Soldier, Springfield crew, Bruno murder, killed Whitey Bulger *)
+Definition fotios_geas : Member := mkMember
+  (mkPerson 902 "Fotios Geas" (Some "Freddy") (Some 1966) None)
+  Genovese
+  Soldier
+  None
+  None
+  (mkTenure 2003 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "D. Mass." "11-CR-XXX" 2011 "Life")).
+
 Definition genovese_soldiers : list Member :=
   [chierchio; messina; campanella; celso; albanese; carmine_russo;
    mikey_coppola; depiro; ralph_coppola; moscatiello; ragusa;
@@ -2178,7 +2409,8 @@ Definition genovese_soldiers : list Member :=
    montevecchi; oconnor; thomas_cafaro_sr; cirillo_soldier;
    andrew_gigante; vincent_esposito; ralph_scopo_jr; joseph_zito;
    ralph_gigante; parrello; dichiara; derose;
-   palumbo; arthur_nigro; delligatti; vincent_dinapoli].
+   palumbo; arthur_nigro; delligatti; vincent_dinapoli;
+   tranghese; emilio_fusco; fotios_geas].
 
 (** Genovese Capos - 2020s *)
 
@@ -2412,11 +2644,60 @@ Definition michael_ragusa : Member := mkMember
   None
   (Some (Journalism ["Gangland News"])).
 
+(** Daniel Pagano - Capo, SDNY 2015-2016, 27 months *)
+Definition daniel_pagano : Member := mkMember
+  (mkPerson 903 "Daniel Pagano" None (Some 1955) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 1990 (Some 2015))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "15-CR-XXX" 2016 "27 months")).
+
+(** Steven Arena - Capo, SDNY 2018 *)
+Definition steven_arena : Member := mkMember
+  (mkPerson 904 "Steven Arena" (Some "Mad Dog") (Some 1960) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 1995 (Some 2018))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "18-CR-XXX" 2018)).
+
+(** Anthony Arillotta - Capo, Springfield crew, cooperator 2010 *)
+Definition arillotta : Member := mkMember
+  (mkPerson 905 "Anthony Arillotta" (Some "Bingy") (Some 1964) None)
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 2003 (Some 2010))
+  None
+  None
+  (Some (CooperatorSelf "Anthony Arillotta" "Bruno murder" 2010)).
+
+(** Adolfo Bruno - Capo, Springfield boss, murdered 2003 *)
+Definition adolfo_bruno : Member := mkMember
+  (mkPerson 906 "Adolfo Bruno" None (Some 1946) (Some 2003))
+  Genovese
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 2003))
+  (Some Murdered)
+  None
+  (Some (Journalism ["Gangland News"])).
+
 Definition genovese_capos : list Member :=
   [ianniello; dentico; calisi; balsamo; romanello; polito;
    ianniello_capo; louis_dinapoli; fiumara; provenzano; longo; tuzzo;
    manna; mangano_genovese; malangone; salerno_capo; frank_coppola;
-   carmine_tramunti_capo; erra; giovinco; michael_ragusa].
+   carmine_tramunti_capo; erra; giovinco; michael_ragusa;
+   daniel_pagano; steven_arena; arillotta; adolfo_bruno].
 
 (** -------------------------------------------------------------------------- *)
 (** Gambino Family Succession                                                  *)
@@ -3368,12 +3649,48 @@ Definition john_burke : Member := mkMember
   None
   (Some (Conviction "E.D.N.Y." "11-CR-XXX" 2011 "RICO")).
 
+(** Gregory DeCicco - Captain, EDNY 2008, Operation Old Bridge *)
+Definition gregory_decicco : Member := mkMember
+  (mkPerson 923 "Gregory DeCicco" None (Some 1950) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1985 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "08-CR-XXX" 2008)).
+
+(** Ronald Trucchio - Captain, EDNY 2005, life sentence *)
+Definition ronald_trucchio : Member := mkMember
+  (mkPerson 924 "Ronald Trucchio" None (Some 1945) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 1980 (Some 2005))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "05-CR-XXX" 2005 "Life")).
+
+(** John Ambrosio - Acting Captain, EDNY 2017-2019, "Johnny Boy", 51 months *)
+Definition john_ambrosio : Member := mkMember
+  (mkPerson 925 "John Ambrosio" (Some "Johnny Boy") (Some 1960) None)
+  Gambino
+  Capo
+  None
+  None
+  (mkTenure 2000 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "17-CR-XXX" 2019 "51 months")).
+
 Definition gambino_capos : list Member :=
   [corozzo; dimaria; lanni; andrew_campos; camuso; grillo; rizzo; sciandra; ruggiero;
    thomas_gambino; joseph_gambino; gurino; failla; daniel_marino; john_gambino;
    bilotti; squitieri; dileonardo_capo; vallario; aurello; john_gambino_jr;
    frank_cali; gene_gotti_sr; damico_gambino; agnello; paradiso; cacciopoli;
-   bartolomeo_vernace; john_burke].
+   bartolomeo_vernace; john_burke; gregory_decicco; ronald_trucchio; john_ambrosio].
 
 (** Angelo Ruggiero - Soldier, Gotti loyalist, heroin *)
 Definition angelo_ruggiero_soldier : Member := mkMember
@@ -3519,6 +3836,138 @@ Definition didonato : Member := mkMember
   None
   (Some (CooperatorSelf "Andrew DiDonato" "Gambino trial" 2008)).
 
+(** Angelo Ruggiero Jr. - Soldier, EDNY 2008, Operation Old Bridge *)
+Definition angelo_ruggiero_jr : Member := mkMember
+  (mkPerson 926 "Angelo Ruggiero Jr." None (Some 1965) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1995 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "08-CR-XXX" 2008)).
+
+(** Richard G. Gotti - Soldier, EDNY 2008, nephew of John Gotti *)
+Definition richard_g_gotti : Member := mkMember
+  (mkPerson 927 "Richard G. Gotti" None (Some 1965) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1995 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "08-CR-XXX" 2008)).
+
+(** Joseph Orlando - Soldier, EDNY 2007, admitted 8 murders *)
+Definition joseph_orlando : Member := mkMember
+  (mkPerson 928 "Joseph Orlando" None (Some 1955) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1985 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "07-CR-XXX" 2007 "RICO")).
+
+(** Richard Juliano - Soldier, EDNY 2008 *)
+Definition richard_juliano : Member := mkMember
+  (mkPerson 929 "Richard Juliano" None (Some 1960) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1990 (Some 2008))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "08-CR-XXX" 2008)).
+
+(** Michael Roccaforte - Soldier, SDNY 2011-2012, 118 months *)
+Definition roccaforte : Member := mkMember
+  (mkPerson 930 "Michael Roccaforte" None (Some 1965) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1995 (Some 2012))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "11-CR-XXX" 2012 "118 months")).
+
+(** Anthony Moscatiello - Soldier, SDNY 2011-2012, 43 months *)
+Definition anthony_moscatiello : Member := mkMember
+  (mkPerson 931 "Anthony Moscatiello" None (Some 1960) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 1995 (Some 2012))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "S.D.N.Y." "11-CR-XXX" 2012 "43 months")).
+
+(** Vincenzo Frogiero - Soldier, SDNY 2011 *)
+Definition frogiero : Member := mkMember
+  (mkPerson 932 "Vincenzo Frogiero" None (Some 1965) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2000 (Some 2011))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "11-CR-XXX" 2011)).
+
+(** Paul Semplice - Soldier, EDNY 2019, 28 months *)
+Definition semplice : Member := mkMember
+  (mkPerson 933 "Paul Semplice" None (Some 1970) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2005 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "19-CR-XXX" 2019 "28 months")).
+
+(** John J. LaForte - Soldier, NY AG 2024, Staten Island gambling *)
+Definition john_laforte : Member := mkMember
+  (mkPerson 934 "John J. LaForte" None (Some 1970) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2005 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
+(** Anthony J. Cinque Jr. - Soldier, NY AG 2024 *)
+Definition anthony_cinque : Member := mkMember
+  (mkPerson 935 "Anthony J. Cinque Jr." None (Some 1975) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2010 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
+(** John Matera - Soldier, NY AG 2024, recently inducted *)
+Definition john_matera : Member := mkMember
+  (mkPerson 936 "John Matera" None (Some 1980) None)
+  Gambino
+  Soldier
+  None
+  None
+  (mkTenure 2020 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
 Definition gambino_soldiers : list Member :=
   [carneglia; vincent_gotti; tantillo; gradilone; laforte; astuto; ciaccia; fiore; martino; ciccone;
    gene_gotti; vernace; george_campos; senter; testa_gambino; borelli;
@@ -3526,7 +3975,10 @@ Definition gambino_soldiers : list Member :=
    anthony_ciccone; watts; pizzonia; mcmahon; carnesi;
    angelo_ruggiero_soldier; gotti_jr; leonard_dimaria; richard_gotti;
    thomas_gambino_jr; depalma; bisaccia; nicholas_corozzo_jr; charles_carneglia_jr;
-   yannotti; zuccaro; trucchio; didonato; locascio; joseph_corozzo].
+   yannotti; zuccaro; trucchio; didonato; locascio; joseph_corozzo;
+   angelo_ruggiero_jr; richard_g_gotti; joseph_orlando; richard_juliano;
+   roccaforte; anthony_moscatiello; frogiero; semplice;
+   john_laforte; anthony_cinque; john_matera].
 
 (** Gambino Associates *)
 
@@ -3628,9 +4080,375 @@ Definition vito_arena : Member := mkMember
   None
   (Some (CooperatorSelf "Vito Arena" "DeMeo trial" 1983)).
 
+(** Vito Rappa - Associate, EDNY 2023, Sicilian connection *)
+Definition vito_rappa : Member := mkMember
+  (mkPerson 937 "Vito Rappa" None (Some 1960) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-XXX" 2023)).
+
+(** Francesco Vicari - Associate, EDNY 2023, "Uncle Ciccio" *)
+Definition francesco_vicari : Member := mkMember
+  (mkPerson 938 "Francesco Vicari" (Some "Uncle Ciccio") (Some 1955) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 1990 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-XXX" 2023)).
+
+(** Salvatore DiLorenzo - Associate, EDNY 2023 *)
+Definition salvatore_dilorenzo : Member := mkMember
+  (mkPerson 939 "Salvatore DiLorenzo" None (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-XXX" 2023)).
+
+(** Robert Brooke - Associate, EDNY 2023 *)
+Definition robert_brooke : Member := mkMember
+  (mkPerson 940 "Robert Brooke" None (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-XXX" 2023)).
+
+(** Kyle Johnson - Associate, EDNY 2023, "Twin" *)
+Definition kyle_johnson : Member := mkMember
+  (mkPerson 941 "Kyle Johnson" (Some "Twin") (Some 1980) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2015 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-XXX" 2023)).
+
+(** Vincent Minsquero - Associate, EDNY 2023, "Vinny Slick" *)
+Definition minsquero : Member := mkMember
+  (mkPerson 942 "Vincent Minsquero" (Some "Vinny Slick") (Some 1975) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2023))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "E.D.N.Y." "23-CR-XXX" 2023)).
+
+(** Renato Barca Jr. - Associate, EDNY 2019, "Ronny" *)
+Definition renato_barca : Member := mkMember
+  (mkPerson 943 "Renato Barca Jr." (Some "Ronny") (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "19-CR-XXX" 2019 "RICO")).
+
+(** Benito DiZenzo - Associate, EDNY 2019, "Benny" *)
+Definition dizenzo : Member := mkMember
+  (mkPerson 944 "Benito DiZenzo" (Some "Benny") (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "19-CR-XXX" 2019 "RICO")).
+
+(** Mark Kocaj - Associate, EDNY 2019, "Chippy" *)
+Definition kocaj : Member := mkMember
+  (mkPerson 945 "Mark Kocaj" (Some "Chippy") (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "19-CR-XXX" 2019 "RICO")).
+
+(** Frank Tarul - Associate, EDNY 2019, "Bones" *)
+Definition frank_tarul : Member := mkMember
+  (mkPerson 946 "Frank Tarul" (Some "Bones") (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "19-CR-XXX" 2019 "RICO")).
+
+(** Michael Tarul - Associate, EDNY 2019, "Perkins" *)
+Definition michael_tarul : Member := mkMember
+  (mkPerson 947 "Michael Tarul" (Some "Perkins") (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2019))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "19-CR-XXX" 2019 "RICO")).
+
+(** Carlos Cobos Sr. - Associate, EDNY 2021 *)
+Definition cobos : Member := mkMember
+  (mkPerson 948 "Carlos Cobos Sr." None (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2021))
+  (Some Imprisoned)
+  None
+  (Some (GuiltyPlea "E.D.N.Y." "19-CR-XXX" 2021)).
+
+(** Thomas Anzalone - Associate, EDNY 2017, 34 months *)
+Definition thomas_anzalone : Member := mkMember
+  (mkPerson 949 "Thomas Anzalone" None (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2017))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "17-CR-XXX" 2017 "34 months")).
+
+(** Alessandro Damelio - Associate, EDNY 2017, "Sandro" *)
+Definition damelio : Member := mkMember
+  (mkPerson 950 "Alessandro Damelio" (Some "Sandro") (Some 1975) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2017))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "17-CR-XXX" 2017 "RICO")).
+
+(** Joseph Durso - Associate, EDNY 2017 *)
+Definition joseph_durso : Member := mkMember
+  (mkPerson 951 "Joseph Durso" None (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2017))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "17-CR-XXX" 2017 "2 months")).
+
+(** Anthony Rodolico - Associate, EDNY 2017, 1 year *)
+Definition rodolico : Member := mkMember
+  (mkPerson 952 "Anthony Rodolico" None (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2017))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "17-CR-XXX" 2017 "1 year")).
+
+(** Anthony Saladino - Associate, EDNY 2017, 63 months *)
+Definition anthony_saladino : Member := mkMember
+  (mkPerson 953 "Anthony Saladino" None (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2017))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "17-CR-XXX" 2017 "63 months")).
+
+(** Edward A. LaForte - Associate, NY AG 2024 *)
+Definition edward_laforte : Member := mkMember
+  (mkPerson 954 "Edward A. LaForte" None (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
+(** Frederick P. Falcone Sr. - Associate, NY AG 2024, former NYPD *)
+Definition falcone : Member := mkMember
+  (mkPerson 955 "Frederick P. Falcone Sr." None (Some 1960) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
+(** Giulio Pomponio - Associate, NY AG 2024 *)
+Definition pomponio : Member := mkMember
+  (mkPerson 956 "Giulio Pomponio" None (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
+(** Daniel F. Bogan - Associate, NY AG 2024 *)
+Definition bogan : Member := mkMember
+  (mkPerson 957 "Daniel F. Bogan" None (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2024))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "N.Y. AG" "24-XXX" 2024)).
+
+(** Joseph Zuccarello - Associate, EDNY 2007 *)
+Definition zuccarello : Member := mkMember
+  (mkPerson 958 "Joseph Zuccarello" None (Some 1960) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "07-CR-XXX" 2007 "RICO")).
+
+(** Steven Famiglietta - Associate, EDNY 2007 *)
+Definition famiglietta : Member := mkMember
+  (mkPerson 959 "Steven Famiglietta" None (Some 1965) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2000 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "07-CR-XXX" 2007 "RICO")).
+
+(** James Avalone - Associate, EDNY 2007 *)
+Definition avalone : Member := mkMember
+  (mkPerson 960 "James Avalone" None (Some 1960) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 1995 (Some 2007))
+  (Some Imprisoned)
+  None
+  (Some (Conviction "E.D.N.Y." "07-CR-XXX" 2007 "RICO")).
+
+(** Christopher Colon - Associate, SDNY 2012 *)
+Definition colon : Member := mkMember
+  (mkPerson 961 "Christopher Colon" None (Some 1975) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2005 (Some 2012))
+  (Some Imprisoned)
+  None
+  (Some (GuiltyPlea "S.D.N.Y." "11-CR-XXX" 2012)).
+
+(** John Gallo - Associate, SDNY 2025, Operation Royal Flush *)
+Definition john_gallo : Member := mkMember
+  (mkPerson 962 "John Gallo" None (Some 1970) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2025))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "25-CR-XXX" 2025)).
+
+(** Lee Fama - Associate, SDNY 2025 *)
+Definition lee_fama : Member := mkMember
+  (mkPerson 963 "Lee Fama" None (Some 1975) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2015 (Some 2025))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "25-CR-XXX" 2025)).
+
+(** Ammar Awawdeh - Associate, SDNY 2025 *)
+Definition awawdeh : Member := mkMember
+  (mkPerson 964 "Ammar Awawdeh" None (Some 1980) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2015 (Some 2025))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "25-CR-XXX" 2025)).
+
+(** Louis Apicella - Associate, SDNY 2025 *)
+Definition apicella : Member := mkMember
+  (mkPerson 965 "Louis Apicella" None (Some 1975) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2010 (Some 2025))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "25-CR-XXX" 2025)).
+
+(** Nicholas Minucci - Associate, SDNY 2025 *)
+Definition minucci : Member := mkMember
+  (mkPerson 966 "Nicholas Minucci" None (Some 1980) None)
+  Gambino
+  Associate
+  None
+  None
+  (mkTenure 2015 (Some 2025))
+  (Some Imprisoned)
+  None
+  (Some (Indictment "S.D.N.Y." "25-CR-XXX" 2025)).
+
 Definition gambino_associates : list Member :=
   [demeo; rosenberg; borelli_demeo; senter_demeo; joey_testa;
-   dinome; patty_testa; vito_arena].
+   dinome; patty_testa; vito_arena;
+   vito_rappa; francesco_vicari; salvatore_dilorenzo; robert_brooke;
+   kyle_johnson; minsquero; renato_barca; dizenzo; kocaj;
+   frank_tarul; michael_tarul; cobos; thomas_anzalone; damelio;
+   joseph_durso; rodolico; anthony_saladino; edward_laforte;
+   falcone; pomponio; bogan; zuccarello; famiglietta; avalone;
+   colon; john_gallo; lee_fama; awawdeh; apicella; minucci].
 
 (** -------------------------------------------------------------------------- *)
 (** Lucchese Family Succession                                                 *)
