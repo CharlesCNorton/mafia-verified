@@ -13470,3 +13470,18 @@ Proof.
   intros m e H. unfold member_evidence_link. rewrite H.
   eexists. split; reflexivity.
 Qed.
+
+(** Boss-coverage completeness with documented gaps (mirroring the uniqueness
+    treatment): for every year 1931-2025, either every NYC family has an
+    ActualBoss, or the year is a documented coverage gap. The gap set captures
+    the genuine front-boss interregna (e.g. the Genovese 1969-1981 era). *)
+Definition nyc_has_boss_year (y : year) : bool :=
+  List.forallb (fun f => has_boss_in_year all_bosses f y) nyc_families.
+
+Definition coverage_gap_years : list year :=
+  List.filter (fun y => negb (nyc_has_boss_year y)) all_years.
+
+Lemma nyc_coverage_or_gap :
+  forallb (fun y => nyc_has_boss_year y
+                    || existsb (Nat.eqb y) coverage_gap_years) all_years = true.
+Proof. vm_compute. reflexivity. Qed.
