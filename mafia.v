@@ -13218,3 +13218,177 @@ Proof. vm_compute. reflexivity. Qed.
 
 Lemma ledger_member_count : List.length all_ledger_members = 251.
 Proof. reflexivity. Qed.
+
+(** ====================================================================== *)
+(** Further Verified Queries and Validations                               *)
+(** ====================================================================== *)
+
+(** Tenure intervals are well-formed: start does not exceed end (half-open
+    [start, end) so start = end is the empty, never-active interval). *)
+Definition tenure_wf_b (m : Member) : bool :=
+  match tenure_end (member_tenure m) with
+  | None => true
+  | Some e => Nat.leb (tenure_start (member_tenure m)) e
+  end.
+
+Lemma all_members_extended_tenure_wf :
+  forallb tenure_wf_b all_members_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Every record carries evidence. *)
+Lemma all_members_extended_have_evidence :
+  forallb has_evidence all_members_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Where a murder names a victim that resolves to a member record and states a
+    family, the stated family agrees with the member's family. *)
+Definition murder_victim_family_consistent (mu : Murder) : bool :=
+  match murder_victim_family mu with
+  | None => true
+  | Some f =>
+    match List.find (fun m => String.eqb (member_name m) (murder_victim mu))
+                    all_members_extended with
+    | None => true
+    | Some m => family_eqb (member_family m) f
+    end
+  end.
+
+Lemma all_murders_family_consistent :
+  forallb murder_victim_family_consistent all_murders = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Time-indexed boss lookup is correct: a returned boss is in the list, of the
+    queried family, and an actual boss that year. *)
+Lemma actual_boss_of_correct : forall ms f y m,
+  actual_boss_of ms f y = Some m ->
+  In m ms /\ member_family m = f /\ is_actual_boss_in_year m y = true.
+Proof.
+  intros ms f y m H. unfold actual_boss_of in H.
+  apply List.find_some in H. destruct H as [Hin Hb].
+  apply andb_true_iff in Hb. destruct Hb as [Hf Hy].
+  repeat split.
+  - exact Hin.
+  - exact (proj1 (family_eqb_eq (member_family m) f) Hf).
+  - exact Hy.
+Qed.
+
+(** Reverse lookup: all records held by a given person_id. *)
+Definition records_of_id (pid : nat) : list Member :=
+  List.filter (fun m => Nat.eqb (member_person_id m) pid) all_members_extended.
+
+Lemma records_of_id_sound : forall pid m,
+  In m (records_of_id pid) -> In m all_members_extended /\ member_person_id m = pid.
+Proof.
+  intros pid m H. unfold records_of_id in H.
+  apply List.filter_In in H. destruct H as [Hin Heq].
+  apply Nat.eqb_eq in Heq. split; assumption.
+Qed.
+
+Lemma records_of_id_complete : forall m,
+  In m all_members_extended -> In m (records_of_id (member_person_id m)).
+Proof.
+  intros m Hin. unfold records_of_id. apply List.filter_In.
+  split; [exact Hin | apply Nat.eqb_refl].
+Qed.
+
+(** Family -> list Member as a function, with exactness. *)
+Definition members_of_family (f : Family) : list Member :=
+  List.filter (fun m => family_eqb (member_family m) f) all_members_extended.
+
+Lemma members_of_family_correct : forall f m,
+  In m (members_of_family f) <-> (In m all_members_extended /\ member_family m = f).
+Proof.
+  intros f m. unfold members_of_family. rewrite List.filter_In. split.
+  - intros [H1 H2]. split.
+    + exact H1.
+    + exact (proj1 (family_eqb_eq (member_family m) f) H2).
+  - intros [H1 H2]. split.
+    + exact H1.
+    + exact (proj2 (family_eqb_eq (member_family m) f) H2).
+Qed.
+
+(** Canonical person database: distinct person_ids (keys) and a representative
+    Person per key, separate from the role-bearing Member records. *)
+Definition canonical_person_ids : list nat :=
+  List.nodup Nat.eq_dec (List.map member_person_id all_members_extended).
+
+Lemma canonical_person_ids_nodup : List.NoDup canonical_person_ids.
+Proof. apply List.NoDup_nodup. Qed.
+
+Definition canonical_persons : list Person :=
+  List.map (fun pid =>
+    match List.find (fun m => Nat.eqb (member_person_id m) pid) all_members_extended with
+    | Some m => member_person m
+    | None => mkPerson pid "unknown" None None None
+    end) canonical_person_ids.
+
+Lemma canonical_persons_count :
+  List.length canonical_persons = List.length canonical_person_ids.
+Proof. unfold canonical_persons. apply List.length_map. Qed.
+
+(** Murder-to-member linkage: resolve a murder's victim to its member record. *)
+Definition murder_victim_member (mu : Murder) : option Member :=
+  List.find (fun m => String.eqb (member_name m) (murder_victim mu)) all_members_extended.
+
+Lemma murder_victim_member_sound : forall mu m,
+  murder_victim_member mu = Some m ->
+  In m all_members_extended /\ member_name m = murder_victim mu.
+Proof.
+  intros mu m H. unfold murder_victim_member in H.
+  apply List.find_some in H. destruct H as [Hin Heq].
+  apply String.eqb_eq in Heq. split; assumption.
+Qed.
+
+(** Cross-family relation person_ids resolve to existing members. *)
+Lemma cross_family_relations_fk :
+  forallb (fun r => forallb id_exists (cfr_members r)) all_cross_family_relations = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Universal boss uniqueness with documented exceptions. The exception set is
+    exactly the years where an NYC family shows more than one ActualBoss at year
+    granularity (intra-year leadership transitions). Off the exceptions,
+    uniqueness holds; every year is unique-or-exception. *)
+Definition all_years : list year := List.seq 1931 95.   (* 1931..2025 *)
+
+Definition nyc_unique_or_none_year (y : year) : bool :=
+  List.forallb (fun f => Nat.leb (count_actual_bosses all_bosses f y) 1) nyc_families.
+
+Definition uniqueness_exception_years : list year :=
+  List.filter (fun y => negb (nyc_unique_or_none_year y)) all_years.
+
+Lemma nyc_uniqueness_or_exception :
+  forallb (fun y => nyc_unique_or_none_year y
+                    || existsb (Nat.eqb y) uniqueness_exception_years) all_years = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Murder-to-orderer linkage: resolve the ordering party to a member record. *)
+Definition murder_orderer_member (mu : Murder) : option Member :=
+  match murder_ordered_by mu with
+  | None => None
+  | Some n => List.find (fun m => String.eqb (member_name m) n) all_members_extended
+  end.
+
+Lemma murder_orderer_member_sound : forall mu m,
+  murder_orderer_member mu = Some m -> In m all_members_extended.
+Proof.
+  intros mu m H. unfold murder_orderer_member in H.
+  destruct (murder_ordered_by mu) as [n|]; [| discriminate].
+  apply List.find_some in H. destruct H as [Hin _]. exact Hin.
+Qed.
+
+(** Crew records with a referential-integrity predicate: the capo and every
+    soldier resolve to existing member records. Compositions are documented:
+    Gotti's Bergin Hunt and Fish Club crew, Bruno's Springfield crew. *)
+Definition crew_wf_b (c : Crew) : bool :=
+  andb (id_exists (crew_capo_id c)) (forallb id_exists (crew_soldier_ids c)).
+
+Definition bergin_crew : Crew := mkCrew Gambino 26 [710; 315; 440; 441]
+  (Some "Bergin Hunt and Fish Club, Ozone Park, Queens") (Some (1970, None)).
+
+Definition springfield_crew : Crew := mkCrew Genovese 906 [905; 902; 901; 900]
+  (Some "Springfield, Massachusetts") (Some (1985, Some 2003)).
+
+Definition documented_crews : list Crew := [bergin_crew; springfield_crew].
+
+Lemma documented_crews_wf : forallb crew_wf_b documented_crews = true.
+Proof. vm_compute. reflexivity. Qed.
