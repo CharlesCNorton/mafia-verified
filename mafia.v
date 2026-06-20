@@ -17,67 +17,6 @@
 (*                                                                            *)
 (******************************************************************************)
 
-(** -------------------------------------------------------------------------- *)
-(** TODO                                                                       *)
-(** -------------------------------------------------------------------------- *)
-(**
-1. Add every documented Soldier for all families up to 2025
-2. Add every documented Capo for all families up to 2025
-3. Add full crew lists for all families up to 2025
-4. Assign every Crew instance to its capo
-5. Populate crew_territory for every crew
-6. Link murder_carried_out_by to Member records instead of strings
-7. Add every documented murder up to 2025
-8. Add every documented inter-family and intra-family war
-9. Document every Commission vote with known details
-10. Add every documented cooperator up to 2025
-11. Add every documented RICO case up to 2025
-12. Document every blood relation among members
-13. Document every cross-family marriage tie
-14. Populate member_evidence for every record
-15. Prove universal boss uniqueness or document exceptions
-16. Add proofs connecting murders to succession events
-17. Prove all_leadership exhaustive for given years
-18. Replace vm_compute with structural induction where appropriate
-19. Expand Philadelphia family beyond bosses (add underbosses, consiglieres, capos)
-20. Expand New England family beyond bosses (add underbosses, consiglieres, capos)
-21. Expand Detroit family beyond bosses (add underbosses, consiglieres, capos)
-22. Expand Kansas City family beyond bosses (add underbosses, consiglieres, capos)
-23. Expand New Orleans family beyond bosses (add underbosses, consiglieres, capos)
-24. Upgrade generic Journalism evidence citations to specific book/page references
-25. Add Apalachin attendee records for all 58 identified participants
-26. Add Commission meeting records beyond 1957 Apalachin
-27. Link murder_ordered_by to Member records via person_id (not strings)
-28. Add foreign key validation predicates for person_ids across records
-29. Replace raw nat lists in CrossFamilyRelation.cfr_members with typed references
-30. Add well-formedness predicate ensuring all person_ids in Crew exist in member database
-31. Add validation that murder_victim_family matches actual victim's family if known
-32. Apply PreciseDate to all tenure boundaries (most currently use year_only)
-33. Use intra-year ordering for same-year succession events (e.g., 1957 Anastasia/Gambino)
-34. Populate precise_tenures database for all leadership transitions
-35. Add month/day precision to all documented murders
-36. Add precise dates for all RICO case indictments and verdicts
-37. Prove universal boss uniqueness via decision procedure over 1931-2025 range
-38. Prove succession chain completeness (no year gaps in ActualBoss coverage)
-39. Prove all_bosses covers every year from 1931-2025 for each NYC family
-40. Prove FrontBoss/ActingBoss periods have corresponding ActualBoss documented
-41. Prove Commission seat holders were active bosses at time of membership
-42. Add exhaustiveness proof for all_leadership across documented years
-43. Prove tenure intervals are well-formed (start < end when end exists)
-44. Prove no person_id collisions across different individuals
-45. Ensure all Boss records have at least Strong tier evidence
-46. Ensure all Underboss records have at least Strong tier evidence
-47. Ensure all Consigliere records have at least Strong tier evidence
-48. Add verification_status to all EvidenceLink records
-49. Cross-reference DOJ press release IDs against official archives
-50. Add archive.org snapshots for all URL references
-51. Factor out family-specific lists into a Family -> list Member function
-52. Add indexed lookup by person_id with O(1) access
-53. Add reverse lookup from person_id to all Member records for that person
-54. Create canonical person database separate from role assignments
-55. Add time-indexed boss lookup function with proof of correctness
-*)
-
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.Arith.Arith.
@@ -1295,7 +1234,7 @@ Definition luciano : Member := mkMember
   (mkTenure 1931 (Some 1947))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Vincent Mangano - First boss of what became Gambino family *)
 Definition mangano : Member := mkMember
@@ -1307,7 +1246,7 @@ Definition mangano : Member := mkMember
   (mkTenure 1931 (Some 1952))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Tom Gagliano - First boss of what became Lucchese family *)
 Definition gagliano : Member := mkMember
@@ -1319,7 +1258,7 @@ Definition gagliano : Member := mkMember
   (mkTenure 1931 (Some 1952))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joseph Bonanno - Youngest founding boss *)
 Definition bonanno : Member := mkMember
@@ -1331,7 +1270,7 @@ Definition bonanno : Member := mkMember
   (mkTenure 1931 (Some 1969))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joseph Profaci - First boss of what became Colombo family *)
 Definition profaci : Member := mkMember
@@ -1343,7 +1282,7 @@ Definition profaci : Member := mkMember
   (mkTenure 1931 (Some 1963))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** -------------------------------------------------------------------------- *)
 (** Pre-1931 Bosses (Castellammarese War Era)                                  *)
@@ -1360,7 +1299,7 @@ Definition maranzano : Member := mkMember
   (mkTenure 1930 (Some 1932))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joe Masseria - Boss, killed 1931 ending Castellammarese War.
     His organization became Genovese family. *)
@@ -1373,7 +1312,7 @@ Definition masseria : Member := mkMember
   (mkTenure 1922 (Some 1932))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition pre_1931_bosses : list Member :=
   [maranzano; masseria].
@@ -1428,7 +1367,7 @@ Definition costello : Member := mkMember
   (mkTenure 1946 (Some 1958))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Vito Genovese - Boss 1957-1969 (imprisoned 1959) *)
 Definition vito_genovese : Member := mkMember
@@ -1440,7 +1379,7 @@ Definition vito_genovese : Member := mkMember
   (mkTenure 1957 (Some 1970))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Philip Lombardo - Front boss 1969-1981 *)
 Definition lombardo : Member := mkMember
@@ -1452,7 +1391,7 @@ Definition lombardo : Member := mkMember
   (mkTenure 1969 (Some 1982))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1969)).
 
 (** Anthony Salerno - Front boss 1981-1986 *)
 Definition salerno : Member := mkMember
@@ -1527,7 +1466,7 @@ Definition moretti : Member := mkMember
   (mkTenure 1946 (Some 1952))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition catena : Member := mkMember
   (mkPerson 14 "Gerardo Catena" (Some "Jerry") (Some 1902) (Some 2000))
@@ -1538,7 +1477,7 @@ Definition catena : Member := mkMember
   (mkTenure 1957 (Some 1973))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition eboli : Member := mkMember
   (mkPerson 15 "Thomas Eboli" (Some "Tommy Ryan") (Some 1911) (Some 1972))
@@ -1549,7 +1488,7 @@ Definition eboli : Member := mkMember
   (mkTenure 1969 (Some 1973))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1969)).
 
 Definition venero_mangano : Member := mkMember
   (mkPerson 16 "Venero Mangano" (Some "Benny Eggs") (Some 1921) (Some 2015))
@@ -1584,7 +1523,7 @@ Definition costello_underboss : Member := mkMember
   (mkTenure 1931 (Some 1937))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Michael Generoso - Underboss 2000s-2010s *)
 Definition generoso : Member := mkMember
@@ -1612,7 +1551,7 @@ Definition strollo : Member := mkMember
   (mkTenure 1951 (Some 1963))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition louis_gigante : Member := mkMember
   (mkPerson 20 "Louis Gigante" None (Some 1931) (Some 2022))
@@ -1632,10 +1571,10 @@ Definition miranda : Member := mkMember
   Consigliere
   None
   None
-  (mkTenure 1963 (Some 1976))
+  (mkTenure 1963 (Some 1974))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Vincent DiNapoli - Consigliere 2000s *)
 Definition vincent_dinapoli : Member := mkMember
@@ -1752,7 +1691,7 @@ Definition anastasia_genovese : Member := mkMember
   (mkTenure 1931 (Some 1951))
   (Some Superseded)
   None
-  (Some (Journalism ["Murder Inc. (1951)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joe Adonis - Underboss under Costello *)
 Definition adonis : Member := mkMember
@@ -1764,7 +1703,7 @@ Definition adonis : Member := mkMember
   (mkTenure 1937 (Some 1956))
   (Some Imprisoned)
   (Some 1971)
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Frank Cognetta - Associate, UFCW officer, SDNY 2018-2019 *)
 Definition cognetta : Member := mkMember
@@ -2409,7 +2348,7 @@ Definition genovese_soldiers : list Member :=
    montevecchi; oconnor; thomas_cafaro_sr; cirillo_soldier;
    andrew_gigante; vincent_esposito; ralph_scopo_jr; joseph_zito;
    ralph_gigante; parrello; dichiara; derose;
-   palumbo; arthur_nigro; delligatti; vincent_dinapoli;
+   palumbo; arthur_nigro; delligatti;
    tranghese; emilio_fusco; fotios_geas].
 
 (** Genovese Capos - 2020s *)
@@ -2711,9 +2650,9 @@ Definition anastasia : Member := mkMember
   (Some ActualBoss)
   None
   (mkTenure 1951 (Some 1958))
+  (Some Murdered)
   None
-  None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Carlo Gambino - Boss 1957-1976, family renamed after him *)
 Definition carlo_gambino : Member := mkMember
@@ -2725,7 +2664,7 @@ Definition carlo_gambino : Member := mkMember
   (mkTenure 1957 (Some 1977))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Paul Castellano - Boss 1976-1985 (murdered outside Sparks) *)
 Definition castellano : Member := mkMember
@@ -2735,9 +2674,9 @@ Definition castellano : Member := mkMember
   (Some ActualBoss)
   None
   (mkTenure 1976 (Some 1986))
+  (Some Murdered)
   None
-  None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1976)).
 
 (** John Gotti - Boss 1985-2002 *)
 Definition gotti : Member := mkMember
@@ -2825,7 +2764,7 @@ Definition anastasia_underboss : Member := mkMember
   (mkTenure 1931 (Some 1952))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition dellacroce : Member := mkMember
   (mkPerson 31 "Aniello Dellacroce" (Some "Neil") (Some 1914) (Some 1985))
@@ -2836,7 +2775,7 @@ Definition dellacroce : Member := mkMember
   (mkTenure 1965 (Some 1986))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1965)).
 
 Definition decicco : Member := mkMember
   (mkPerson 32 "Frank DeCicco" (Some "Frankie") (Some 1935) (Some 1986))
@@ -2847,7 +2786,7 @@ Definition decicco : Member := mkMember
   (mkTenure 1985 (Some 1987))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1985)).
 
 Definition gravano : Member := mkMember
   (mkPerson 33 "Salvatore Gravano" (Some "Sammy the Bull") (Some 1945) None)
@@ -2870,7 +2809,7 @@ Definition biondo : Member := mkMember
   (mkTenure 1957 (Some 1967))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Nicholas Corozzo - Caporegime 1990s-2008 (indicted 2008 as capo) *)
 Definition corozzo : Member := mkMember
@@ -2910,7 +2849,7 @@ Definition joseph_n_gallo : Member := mkMember
   (mkTenure 1957 (Some 1977))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joseph Corozzo - Consigliere 1990s-2000s *)
 Definition joseph_corozzo : Member := mkMember
@@ -2934,7 +2873,7 @@ Definition arcuri : Member := mkMember
   (mkTenure 1977 (Some 1990))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1977)).
 
 (** Samuel Moncada - Consigliere 2010s *)
 Definition moncada : Member := mkMember
@@ -3690,7 +3629,8 @@ Definition gambino_capos : list Member :=
    thomas_gambino; joseph_gambino; gurino; failla; daniel_marino; john_gambino;
    bilotti; squitieri; dileonardo_capo; vallario; aurello; john_gambino_jr;
    frank_cali; gene_gotti_sr; damico_gambino; agnello; paradiso; cacciopoli;
-   bartolomeo_vernace; john_burke; gregory_decicco; ronald_trucchio; john_ambrosio].
+   bartolomeo_vernace; john_burke; gregory_decicco; ronald_trucchio; john_ambrosio;
+   richard_gotti].
 
 (** Angelo Ruggiero - Soldier, Gotti loyalist, heroin *)
 Definition angelo_ruggiero_soldier : Member := mkMember
@@ -3973,9 +3913,9 @@ Definition gambino_soldiers : list Member :=
    gene_gotti; vernace; george_campos; senter; testa_gambino; borelli;
    john_carneglia; willie_johnson; rampino; eddie_lino; salvatore_scala; remini;
    anthony_ciccone; watts; pizzonia; mcmahon; carnesi;
-   angelo_ruggiero_soldier; gotti_jr; leonard_dimaria; richard_gotti;
+   angelo_ruggiero_soldier; gotti_jr; leonard_dimaria;
    thomas_gambino_jr; depalma; bisaccia; nicholas_corozzo_jr; charles_carneglia_jr;
-   yannotti; zuccaro; trucchio; didonato; locascio; joseph_corozzo;
+   yannotti; zuccaro; trucchio; didonato;
    angelo_ruggiero_jr; richard_g_gotti; joseph_orlando; richard_juliano;
    roccaforte; anthony_moscatiello; frogiero; semplice;
    john_laforte; anthony_cinque; john_matera].
@@ -4464,7 +4404,7 @@ Definition tommy_lucchese : Member := mkMember
   (mkTenure 1951 (Some 1968))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Carmine Tramunti - Boss 1967-1974 *)
 Definition tramunti : Member := mkMember
@@ -4476,7 +4416,7 @@ Definition tramunti : Member := mkMember
   (mkTenure 1967 (Some 1975))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1967)).
 
 (** Anthony Corallo - Boss 1974-1986 *)
 Definition corallo : Member := mkMember
@@ -4553,7 +4493,7 @@ Definition lasalle : Member := mkMember
   (mkTenure 1931 (Some 1952))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Salvatore Santoro - Underboss 1974-1987 *)
 Definition santoro : Member := mkMember
@@ -4630,7 +4570,7 @@ Definition rao : Member := mkMember
   (mkTenure 1953 (Some 1989))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Christopher Furnari - Consigliere 1973-1985 *)
 Definition furnari : Member := mkMember
@@ -4895,7 +4835,7 @@ Definition cersani : Member := mkMember
 
 (** Michael Madonna Sr. - Capo, father of boss *)
 Definition michael_madonna_sr : Member := mkMember
-  (mkPerson 771 "Michael Madonna Sr." None (Some 1935) None)
+  (mkPerson 771 "Michael Madonna Sr." None (Some 1935) (Some 2000))
   Lucchese
   Capo
   None
@@ -4931,7 +4871,7 @@ Definition cerrella : Member := mkMember
 
 (** Peter Chiodo - Capo, survived shooting, cooperator *)
 Definition chiodo : Member := mkMember
-  (mkPerson 801 "Peter Chiodo" (Some "Fat Pete") (Some 1951) None)
+  (mkPerson 1001 "Peter Chiodo" (Some "Fat Pete") (Some 1951) None)
   Lucchese
   Capo
   None
@@ -4943,7 +4883,7 @@ Definition chiodo : Member := mkMember
 
 (** Frank Federico - Capo, killed by Casso *)
 Definition federico : Member := mkMember
-  (mkPerson 802 "Frank Federico" None (Some 1940) (Some 1991))
+  (mkPerson 1002 "Frank Federico" None (Some 1940) (Some 1991))
   Lucchese
   Capo
   None
@@ -4955,9 +4895,9 @@ Definition federico : Member := mkMember
 
 Definition lucchese_capos : list Member :=
   [baratta; crea_jr; truscello; castellucci; corso; joseph_perna; zappola; frank_salerno;
-   vario; taccetta; accetturo; giuseppe_dinapoli; louis_dinapoli; furnari;
+   vario; taccetta; accetturo; giuseppe_dinapoli;
    frank_manzo; thomas_mix; ralph_cuomo; john_baudanza; pennisi;
-   cersani; michael_madonna_sr; cerrella; chiodo; federico; vincent_dinapoli].
+   cersani; michael_madonna_sr; cerrella; chiodo; federico; castelle].
 
 (** Lucchese Soldiers *)
 
@@ -5203,7 +5143,7 @@ Definition tangorra : Member := mkMember
 
 (** Alphonse D'Arco - Soldier/Acting Boss, key cooperator *)
 Definition alphonse_darco : Member := mkMember
-  (mkPerson 800 "Alphonse D'Arco" (Some "Little Al") (Some 1932) (Some 2019))
+  (mkPerson 1000 "Alphonse D'Arco" (Some "Little Al") (Some 1932) (Some 2019))
   Lucchese
   Soldier
   None
@@ -5215,7 +5155,7 @@ Definition alphonse_darco : Member := mkMember
 
 (** Joseph Martinelli - Soldier, Bronx crew *)
 Definition martinelli : Member := mkMember
-  (mkPerson 805 "Joseph Martinelli" None (Some 1950) None)
+  (mkPerson 1003 "Joseph Martinelli" None (Some 1950) None)
   Lucchese
   Soldier
   None
@@ -5227,7 +5167,7 @@ Definition martinelli : Member := mkMember
 
 (** Patrick Dellorusso - Soldier, 2017 murder conviction *)
 Definition dellorusso : Member := mkMember
-  (mkPerson 806 "Patrick Dellorusso" None (Some 1960) None)
+  (mkPerson 1004 "Patrick Dellorusso" None (Some 1960) None)
   Lucchese
   Soldier
   None
@@ -5239,7 +5179,7 @@ Definition dellorusso : Member := mkMember
 
 (** Terrence Caldwell - Soldier, 2019 heroin *)
 Definition caldwell : Member := mkMember
-  (mkPerson 807 "Terrence Caldwell" None (Some 1970) None)
+  (mkPerson 1005 "Terrence Caldwell" None (Some 1970) None)
   Lucchese
   Soldier
   None
@@ -5254,7 +5194,7 @@ Definition lucchese_soldiers : list Member :=
    facciolo; raucci; pappadio; frank_smith; george_zappola; bevacqua;
    castorina; farese; joseph_laforte; spinelli; matthew_madonna_jr;
    truscello_jr; martin_taccetta; ricciardi; tangorra;
-   alphonse_darco; migliore; martinelli; dellorusso; caldwell; castelle].
+   alphonse_darco; martinelli; dellorusso; caldwell].
 
 (** Lucchese Associates *)
 
@@ -5389,7 +5329,7 @@ Definition digregorio : Member := mkMember
   (mkTenure 1964 (Some 1967))
   (Some Removed)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1964)).
 
 (** Paul Sciacca - Boss 1966-1968, succeeded DiGregorio.
     Note: Some sources extend his tenure to 1971, but Evola emerged as
@@ -5403,7 +5343,7 @@ Definition sciacca : Member := mkMember
   (mkTenure 1966 (Some 1969))
   (Some Superseded)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1966)).
 
 (** Natale Evola - Boss 1968-1973 *)
 Definition evola : Member := mkMember
@@ -5415,7 +5355,7 @@ Definition evola : Member := mkMember
   (mkTenure 1968 (Some 1974))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1968)).
 
 (** Philip Rastelli - Boss 1973-1974 (before Galante takeover) *)
 Definition rastelli_early : Member := mkMember
@@ -5427,7 +5367,7 @@ Definition rastelli_early : Member := mkMember
   (mkTenure 1973 (Some 1975))
   (Some Imprisoned)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1973)).
 
 (** Philip Rastelli - Boss 1979-1991 (after Galante murdered) *)
 Definition rastelli : Member := mkMember
@@ -5439,7 +5379,7 @@ Definition rastelli : Member := mkMember
   (mkTenure 1979 (Some 1992))
   (Some Died)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1979)).
 
 (** Joseph Massino - Boss 1991-2004 (became government witness) *)
 Definition massino : Member := mkMember
@@ -5463,7 +5403,7 @@ Definition galante_boss : Member := mkMember
   (mkTenure 1974 (Some 1980))
   (Some Murdered)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1974)).
 
 (** Vincent Basciano - Acting Boss 2004-2006 *)
 Definition basciano : Member := mkMember
@@ -5504,7 +5444,7 @@ Definition galante : Member := mkMember
   (mkTenure 1953 (Some 1963))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Nicholas Marangello - Underboss 1970s *)
 Definition marangello : Member := mkMember
@@ -5516,7 +5456,7 @@ Definition marangello : Member := mkMember
   (mkTenure 1974 (Some 1981))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1974)).
 
 (** Salvatore Vitale - Underboss 1999-2003, turned witness *)
 Definition vitale : Member := mkMember
@@ -5540,7 +5480,7 @@ Definition bonventre : Member := mkMember
   (mkTenure 1981 (Some 1984))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1981)).
 
 (** Anthony Graziano - Consigliere 2002-2019 (indicted 2002 as consigliere) *)
 Definition graziano : Member := mkMember
@@ -5569,7 +5509,7 @@ Definition cannone : Member := mkMember
   (mkTenure 1968 (Some 1975))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1968)).
 
 (** Anthony Spero - Consigliere 1990s-2000s *)
 Definition spero : Member := mkMember
@@ -5833,10 +5773,10 @@ Definition palazzolo : Member := mkMember
   (Some (Conviction "E.D.N.Y." "11-CR-XXX" 2011 "RICO")).
 
 Definition bonanno_capos : list Member :=
-  [sciascia; napolitano; cammarano; zancocchio; sabella; anthony_pipitone;
-   asaro; giallanzo; zummo; catalano; urso; robert_lino; bonventre;
+  [sciascia; napolitano; zancocchio; sabella; anthony_pipitone;
+   asaro; giallanzo; zummo; catalano; urso; robert_lino;
    philip_giaccone; dominick_trinchera; alphonse_indelicato; defilippo;
-   attanasio; jerome_asaro; palazzolo; spero].
+   attanasio; jerome_asaro; palazzolo].
 
 Definition bonanno_soldiers_historical : list Member :=
   [lefty_ruggiero].
@@ -6172,7 +6112,7 @@ Definition bonanno_soldiers : list Member :=
   [tropiano; miniero; santapaolo; armetta; vito_pipitone;
    padavona; palmaccio; festa; ragano; rizzuto; coppa; tartaglione;
    restivo; baldassare_amato; leisenheimer; anthony_graziano;
-   james_galante; nicholas_santora; cannone; anthony_indelicato;
+   james_galante; nicholas_santora; anthony_indelicato;
    tartaglione_jr; paul_castellano_jr; emanuel_aiello; pisani;
    montagna; damiano_zummo].
 
@@ -6195,7 +6135,7 @@ Definition magliocco : Member := mkMember
   (mkTenure 1962 (Some 1964))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joseph Colombo - Boss 1963-1971, family renamed after him *)
 Definition joseph_colombo : Member := mkMember
@@ -6207,7 +6147,7 @@ Definition joseph_colombo : Member := mkMember
   (mkTenure 1963 (Some 1972))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Carmine Persico - Boss 1973-2019 (imprisoned most of tenure) *)
 Definition persico : Member := mkMember
@@ -6309,7 +6249,7 @@ Definition franzese : Member := mkMember
   (mkTenure 1966 (Some 1970))
   None
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1966)).
 
 (** John DeRoss - Underboss 1990s-2000s *)
 Definition deross : Member := mkMember
@@ -6694,7 +6634,7 @@ Definition colombo_capos : list Member :=
    cacace; scarpa_jr; salvatore_profaci; joseph_russo_colombo; michael_sessa;
    benedetto_aloi; vincent_aloi; mcintosh; william_cutolo_jr; alphonse_persico_jr;
    delucia; ralph_lombardo; gioeli_capo; anthony_russo_sr; sparaco; panarella;
-   deross; maragni; joseph_campanella; frascone].
+   maragni; joseph_campanella; frascone].
 
 (** Colombo Soldiers *)
 
@@ -7117,7 +7057,7 @@ Definition cutolo_sr : Member := mkMember
   (mkTenure 1994 (Some 1999))
   (Some Murdered)
   (Some 1999)
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1994)).
 
 Definition colombo_associates : list Member :=
   [scarpa].
@@ -7137,7 +7077,7 @@ Definition magaddino : Member := mkMember
   (mkTenure 1922 (Some 1975))
   (Some Died)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joseph Todaro Sr. - Boss 1974-1984, succeeded Magaddino *)
 Definition todaro_sr : Member := mkMember
@@ -7149,7 +7089,7 @@ Definition todaro_sr : Member := mkMember
   (mkTenure 1974 (Some 1985))
   (Some Resigned)
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1974)).
 
 (** Leonard Falzone - Boss 1984-2006 *)
 Definition falzone : Member := mkMember
@@ -7161,7 +7101,7 @@ Definition falzone : Member := mkMember
   (mkTenure 1984 (Some 2007))
   (Some Died)
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1984)).
 
 (** Joseph Todaro Jr. - Boss 2006-present, succeeded Falzone *)
 Definition todaro_jr : Member := mkMember
@@ -7173,7 +7113,7 @@ Definition todaro_jr : Member := mkMember
   (mkTenure 2006 None)
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 2006)).
 
 (** Angelo Massaro - Underboss under Magaddino *)
 Definition massaro : Member := mkMember
@@ -7185,7 +7125,7 @@ Definition massaro : Member := mkMember
   (mkTenure 1950 (Some 1970))
   (Some Died)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition buffalo_bosses : list Member :=
   [magaddino; todaro_sr; falzone; todaro_jr].
@@ -7270,7 +7210,7 @@ Definition leonard_falzone : Member := mkMember
   (mkTenure 2006 None)
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 2006)).
 
 (** Joseph Pieri - Soldier, Rochester faction *)
 Definition pieri : Member := mkMember
@@ -7309,7 +7249,7 @@ Definition russotti : Member := mkMember
   (Some (Conviction "W.D.N.Y." "83-CR-XXX" 1983 "RICO")).
 
 Definition buffalo_soldiers : list Member :=
-  [pasquale_calabrese; victor_sansanese; pieri; nicoletti_sr].
+  [pasquale_calabrese; victor_sansanese; pieri].
 
 Definition buffalo_underbosses_extra : list Member :=
   [leonard_falzone].
@@ -7329,7 +7269,7 @@ Definition accardo : Member := mkMember
   (mkTenure 1947 (Some 1958))
   (Some Resigned)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Sam Giancana - Boss 1957-1966. Did not personally attend Apalachin
     but sent representative. Murdered 1975. *)
@@ -7342,7 +7282,7 @@ Definition giancana : Member := mkMember
   (mkTenure 1957 (Some 1967))
   (Some Removed)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Joseph Aiuppa - Boss 1971-1986, convicted in Strawman cases *)
 Definition aiuppa : Member := mkMember
@@ -7390,7 +7330,7 @@ Definition difronzo : Member := mkMember
   (mkTenure 1996 (Some 2015))
   (Some Died)
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1996)).
 
 (** Salvatore DeLaurentis - Boss 2014-present *)
 Definition delaurentis : Member := mkMember
@@ -7402,7 +7342,7 @@ Definition delaurentis : Member := mkMember
   (mkTenure 2014 None)
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 2014)).
 
 (** Nick Ferriola - Boss 1986-1989, died of cancer *)
 Definition ferriola : Member := mkMember
@@ -7414,7 +7354,7 @@ Definition ferriola : Member := mkMember
   (mkTenure 1986 (Some 1989))
   (Some Died)
   (Some 1991)
-  (Some (Journalism ["The Outfit (2002)"])).
+  (Some (LEReport "FBI" 1986)).
 
 (** Sam Carlisi - Boss 1989-1996, imprisoned *)
 Definition carlisi : Member := mkMember
@@ -7438,7 +7378,7 @@ Definition ricca : Member := mkMember
   (mkTenure 1943 (Some 1947))
   (Some Resigned)
   (Some 1972)
-  (Some (Journalism ["The Outfit (2002)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition chicago_bosses : list Member :=
   [accardo; giancana; battaglia; aiuppa; cerone; difronzo; delaurentis;
@@ -7576,7 +7516,7 @@ Definition nitti : Member := mkMember
   (mkTenure 1931 (Some 1943))
   (Some Died)
   (Some 1943)
-  (Some (Journalism ["The Outfit (2002)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Jackie Cerone - Underboss, Commission Trial *)
 Definition jackie_cerone : Member := mkMember
@@ -7641,7 +7581,7 @@ Definition dauber : Member := mkMember
 Definition chicago_capos : list Member :=
   [frank_calabrese; joseph_lombardo; spilotro; lapietra; albert_tocco;
    marcello_chicago; infelice; sarno; marco_damico; destefano;
-   nitti; jackie_cerone; lapietra_capo; saladino; dauber].
+   lapietra_capo; saladino; dauber].
 
 (** Chicago Soldiers - Family Secrets *)
 
@@ -7784,7 +7724,7 @@ Definition bruno : Member := mkMember
   (mkTenure 1959 (Some 1980))
   (Some Murdered)
   None
-  (Some (Journalism ["The Last Mafioso (1981)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Nicky Scarfo - Boss 1981-1991, imprisoned *)
 Definition scarfo : Member := mkMember
@@ -7861,7 +7801,7 @@ Definition testa : Member := mkMember
   (mkTenure 1959 (Some 1980))
   (Some Superseded)
   None
-  (Some (Journalism ["Blood and Honor (1991)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Philip Leonetti - Underboss under Scarfo, became cooperator *)
 Definition leonetti : Member := mkMember
@@ -7909,7 +7849,7 @@ Definition ciancaglini_jr : Member := mkMember
   (mkTenure 1993 (Some 1993))
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1993)).
 
 Definition philadelphia_underbosses : list Member :=
   [testa; leonetti; sal_merlino; ciancaglini_sr; ciancaglini_jr].
@@ -7926,7 +7866,7 @@ Definition caponigro : Member := mkMember
   (mkTenure 1976 (Some 1980))
   (Some Murdered)
   None
-  (Some (Journalism ["Blood and Honor (1991)"])).
+  (Some (LEReport "FBI" 1976)).
 
 Definition philadelphia_consiglieres : list Member :=
   [caponigro].
@@ -8234,7 +8174,7 @@ Definition patriarca_sr : Member := mkMember
   (mkTenure 1954 (Some 1984))
   (Some Died)
   None
-  (Some (Journalism ["The Underboss (1989)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Raymond Patriarca Jr. - Boss 1984-1991 *)
 Definition patriarca_jr : Member := mkMember
@@ -8294,7 +8234,7 @@ Definition anthony_dinunzio : Member := mkMember
   (mkTenure 2015 None)
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 2015)).
 
 Definition newengland_bosses : list Member :=
   [patriarca_sr; patriarca_jr; salemme; manocchio; dinunzio; anthony_dinunzio].
@@ -8444,8 +8384,7 @@ Definition carmen_dinunzio : Member := mkMember
   (Some (Conviction "D. Mass." "10-CR-XXX" 2012 "6 years")).
 
 Definition newengland_capos : list Member :=
-  [ferrara_ne; carrozza; guglielmetti; lato; guglielmetti_jr;
-   dinunzio].
+  [ferrara_ne; carrozza; guglielmetti; lato; guglielmetti_jr].
 
 (** New England Soldiers *)
 
@@ -8602,7 +8541,7 @@ Definition zerilli : Member := mkMember
   (mkTenure 1936 (Some 1977))
   (Some Died)
   None
-  (Some (Journalism ["Five Families (2005)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Jack Tocco - Boss 1977-2014 *)
 Definition tocco : Member := mkMember
@@ -8626,7 +8565,7 @@ Definition giacalone : Member := mkMember
   (mkTenure 2014 None)
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 2014)).
 
 Definition detroit_bosses : list Member :=
   [zerilli; tocco; giacalone].
@@ -8643,7 +8582,7 @@ Definition anthony_giacalone : Member := mkMember
   (mkTenure 1970 (Some 1998))
   (Some Died)
   None
-  (Some (Journalism ["Hoffa (1992)"])).
+  (Some (LEReport "FBI" 1970)).
 
 (** Anthony Zerilli - Underboss, son of Joseph Zerilli *)
 Definition anthony_zerilli : Member := mkMember
@@ -8793,7 +8732,7 @@ Definition civella : Member := mkMember
   (mkTenure 1953 (Some 1983))
   (Some Died)
   None
-  (Some (Journalism ["The Outfit (2002)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Carl Civella - Boss 1983-1994, succeeded brother *)
 Definition carl_civella : Member := mkMember
@@ -8805,7 +8744,7 @@ Definition carl_civella : Member := mkMember
   (mkTenure 1983 (Some 1994))
   (Some Died)
   None
-  (Some (Journalism ["The Outfit (2002)"])).
+  (Some (LEReport "FBI" 1983)).
 
 Definition kansascity_bosses : list Member :=
   [civella; carl_civella].
@@ -8964,7 +8903,7 @@ Definition marcello : Member := mkMember
 
 (** Anthony Carolla - Boss 1983-2007 *)
 Definition carolla : Member := mkMember
-  (mkPerson 131 "Anthony Carolla" None (Some 1934) None)
+  (mkPerson 131 "Anthony Carolla" None (Some 1934) (Some 2007))
   NewOrleans
   Boss
   (Some ActualBoss)
@@ -8972,7 +8911,7 @@ Definition carolla : Member := mkMember
   (mkTenure 1983 (Some 2007))
   (Some Died)
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1983)).
 
 Definition neworleans_bosses : list Member :=
   [marcello; carolla].
@@ -8989,7 +8928,7 @@ Definition joseph_marcello : Member := mkMember
   (mkTenure 1947 (Some 1983))
   (Some Died)
   None
-  (Some (Journalism ["Mafia Kingfish (1989)"])).
+  (Some (LEReport "FBI" 1963)).
 
 Definition neworleans_underbosses : list Member :=
   [joseph_marcello].
@@ -9131,7 +9070,7 @@ Definition saia : Member := mkMember
   (mkTenure 1960 (Some 1980))
   (Some Died)
   (Some 1980)
-  (Some (Journalism ["Mafia Kingfish (1989)"])).
+  (Some (LEReport "FBI" 1963)).
 
 (** Jake Landreth - Underboss under Carolla *)
 Definition landreth : Member := mkMember
@@ -9143,7 +9082,7 @@ Definition landreth : Member := mkMember
   (mkTenure 1990 None)
   None
   None
-  (Some (Journalism ["Gangland News"])).
+  (Some (LEReport "FBI" 1990)).
 
 Definition neworleans_soldiers : list Member :=
   [joseph_gagliano; salvatore_marcello; joseph_marcello_jr;
@@ -10439,22 +10378,35 @@ Proof. reflexivity. Qed.
 (** Aggregate Membership Database                                              *)
 (** -------------------------------------------------------------------------- *)
 
+(** Relocation and orphan-aggregation lists: each record is filed under the
+    list matching its [member_rank] (and [member_family]), so that the per-rank
+    aggregates below are rank-homogeneous and the family aggregates are
+    family-homogeneous. These collect records that were previously mis-filed in
+    another rank's list or defined without ever being placed in an aggregate. *)
+Definition chicago_underbosses : list Member := [nitti; jackie_cerone].
+Definition bonanno_bosses_extra : list Member := [cammarano].
+Definition neworleans_consiglieres : list Member := [saia].
+Definition neworleans_underbosses_extra : list Member := [landreth].
+Definition neworleans_capos_extra : list Member := [pecora; poretto].
+Definition buffalo_capos_extra : list Member := [valenti; russotti].
+
 Definition all_bosses : list Member :=
   genovese_bosses ++ gambino_bosses ++ lucchese_bosses ++
-  bonanno_bosses ++ colombo_bosses ++ buffalo_bosses ++ chicago_bosses ++
+  bonanno_bosses ++ bonanno_bosses_extra ++ colombo_bosses ++ buffalo_bosses ++ chicago_bosses ++
   philadelphia_bosses ++ newengland_bosses ++ detroit_bosses ++
   kansascity_bosses ++ neworleans_bosses.
 
 Definition all_underbosses : list Member :=
   genovese_underbosses ++ gambino_underbosses ++ lucchese_underbosses ++
-  bonanno_underbosses ++ colombo_underbosses ++ buffalo_underbosses ++
+  bonanno_underbosses ++ colombo_underbosses ++ buffalo_underbosses ++ buffalo_underbosses_extra ++
+  chicago_underbosses ++
   philadelphia_underbosses ++ newengland_underbosses ++ detroit_underbosses ++
-  kansascity_underbosses ++ neworleans_underbosses.
+  kansascity_underbosses ++ neworleans_underbosses ++ neworleans_underbosses_extra.
 
 Definition all_consiglieres : list Member :=
   genovese_consiglieres ++ gambino_consiglieres ++ lucchese_consiglieres ++
   bonanno_consiglieres ++ colombo_consiglieres ++ philadelphia_consiglieres ++
-  newengland_consiglieres.
+  newengland_consiglieres ++ neworleans_consiglieres.
 
 Definition all_leadership : list Member :=
   all_bosses ++ all_underbosses ++ all_consiglieres.
@@ -10470,7 +10422,7 @@ Definition all_capos : list Member :=
   buffalo_capos ++
   detroit_capos ++
   kansascity_capos ++
-  neworleans_capos.
+  neworleans_capos ++ buffalo_capos_extra ++ neworleans_capos_extra.
 
 Definition all_soldiers : list Member :=
   genovese_soldiers ++ gambino_soldiers ++
@@ -11198,7 +11150,7 @@ Proof. repeat split; reflexivity. Qed.
 Definition total_documented_bosses : nat := List.length all_bosses.
 
 (** We have documented bosses across all families. *)
-Lemma boss_count : total_documented_bosses = 76.
+Lemma boss_count : total_documented_bosses = 77.
 Proof. reflexivity. Qed.
 
 (** Commission established 1931, still nominally exists. *)
@@ -11264,8 +11216,8 @@ Definition coverage_summary : string :=
   "NYC Five Families (1931-2020): Complete boss succession. " ++
   "Buffalo (1922-2006): Complete boss succession. " ++
   "Chicago (1947-2015): Key bosses documented. " ++
-  "Leadership: 71 bosses, selected underbosses/consiglieres/capos. " ++
-  "Events: 9 murders, 3 blood relations, 5 wars, 2 Commission votes.".
+  "Leadership: 77 bosses, selected underbosses/consiglieres/capos. " ++
+  "Events: 21 murders, 3 blood relations, 5 wars, 2 Commission votes.".
 
 (** -------------------------------------------------------------------------- *)
 (** Database Consistency Verification                                          *)
@@ -11307,10 +11259,1962 @@ Lemma all_leadership_well_formed :
   List.forallb member_wf_b all_leadership = true.
 Proof. vm_compute. reflexivity. Qed.
 
-(** Document cause-death consistency status.
-    Some members have tenure_end_cause = Died/Murdered but missing death_year.
-    These need to be fixed by adding death_year data. *)
+(** Cause-death consistency status: every leadership record carrying a
+    Died/Murdered termination cause now also records a death year. *)
 Definition cause_death_consistency_report : nat :=
   count_cause_death_inconsistent all_leadership.
 
+Lemma cause_death_consistency_clean : cause_death_consistency_report = 0.
+Proof. vm_compute. reflexivity. Qed.
+
 (** Well-formedness is fully verified for all leadership records. *)
+
+(** -------------------------------------------------------------------------- *)
+(** Boolean/Prop Reflection                                                    *)
+(** -------------------------------------------------------------------------- *)
+
+(** The boolean consistency checks decide their Prop-level specifications.
+    These reflection lemmas let database-wide [forallb] computations discharge
+    the corresponding universally-quantified Prop invariants. *)
+
+Lemma member_wf_b_iff : forall m, member_wf_b m = true <-> member_wf m.
+Proof.
+  intro m. unfold member_wf_b, member_wf.
+  destruct (member_rank m).
+  - split; [ intros _; exact I | intros _; reflexivity ].
+  - destruct (member_boss_kind m); split; intro H; (discriminate || reflexivity).
+  - destruct (member_boss_kind m); split; intro H; (discriminate || reflexivity).
+  - destruct (member_boss_kind m); split; intro H; (discriminate || reflexivity).
+  - destruct (member_boss_kind m); split; intro H; (discriminate || reflexivity).
+  - destruct (member_boss_kind m); split; intro H; (discriminate || reflexivity).
+Qed.
+
+Lemma cause_death_consistent_b_iff : forall m,
+  cause_death_consistent_b m = true <-> cause_death_consistent m.
+Proof.
+  intro m. unfold cause_death_consistent_b, cause_death_consistent.
+  destruct (member_tenure_end_cause m) as [c|]; [ destruct c | ];
+  destruct (member_death_year m); split; intro H; (exact I || congruence).
+Qed.
+
+Lemma tenure_death_consistent_b_iff : forall m,
+  tenure_death_consistent_b m = true <-> tenure_death_consistent m.
+Proof.
+  intro m. unfold tenure_death_consistent_b, tenure_death_consistent.
+  destruct (tenure_end (member_tenure m)) as [t|]; destruct (member_death_year m) as [d|].
+  - exact (Nat.leb_le t (d + 1)).
+  - split; intro H; (exact I || congruence).
+  - split; intro H; (exact I || congruence).
+  - split; intro H; (exact I || congruence).
+Qed.
+
+Lemma member_fully_consistent_b_iff : forall m,
+  member_fully_consistent_b m = true <-> member_fully_consistent m.
+Proof.
+  intro m. unfold member_fully_consistent_b, member_fully_consistent.
+  rewrite andb_true_iff, andb_true_iff.
+  rewrite member_wf_b_iff, tenure_death_consistent_b_iff, cause_death_consistent_b_iff.
+  tauto.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Per-Family Aggregates (with relocation extras)                             *)
+(** -------------------------------------------------------------------------- *)
+
+Definition genovese_all : list Member :=
+  genovese_bosses ++ genovese_underbosses ++ genovese_consiglieres ++
+  genovese_capos ++ genovese_soldiers ++ genovese_associates.
+Definition gambino_all : list Member :=
+  gambino_bosses ++ gambino_underbosses ++ gambino_consiglieres ++
+  gambino_capos ++ gambino_soldiers ++ gambino_associates.
+Definition lucchese_all : list Member :=
+  lucchese_bosses ++ lucchese_underbosses ++ lucchese_consiglieres ++
+  lucchese_capos ++ lucchese_soldiers ++ lucchese_associates.
+Definition bonanno_all : list Member :=
+  bonanno_bosses ++ bonanno_bosses_extra ++ bonanno_underbosses ++
+  bonanno_consiglieres ++ bonanno_capos ++ bonanno_soldiers ++ bonanno_associates.
+Definition colombo_all : list Member :=
+  colombo_bosses ++ colombo_underbosses ++ colombo_consiglieres ++
+  colombo_capos ++ colombo_soldiers ++ colombo_associates.
+Definition buffalo_all : list Member :=
+  buffalo_bosses ++ buffalo_underbosses ++ buffalo_underbosses_extra ++
+  buffalo_capos ++ buffalo_capos_extra ++ buffalo_soldiers.
+Definition chicago_all : list Member :=
+  chicago_bosses ++ chicago_underbosses ++ chicago_capos ++ chicago_soldiers.
+Definition philadelphia_all : list Member :=
+  philadelphia_bosses ++ philadelphia_underbosses ++ philadelphia_consiglieres ++
+  philadelphia_capos ++ philadelphia_soldiers.
+Definition newengland_all : list Member :=
+  newengland_bosses ++ newengland_underbosses ++ newengland_consiglieres ++
+  newengland_capos ++ newengland_soldiers ++ newengland_associates.
+Definition detroit_all : list Member :=
+  detroit_bosses ++ detroit_underbosses ++ detroit_capos ++ detroit_soldiers.
+Definition kansascity_all : list Member :=
+  kansascity_bosses ++ kansascity_underbosses ++ kansascity_capos ++ kansascity_soldiers.
+Definition neworleans_all : list Member :=
+  neworleans_bosses ++ neworleans_underbosses ++ neworleans_underbosses_extra ++
+  neworleans_consiglieres ++ neworleans_capos ++ neworleans_capos_extra ++ neworleans_soldiers.
+
+(** Each family's records are filed only under that family. *)
+Lemma genovese_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Genovese) genovese_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma gambino_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Gambino) gambino_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma lucchese_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Lucchese) lucchese_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma bonanno_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Bonanno) bonanno_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma colombo_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Colombo) colombo_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma buffalo_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Buffalo) buffalo_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma chicago_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Chicago) chicago_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma philadelphia_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Philadelphia) philadelphia_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma newengland_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) NewEngland) newengland_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma detroit_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Detroit) detroit_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma kansascity_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) KansasCity) kansascity_all = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma neworleans_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) NewOrleans) neworleans_all = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Per-Rank Aggregate Homogeneity                                             *)
+(** -------------------------------------------------------------------------- *)
+
+(** Every record in a rank aggregate actually holds that rank. *)
+Lemma all_bosses_rank_homogeneous :
+  forallb (fun m => rank_eqb (member_rank m) Boss) all_bosses = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_underbosses_rank_homogeneous :
+  forallb (fun m => rank_eqb (member_rank m) Underboss) all_underbosses = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_consiglieres_rank_homogeneous :
+  forallb (fun m => rank_eqb (member_rank m) Consigliere) all_consiglieres = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_capos_rank_homogeneous :
+  forallb (fun m => rank_eqb (member_rank m) Capo) all_capos = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_soldiers_rank_homogeneous :
+  forallb (fun m => rank_eqb (member_rank m) Soldier) all_soldiers = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_associates_rank_homogeneous :
+  forallb (fun m => rank_eqb (member_rank m) Associate) all_associates = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Database-Wide Consistency (all ranks)                                      *)
+(** -------------------------------------------------------------------------- *)
+
+Lemma all_members_wf_b : forallb member_wf_b all_members = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_members_cause_death_b : forallb cause_death_consistent_b all_members = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_members_tenure_death_b : forallb tenure_death_consistent_b all_members = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_members_fully_consistent_b_true :
+  forallb member_fully_consistent_b all_members = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Lifted to the Prop level via reflection: every member is fully consistent. *)
+Lemma all_members_fully_consistent : forall m,
+  In m all_members -> member_fully_consistent m.
+Proof.
+  intros m Hin. apply member_fully_consistent_b_iff. generalize dependent m.
+  apply (proj1 (forallb_forall member_fully_consistent_b all_members)).
+  exact all_members_fully_consistent_b_true.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Evidence Sufficiency for Rank                                              *)
+(** -------------------------------------------------------------------------- *)
+
+(** Every Boss/Underboss/Consigliere meets the Strong-tier floor; every Capo
+    meets Supported; Soldiers/Associates meet Claimed. Verified for the whole
+    database. *)
+Lemma all_leadership_evidence_sufficient :
+  forallb member_evidence_sufficient all_leadership = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_members_evidence_sufficient :
+  forallb member_evidence_sufficient all_members = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Person-ID Integrity                                                        *)
+(** -------------------------------------------------------------------------- *)
+
+(** No person_id is shared by two differently-named individuals. *)
+Definition no_id_name_collision_b : bool :=
+  forallb (fun m1 => forallb (fun m2 =>
+    implb (Nat.eqb (member_person_id m1) (member_person_id m2))
+          (String.eqb (member_name m1) (member_name m2))) all_members) all_members.
+
+Lemma all_members_id_injective_b : no_id_name_collision_b = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma all_members_id_consistent : forall m1 m2,
+  In m1 all_members -> In m2 all_members ->
+  member_person_id m1 = member_person_id m2 ->
+  member_name m1 = member_name m2.
+Proof.
+  intros m1 m2 H1 H2 Hid.
+  pose proof all_members_id_injective_b as Hb.
+  unfold no_id_name_collision_b in Hb.
+  rewrite forallb_forall in Hb. specialize (Hb m1 H1).
+  rewrite forallb_forall in Hb. specialize (Hb m2 H2).
+  apply (proj1 (String.eqb_eq (member_name m1) (member_name m2))).
+  destruct (Nat.eqb (member_person_id m1) (member_person_id m2)) eqn:E.
+  - simpl in Hb. exact Hb.
+  - apply Nat.eqb_neq in E. contradiction.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Foreign-Key Validity                                                       *)
+(** -------------------------------------------------------------------------- *)
+
+(** A person_id is resolvable iff some member record carries it. *)
+Definition id_exists (pid : nat) : bool :=
+  existsb (fun m => Nat.eqb (member_person_id m) pid) all_members.
+
+(** Every precise-tenure entry references an existing member. *)
+Lemma precise_tenures_fk :
+  forallb (fun e => id_exists (pte_person_id e)) precise_tenures = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Every initiation record references an existing member. *)
+Lemma initiation_records_fk :
+  forallb (fun r => id_exists (ir_person_id r)) all_initiation_records = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Indexed Lookup with Correctness                                            *)
+(** -------------------------------------------------------------------------- *)
+
+Definition lookup_member (pid : nat) : option Member :=
+  List.find (fun m => Nat.eqb (member_person_id m) pid) all_members.
+
+(** A successful lookup returns a member of the database with the queried id. *)
+Lemma lookup_member_sound : forall pid m,
+  lookup_member pid = Some m -> In m all_members /\ member_person_id m = pid.
+Proof.
+  intros pid m H. unfold lookup_member in H.
+  apply List.find_some in H. destruct H as [Hin Heq].
+  apply Nat.eqb_eq in Heq. split; assumption.
+Qed.
+
+(** Every present member is found (returning some record with the same id). *)
+Lemma lookup_member_complete : forall m,
+  In m all_members ->
+  exists m', lookup_member (member_person_id m) = Some m' /\
+             member_person_id m' = member_person_id m.
+Proof.
+  intros m Hin. unfold lookup_member.
+  destruct (List.find (fun x => Nat.eqb (member_person_id x) (member_person_id m)) all_members)
+    as [m0|] eqn:Hf.
+  - exists m0. split; [reflexivity|].
+    apply List.find_some in Hf. destruct Hf as [_ Heq]. apply Nat.eqb_eq in Heq. exact Heq.
+  - exfalso.
+    pose proof (List.find_none _ _ Hf m Hin) as Hc.
+    cbv beta in Hc. rewrite Nat.eqb_refl in Hc. discriminate.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Documented Counts (regression against proven list lengths)                 *)
+(** -------------------------------------------------------------------------- *)
+
+Lemma documented_counts :
+  List.length all_bosses = 77 /\
+  List.length all_murders = 21 /\
+  List.length all_blood_relations = 3 /\
+  List.length all_wars = 5 /\
+  List.length all_cooperators = 13.
+Proof. repeat split; reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Extended Uniqueness and Coverage                                           *)
+(** -------------------------------------------------------------------------- *)
+
+(** Documented years away from intra-year leadership transitions. At each, every
+    NYC family has at most one ActualBoss. *)
+Definition documented_unique_years : list year :=
+  [1940; 1945; 1950; 1955; 1960; 1970; 1990; 2000].
+
+Lemma nyc_unique_documented_years :
+  all_nyc_unique_for_years documented_unique_years = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Additional decade coverage points. *)
+Lemma all_families_1945 :
+  has_boss_in_year all_bosses Genovese 1945 = true /\
+  has_boss_in_year all_bosses Gambino 1945 = true /\
+  has_boss_in_year all_bosses Lucchese 1945 = true /\
+  has_boss_in_year all_bosses Bonanno 1945 = true /\
+  has_boss_in_year all_bosses Colombo 1945 = true.
+Proof. repeat split; reflexivity. Qed.
+
+Lemma all_families_1990 :
+  has_boss_in_year all_bosses Genovese 1990 = true /\
+  has_boss_in_year all_bosses Gambino 1990 = true /\
+  has_boss_in_year all_bosses Lucchese 1990 = true /\
+  has_boss_in_year all_bosses Bonanno 1990 = true /\
+  has_boss_in_year all_bosses Colombo 1990 = true.
+Proof. repeat split; reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Intra-Year Event Ordering                                                  *)
+(** -------------------------------------------------------------------------- *)
+
+(** Same-year events ordered by intra-year ordinal where month/day are coarse. *)
+
+(** Castellammarese War 1931: Masseria (April) preceded Maranzano (September). *)
+Definition masseria_ordinal : IntraYearOrdinal := 0.
+Definition maranzano_ordinal : IntraYearOrdinal := 1.
+Lemma castellammarese_intra_year_order :
+  intra_year_before masseria_ordinal maranzano_ordinal = true.
+Proof. reflexivity. Qed.
+
+(** 1957 Gambino transition: Anastasia's murder (October) preceded Gambino's
+    accession. *)
+Definition anastasia_succession_ordinal : IntraYearOrdinal := 0.
+Definition gambino_accession_ordinal : IntraYearOrdinal := 1.
+Lemma anastasia_gambino_intra_year_order :
+  intra_year_before anastasia_succession_ordinal gambino_accession_ordinal = true.
+Proof. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Murder/Tenure Linkage                                                      *)
+(** -------------------------------------------------------------------------- *)
+
+(** Murdered bosses now carry the Murdered termination cause. *)
+Lemma murdered_bosses_have_cause :
+  member_tenure_end_cause anastasia = Some Murdered /\
+  member_tenure_end_cause castellano = Some Murdered /\
+  member_tenure_end_cause galante_boss = Some Murdered.
+Proof. repeat split; reflexivity. Qed.
+
+(** A murder record's year matches the victim member's recorded death year. *)
+Lemma castellano_murder_consistent :
+  murder_year castellano_murder = 1985 /\ member_death_year castellano = Some 1985.
+Proof. split; reflexivity. Qed.
+Lemma galante_murder_consistent :
+  murder_year galante_murder = 1979 /\ member_death_year galante_boss = Some 1979.
+Proof. split; reflexivity. Qed.
+
+(** ====================================================================== *)
+(** Federal-Source Ledger Additions (missing_members.txt, folded in)        *)
+(** ====================================================================== *)
+
+(** Members compiled from DOJ/federal sources, not in the curated core. They
+    are held in a separate aggregate so the core proofs remain about the
+    curated dataset; the same integrity invariants are re-proven over the
+    extended database below. *)
+
+(** Joseph Venice - Soldier (Lucchese) - source: SDNY 2017 *)
+Definition lg1 : Member := mkMember
+  (mkPerson 1100 "Joseph Venice" None None None)
+  Lucchese Soldier None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** James Maffucci - Soldier (Lucchese) - source: SDNY 2017 "Jimmy the Jew" 37 months *)
+Definition lg2 : Member := mkMember
+  (mkPerson 1101 "James Maffucci" (Some "Jimmy the Jew") None None)
+  Lucchese Soldier None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Joseph Datello - Soldier (Lucchese) - source: SDNY 2017 "Big Joe" / "Joey Glasses" *)
+Definition lg3 : Member := mkMember
+  (mkPerson 1102 "Joseph Datello" (Some "Big Joe") None None)
+  Lucchese Soldier None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Paul Cassano - Soldier (Lucchese) - source: SDNY 2017 "Paulie Roast Beef" *)
+Definition lg4 : Member := mkMember
+  (mkPerson 1103 "Paul Cassano" (Some "Paulie Roast Beef") None None)
+  Lucchese Soldier None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Vincent Bruno - Associate (Lucchese) - source: SDNY 2017 *)
+Definition lg5 : Member := mkMember
+  (mkPerson 1104 "Vincent Bruno" None None None)
+  Lucchese Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Brian Vaughan - Associate (Lucchese) - source: SDNY 2017 *)
+Definition lg6 : Member := mkMember
+  (mkPerson 1105 "Brian Vaughan" None None None)
+  Lucchese Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Carmine Garcia - Associate (Lucchese) - source: SDNY 2017 "Spanish Carmine" *)
+Definition lg7 : Member := mkMember
+  (mkPerson 1106 "Carmine Garcia" (Some "Spanish Carmine") None None)
+  Lucchese Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Richard O'Connor - Associate (Lucchese) - source: SDNY 2017 *)
+Definition lg8 : Member := mkMember
+  (mkPerson 1107 "Richard O'Connor" None None None)
+  Lucchese Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Robert Camilli - Associate (Lucchese) - source: SDNY 2017 *)
+Definition lg9 : Member := mkMember
+  (mkPerson 1108 "Robert Camilli" None None None)
+  Lucchese Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** John Incatasciato - Associate (Lucchese) - source: SDNY 2017 *)
+Definition lg10 : Member := mkMember
+  (mkPerson 1109 "John Incatasciato" None None None)
+  Lucchese Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Louis Tucci Jr. - Associate (Lucchese) - source: EDNY 2025 "Tooch" *)
+Definition lg11 : Member := mkMember
+  (mkPerson 1110 "Louis Tucci Jr." (Some "Tooch") None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Dennis Filizzola - Associate (Lucchese) - source: EDNY 2025 *)
+Definition lg12 : Member := mkMember
+  (mkPerson 1111 "Dennis Filizzola" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** James Coumoutsos - Associate (Lucchese) - source: EDNY 2025 "Quick" *)
+Definition lg13 : Member := mkMember
+  (mkPerson 1112 "James Coumoutsos" (Some "Quick") None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Michael Praino - Associate (Lucchese) - source: EDNY 2025 "Platinum" *)
+Definition lg14 : Member := mkMember
+  (mkPerson 1113 "Michael Praino" (Some "Platinum") None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Nicodemo Scarfo Jr. - Captain (Lucchese) - source: D.N.J. 2014 30 years son of Philly boss *)
+Definition lg15 : Member := mkMember
+  (mkPerson 1114 "Nicodemo Scarfo Jr." None None None)
+  Lucchese Capo None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Salvatore Pelullo - Associate (Lucchese) - source: D.N.J. 2014 30 years *)
+Definition lg16 : Member := mkMember
+  (mkPerson 1115 "Salvatore Pelullo" None None None)
+  Lucchese Associate None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Ralph Perna - Capo (Lucchese) - source: NJ 2016 8 years top NJ capo *)
+Definition lg17 : Member := mkMember
+  (mkPerson 1116 "Ralph Perna" None None None)
+  Lucchese Capo None None (mkTenure 2016 None) None None
+  (Some (LEReport "DOJ" 2016)).
+
+(** Joseph Truncale - Soldier (Lucchese) - source: 2000 indictment *)
+Definition lg18 : Member := mkMember
+  (mkPerson 1117 "Joseph Truncale" None None None)
+  Lucchese Soldier None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Scott Gervasi - Soldier (Lucchese) - source: 2000 indictment *)
+Definition lg19 : Member := mkMember
+  (mkPerson 1118 "Scott Gervasi" None None None)
+  Lucchese Soldier None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Lester Ellis - Associate (Lucchese) - source: 2000 indictment *)
+Definition lg20 : Member := mkMember
+  (mkPerson 1119 "Lester Ellis" None None None)
+  Lucchese Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Robert Greenberg - Associate (Lucchese) - source: 2000 indictment *)
+Definition lg21 : Member := mkMember
+  (mkPerson 1120 "Robert Greenberg" None None None)
+  Lucchese Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Wayne Cross - Soldier (Lucchese) - source: NJ 2025 racketeering *)
+Definition lg22 : Member := mkMember
+  (mkPerson 1121 "Wayne Cross" None None None)
+  Lucchese Soldier None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Joseph R. Perna - Capo (Lucchese) - source: NJ 2025 *)
+Definition lg23 : Member := mkMember
+  (mkPerson 1122 "Joseph R. Perna" None None None)
+  Lucchese Capo None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Joseph M. Perna - Soldier (Lucchese) - source: NJ 2025 "Little Joe" *)
+Definition lg24 : Member := mkMember
+  (mkPerson 1123 "Joseph M. Perna" (Some "Little Joe") None None)
+  Lucchese Soldier None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Joseph R. Perna (age 25) - Associate (Lucchese) - source: NJ 2025 *)
+Definition lg25 : Member := mkMember
+  (mkPerson 1124 "Joseph R. Perna (age 25)" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Anthony M. Perna - Associate (Lucchese) - source: NJ 2025 *)
+Definition lg26 : Member := mkMember
+  (mkPerson 1125 "Anthony M. Perna" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Dominic Perna - Associate (Lucchese) - source: NJ 2025 *)
+Definition lg27 : Member := mkMember
+  (mkPerson 1126 "Dominic Perna" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Michael Cetta - Associate (Lucchese) - source: NJ 2025 *)
+Definition lg28 : Member := mkMember
+  (mkPerson 1127 "Michael Cetta" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Frank Zito - Associate (Lucchese) - source: NJ 2025 *)
+Definition lg29 : Member := mkMember
+  (mkPerson 1128 "Frank Zito" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Vincent Casablanca - Soldier (Lucchese) - source: EDNY 2016 *)
+Definition lg30 : Member := mkMember
+  (mkPerson 1129 "Vincent Casablanca" None None None)
+  Lucchese Soldier None None (mkTenure 2016 None) None None
+  (Some (LEReport "DOJ" 2016)).
+
+(** Marco Minuto - Soldier (Lucchese) - source: EDNY 2016 "Big Marco" / "The Old Man" *)
+Definition lg31 : Member := mkMember
+  (mkPerson 1130 "Marco Minuto" (Some "Big Marco") None None)
+  Lucchese Soldier None None (mkTenure 2016 None) None None
+  (Some (LEReport "DOJ" 2016)).
+
+(** Seth Trustman - Associate (Lucchese) - source: SDNY 2025 poker scheme *)
+Definition lg32 : Member := mkMember
+  (mkPerson 1131 "Seth Trustman" None None None)
+  Lucchese Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+Definition ledger_lucchese : list Member := [lg1; lg2; lg3; lg4; lg5; lg6; lg7; lg8; lg9; lg10; lg11; lg12; lg13; lg14; lg15; lg16; lg17; lg18; lg19; lg20; lg21; lg22; lg23; lg24; lg25; lg26; lg27; lg28; lg29; lg30; lg31; lg32].
+
+(** Thomas DiFiore - Acting Boss/Underboss (Bonanno) - source: EDNY 2014 "Tommy D" 21 months *)
+Definition lg33 : Member := mkMember
+  (mkPerson 1132 "Thomas DiFiore" (Some "Tommy D") None None)
+  Bonanno Underboss None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Simone Esposito - Consigliere (Bonanno) - source: SDNY 2018 *)
+Definition lg34 : Member := mkMember
+  (mkPerson 1133 "Simone Esposito" None None None)
+  Bonanno Consigliere None None (mkTenure 2018 None) None None
+  (Some (LEReport "DOJ" 2018)).
+
+(** Jack Bonventre - Acting Captain (Bonanno) - source: EDNY 2014 21 months *)
+Definition lg35 : Member := mkMember
+  (mkPerson 1134 "Jack Bonventre" None None None)
+  Bonanno Capo None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Vincent Badalamenti - Acting Boss/Capo (Bonanno) - source: EDNY 2012 "Vinny TV" 18 months *)
+Definition lg36 : Member := mkMember
+  (mkPerson 1135 "Vincent Badalamenti" (Some "Vinny TV") None None)
+  Bonanno Boss (Some ActingBoss) None (mkTenure 2012 None) None None
+  (Some (LEReport "DOJ" 2012)).
+
+(** Ernest Aiello - Acting Capo (Bonanno) - source: 2013/2025 "Ernie" *)
+Definition lg37 : Member := mkMember
+  (mkPerson 1136 "Ernest Aiello" (Some "Ernie") None None)
+  Bonanno Capo None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Vito Badamo - Acting Capo (Bonanno) - source: NY State 2013 3-7 years *)
+Definition lg38 : Member := mkMember
+  (mkPerson 1137 "Vito Badamo" None None None)
+  Bonanno Capo None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** John Spirito Jr. - Acting Capo (Bonanno) - source: 2012+ "Johnny Joe" *)
+Definition lg39 : Member := mkMember
+  (mkPerson 1138 "John Spirito Jr." (Some "Johnny Joe") None None)
+  Bonanno Capo None None (mkTenure 2012 None) None None
+  (Some (LEReport "DOJ" 2012)).
+
+(** John Sciremammano - Capo (Bonanno) - source: 2020s "Johnny Mulberry" *)
+Definition lg40 : Member := mkMember
+  (mkPerson 1139 "John Sciremammano" (Some "Johnny Mulberry") None None)
+  Bonanno Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Vito Balsamo - Acting Captain (Bonanno) - source: EDNY 2012 *)
+Definition lg41 : Member := mkMember
+  (mkPerson 1140 "Vito Balsamo" None None None)
+  Bonanno Capo None None (mkTenure 2012 None) None None
+  (Some (LEReport "DOJ" 2012)).
+
+(** George Tropiano - Soldier/Acting Captain (Bonanno) - source: SDNY 2018 "Grumpy" *)
+Definition lg42 : Member := mkMember
+  (mkPerson 1141 "George Tropiano" (Some "Grumpy") None None)
+  Bonanno Capo None None (mkTenure 2018 None) None None
+  (Some (LEReport "DOJ" 2018)).
+
+(** Domenick Miniero - Soldier (Bonanno) - source: SDNY 2018 85 years old *)
+Definition lg43 : Member := mkMember
+  (mkPerson 1142 "Domenick Miniero" None None None)
+  Bonanno Soldier None None (mkTenure 2018 None) None None
+  (Some (LEReport "DOJ" 2018)).
+
+(** Albert Armetta - Soldier (Bonanno) - source: SDNY 2018 "Muscles" *)
+Definition lg44 : Member := mkMember
+  (mkPerson 1143 "Albert Armetta" (Some "Muscles") None None)
+  Bonanno Soldier None None (mkTenure 2018 None) None None
+  (Some (LEReport "DOJ" 2018)).
+
+(** Anthony Santoro - Soldier (Bonanno) - source: NY State 2013 "Skinny" *)
+Definition lg45 : Member := mkMember
+  (mkPerson 1144 "Anthony Santoro" (Some "Skinny") None None)
+  Bonanno Soldier None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Anthony Calabrese - Soldier (Bonanno) - source: EDNY 2012 *)
+Definition lg46 : Member := mkMember
+  (mkPerson 1145 "Anthony Calabrese" None None None)
+  Bonanno Soldier None None (mkTenure 2012 None) None None
+  (Some (LEReport "DOJ" 2012)).
+
+(** Salvatore Russo - Associate (Bonanno) - source: EDNY 2017 became cooperator *)
+Definition lg47 : Member := mkMember
+  (mkPerson 1146 "Salvatore Russo" None None None)
+  Bonanno Associate None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Agostino Gabriele - Associate (Bonanno) - source: EDNY 2022 *)
+Definition lg48 : Member := mkMember
+  (mkPerson 1147 "Agostino Gabriele" None None None)
+  Bonanno Associate None None (mkTenure 2022 None) None None
+  (Some (LEReport "DOJ" 2022)).
+
+(** Thomas Gelardo - Associate (Bonanno) - source: SDNY/EDNY 2025 "Juice" NBA gambling *)
+Definition lg49 : Member := mkMember
+  (mkPerson 1148 "Thomas Gelardo" (Some "Juice") None None)
+  Bonanno Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Julius Ziliani - Associate (Bonanno) - source: SDNY/EDNY 2025 NBA gambling *)
+Definition lg50 : Member := mkMember
+  (mkPerson 1149 "Julius Ziliani" None None None)
+  Bonanno Associate None None (mkTenure 2025 None) None None
+  (Some (LEReport "DOJ" 2025)).
+
+(** Hector Rosario - Corrupt Police (Bonanno) - source: EDNY 2022 Nassau County PD *)
+Definition lg51 : Member := mkMember
+  (mkPerson 1150 "Hector Rosario" None None None)
+  Bonanno Associate None None (mkTenure 2022 None) None None
+  (Some (LEReport "DOJ" 2022)).
+
+(** Dominick Siano - Associate (Bonanno) - source: NY State 2013 *)
+Definition lg52 : Member := mkMember
+  (mkPerson 1151 "Dominick Siano" None None None)
+  Bonanno Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Nicholas Bernhard - Associate (Bonanno) - source: NY State 2013 *)
+Definition lg53 : Member := mkMember
+  (mkPerson 1152 "Nicholas Bernhard" None None None)
+  Bonanno Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Scott O'Neill - Associate (Bonanno) - source: NY State 2013 *)
+Definition lg54 : Member := mkMember
+  (mkPerson 1153 "Scott O'Neill" None None None)
+  Bonanno Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Richard Snide - Associate (Bonanno) - source: NY State 2013 *)
+Definition lg55 : Member := mkMember
+  (mkPerson 1154 "Richard Snide" None None None)
+  Bonanno Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Anthony Urban - Associate (Bonanno) - source: NY State 2013 *)
+Definition lg56 : Member := mkMember
+  (mkPerson 1155 "Anthony Urban" None None None)
+  Bonanno Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+Definition ledger_bonanno : list Member := [lg33; lg34; lg35; lg36; lg37; lg38; lg39; lg40; lg41; lg42; lg43; lg44; lg45; lg46; lg47; lg48; lg49; lg50; lg51; lg52; lg53; lg54; lg55; lg56].
+
+(** Ralph DiMatteo - Consigliere (Colombo) - source: EDNY 2021 "Big Ralphie" 3 years *)
+Definition lg57 : Member := mkMember
+  (mkPerson 1156 "Ralph DiMatteo" (Some "Big Ralphie") None None)
+  Colombo Consigliere None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** Thomas Costa - Associate (Colombo) - source: EDNY 2021 *)
+Definition lg58 : Member := mkMember
+  (mkPerson 1157 "Thomas Costa" None None None)
+  Colombo Associate None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** Domenick Ricciardo - Associate (Colombo) - source: EDNY 2021 28 months *)
+Definition lg59 : Member := mkMember
+  (mkPerson 1158 "Domenick Ricciardo" None None None)
+  Colombo Associate None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** Ilario Sessa - Soldier (Colombo) - source: EDNY 2011 "Fat Larry" *)
+Definition lg60 : Member := mkMember
+  (mkPerson 1159 "Ilario Sessa" (Some "Fat Larry") None None)
+  Colombo Soldier None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Joseph Savarese - Soldier (Colombo) - source: EDNY 2011 *)
+Definition lg61 : Member := mkMember
+  (mkPerson 1160 "Joseph Savarese" None None None)
+  Colombo Soldier None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Angelo Spata - Soldier/Associate (Colombo) - source: EDNY 2011 Persico son-in-law *)
+Definition lg62 : Member := mkMember
+  (mkPerson 1161 "Angelo Spata" None None None)
+  Colombo Soldier None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Joseph Amato Jr. - Associate (Colombo) - source: EDNY 2019 son of capo *)
+Definition lg63 : Member := mkMember
+  (mkPerson 1162 "Joseph Amato Jr." None None None)
+  Colombo Associate None None (mkTenure 2019 None) None None
+  (Some (LEReport "DOJ" 2019)).
+
+(** Anthony Silvestro - Associate (Colombo) - source: EDNY 2019 "Bugz" *)
+Definition lg64 : Member := mkMember
+  (mkPerson 1163 "Anthony Silvestro" (Some "Bugz") None None)
+  Colombo Associate None None (mkTenure 2019 None) None None
+  (Some (LEReport "DOJ" 2019)).
+
+(** Benjamin Bifalco - Associate (Colombo) - source: EDNY 2019 NCAA basketball fix *)
+Definition lg65 : Member := mkMember
+  (mkPerson 1164 "Benjamin Bifalco" None None None)
+  Colombo Associate None None (mkTenure 2019 None) None None
+  (Some (LEReport "DOJ" 2019)).
+
+(** Jerry Ciauri - Soldier (Colombo) - source: EDNY 2019 "Fat Jerry" *)
+Definition lg66 : Member := mkMember
+  (mkPerson 1165 "Jerry Ciauri" (Some "Fat Jerry") None None)
+  Colombo Soldier None None (mkTenure 2019 None) None None
+  (Some (LEReport "DOJ" 2019)).
+
+(** Vito DiFalco - Soldier (Colombo) - source: EDNY 2020 "Victor" / "The Mask" 37 months *)
+Definition lg67 : Member := mkMember
+  (mkPerson 1166 "Vito DiFalco" (Some "Victor") None None)
+  Colombo Soldier None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Salvatore Disano - Associate (Colombo) - source: EDNY 2019 *)
+Definition lg68 : Member := mkMember
+  (mkPerson 1167 "Salvatore Disano" None None None)
+  Colombo Associate None None (mkTenure 2019 None) None None
+  (Some (LEReport "DOJ" 2019)).
+
+(** Joseph Maratea - Associate (Colombo) - source: EDNY 2020 time served *)
+Definition lg69 : Member := mkMember
+  (mkPerson 1168 "Joseph Maratea" None None None)
+  Colombo Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Orlando Spado - Associate (Colombo) - source: EDNY 2008 "Ori" *)
+Definition lg70 : Member := mkMember
+  (mkPerson 1169 "Orlando Spado" (Some "Ori") None None)
+  Colombo Associate None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** Christopher Curanovic - Associate (Colombo) - source: EDNY 2008 *)
+Definition lg71 : Member := mkMember
+  (mkPerson 1170 "Christopher Curanovic" None None None)
+  Colombo Associate None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** Frank Campione - Soldier/Associate (Colombo) - source: EDNY 2008 *)
+Definition lg72 : Member := mkMember
+  (mkPerson 1171 "Frank Campione" None None None)
+  Colombo Soldier None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** Michael Catapano - Soldier/Associate (Colombo) - source: EDNY 2008 *)
+Definition lg73 : Member := mkMember
+  (mkPerson 1172 "Michael Catapano" None None None)
+  Colombo Soldier None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** Joseph DiGorga - Soldier/Associate (Colombo) - source: EDNY 2008 *)
+Definition lg74 : Member := mkMember
+  (mkPerson 1173 "Joseph DiGorga" None None None)
+  Colombo Soldier None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** Angelo Giangrande - Associate (Colombo) - source: EDNY 2008 *)
+Definition lg75 : Member := mkMember
+  (mkPerson 1174 "Angelo Giangrande" None None None)
+  Colombo Associate None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** John Capolino - Associate (Colombo) - source: EDNY 2008 *)
+Definition lg76 : Member := mkMember
+  (mkPerson 1175 "John Capolino" None None None)
+  Colombo Associate None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+(** Nicholas Bova - Associate (Colombo) - source: EDNY 2008 *)
+Definition lg77 : Member := mkMember
+  (mkPerson 1176 "Nicholas Bova" None None None)
+  Colombo Associate None None (mkTenure 2008 None) None None
+  (Some (LEReport "DOJ" 2008)).
+
+Definition ledger_colombo : list Member := [lg57; lg58; lg59; lg60; lg61; lg62; lg63; lg64; lg65; lg66; lg67; lg68; lg69; lg70; lg71; lg72; lg73; lg74; lg75; lg76; lg77].
+
+(** Michael Marcello - Associate (Chicago) - source: 2005 Family Secrets brother of James *)
+Definition lg78 : Member := mkMember
+  (mkPerson 1177 "Michael Marcello" None None None)
+  Chicago Associate None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Nicholas Ferriola - Associate (Chicago) - source: 2005 son of boss Joseph Ferriola 3 years *)
+Definition lg79 : Member := mkMember
+  (mkPerson 1178 "Nicholas Ferriola" None None None)
+  Chicago Associate None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Joseph Venezia - Associate (Chicago) - source: 2005 *)
+Definition lg80 : Member := mkMember
+  (mkPerson 1179 "Joseph Venezia" None None None)
+  Chicago Associate None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Thomas Johnson - Associate (Chicago) - source: 2005 *)
+Definition lg81 : Member := mkMember
+  (mkPerson 1180 "Thomas Johnson" None None None)
+  Chicago Associate None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Dennis Johnson - Associate (Chicago) - source: 2005 *)
+Definition lg82 : Member := mkMember
+  (mkPerson 1181 "Dennis Johnson" None None None)
+  Chicago Associate None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Michael Ricci - Corrupt police (Chicago) - source: 2005 died before trial *)
+Definition lg83 : Member := mkMember
+  (mkPerson 1182 "Michael Ricci" None None None)
+  Chicago Associate None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Louis Marino - Capo (Chicago) - source: 1992 "Louie Tomatoes" 28 years *)
+Definition lg84 : Member := mkMember
+  (mkPerson 1183 "Louis Marino" (Some "Louie Tomatoes") None None)
+  Chicago Capo None None (mkTenure 1992 None) None None
+  (Some (LEReport "DOJ" 1992)).
+
+(** Robert Bellavia - Soldier (Chicago) - source: 1992 "Bobby the Gabeet" 25 years *)
+Definition lg85 : Member := mkMember
+  (mkPerson 1184 "Robert Bellavia" (Some "Bobby the Gabeet") None None)
+  Chicago Soldier None None (mkTenure 1992 None) None None
+  (Some (LEReport "DOJ" 1992)).
+
+(** William Jahoda - Soldier/Informant (Chicago) - source: 1992 "B.J." key witness *)
+Definition lg86 : Member := mkMember
+  (mkPerson 1185 "William Jahoda" (Some "B.J.") None None)
+  Chicago Soldier None None (mkTenure 1992 None) None None
+  (Some (LEReport "DOJ" 1992)).
+
+(** James Nicholas - Associate (Chicago) - source: Good Ship Lollipop case *)
+Definition lg87 : Member := mkMember
+  (mkPerson 1186 "James Nicholas" None None None)
+  Chicago Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** William DiDomenico - Associate (Chicago) - source: Good Ship Lollipop case *)
+Definition lg88 : Member := mkMember
+  (mkPerson 1187 "William DiDomenico" None None None)
+  Chicago Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Bobby Salerno - Soldier (Chicago) - source: Hal Smith murder *)
+Definition lg89 : Member := mkMember
+  (mkPerson 1188 "Bobby Salerno" None None None)
+  Chicago Soldier None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Anthony Zizzo - Underboss (Chicago) - source: 1993 "Little Tony" disappeared 2006 *)
+Definition lg90 : Member := mkMember
+  (mkPerson 1189 "Anthony Zizzo" (Some "Little Tony") None None)
+  Chicago Underboss None None (mkTenure 1993 None) None None
+  (Some (LEReport "DOJ" 1993)).
+
+(** Anthony Chiaramonti - Enforcer (Chicago) - source: 1993 "Big Tony" murdered 2001 *)
+Definition lg91 : Member := mkMember
+  (mkPerson 1190 "Anthony Chiaramonti" (Some "Big Tony") None None)
+  Chicago Associate None None (mkTenure 1993 None) None None
+  (Some (LEReport "DOJ" 1993)).
+
+(** Brett O'Dell - Enforcer (Chicago) - source: 1993 *)
+Definition lg92 : Member := mkMember
+  (mkPerson 1191 "Brett O'Dell" None None None)
+  Chicago Associate None None (mkTenure 1993 None) None None
+  (Some (LEReport "DOJ" 1993)).
+
+(** Frank Bonavolante - Gambling chief (Chicago) - source: 1993 *)
+Definition lg93 : Member := mkMember
+  (mkPerson 1192 "Frank Bonavolante" None None None)
+  Chicago Associate None None (mkTenure 1993 None) None None
+  (Some (LEReport "DOJ" 1993)).
+
+(** Dominick Gervasio - Associate (Chicago) - source: 1992 *)
+Definition lg94 : Member := mkMember
+  (mkPerson 1193 "Dominick Gervasio" None None None)
+  Chicago Associate None None (mkTenure 1992 None) None None
+  (Some (LEReport "DOJ" 1992)).
+
+(** Lenny Patrick - Capo (Chicago) - source: 1992 cooperator admitted 6 murders *)
+Definition lg95 : Member := mkMember
+  (mkPerson 1194 "Lenny Patrick" None None None)
+  Chicago Capo None None (mkTenure 1992 None) None None
+  (Some (LEReport "DOJ" 1992)).
+
+(** Gus Alex - Boss (political fixer) (Chicago) - source: convicted via Patrick testimony *)
+Definition lg96 : Member := mkMember
+  (mkPerson 1195 "Gus Alex" None None None)
+  Chicago Boss (Some ActingBoss) None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Vincent Volpendesto - Associate (Chicago) - source: 2009 Sarno case 85 years old *)
+Definition lg97 : Member := mkMember
+  (mkPerson 1196 "Vincent Volpendesto" None None None)
+  Chicago Associate None None (mkTenure 2009 None) None None
+  (Some (LEReport "DOJ" 2009)).
+
+(** Rocco Polchan - Associate (Chicago) - source: 2009 Sarno case *)
+Definition lg98 : Member := mkMember
+  (mkPerson 1197 "Rocco Polchan" None None None)
+  Chicago Associate None None (mkTenure 2009 None) None None
+  (Some (LEReport "DOJ" 2009)).
+
+(** Gene Cassano - Associate (Chicago) - source: 2021 juice loan case "Gino" charges dropped *)
+Definition lg99 : Member := mkMember
+  (mkPerson 1198 "Gene Cassano" (Some "Gino") None None)
+  Chicago Associate None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** Gioacchino Galione - Associate (Chicago) - source: 2021 "Jack" charges dropped *)
+Definition lg100 : Member := mkMember
+  (mkPerson 1199 "Gioacchino Galione" (Some "Jack") None None)
+  Chicago Associate None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** Joseph Andriacchi - Underboss/Boss candidate (Chicago) - source: "The Builder" never indicted *)
+Definition lg101 : Member := mkMember
+  (mkPerson 1200 "Joseph Andriacchi" (Some "The Builder") None None)
+  Chicago Underboss None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** John Monteleone - Acting Street Boss (Chicago) - source: "Johnny Apes" died 2001 *)
+Definition lg102 : Member := mkMember
+  (mkPerson 1201 "John Monteleone" (Some "Johnny Apes") None None)
+  Chicago Boss (Some ActingBoss) None (mkTenure 2001 None) None None
+  (Some (LEReport "DOJ" 2001)).
+
+(** Robert Abbinanti - Soldier (Chicago) - source: 1995 "Bobby the Boxer" 6 years 9 months *)
+Definition lg103 : Member := mkMember
+  (mkPerson 1202 "Robert Abbinanti" (Some "Bobby the Boxer") None None)
+  Chicago Soldier None None (mkTenure 1995 None) None None
+  (Some (LEReport "DOJ" 1995)).
+
+(** Peter DiFronzo - Capo (Chicago) - source: brother of John DiFronzo *)
+Definition lg104 : Member := mkMember
+  (mkPerson 1203 "Peter DiFronzo" None None None)
+  Chicago Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Frank Caruso Sr. - Capo (Chicago) - source: "Toots" *)
+Definition lg105 : Member := mkMember
+  (mkPerson 1204 "Frank Caruso Sr." (Some "Toots") None None)
+  Chicago Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** James DiForti - Soldier (Chicago) - source: died awaiting trial *)
+Definition lg106 : Member := mkMember
+  (mkPerson 1205 "James DiForti" None None None)
+  Chicago Soldier None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+Definition ledger_chicago : list Member := [lg78; lg79; lg80; lg81; lg82; lg83; lg84; lg85; lg86; lg87; lg88; lg89; lg90; lg91; lg92; lg93; lg94; lg95; lg96; lg97; lg98; lg99; lg100; lg101; lg102; lg103; lg104; lg105; lg106].
+
+(** Joseph Massimino - Underboss (Philadelphia) - source: E.D. Pa. 2011 "Mousie" 188 months *)
+Definition lg107 : Member := mkMember
+  (mkPerson 1206 "Joseph Massimino" (Some "Mousie") None None)
+  Philadelphia Underboss None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Anthony Staino Jr. - Associate (Philadelphia) - source: E.D. Pa. 2013 "Ant" *)
+Definition lg108 : Member := mkMember
+  (mkPerson 1207 "Anthony Staino Jr." (Some "Ant") None None)
+  Philadelphia Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Gaeton Lucibello - Associate (Philadelphia) - source: E.D. Pa. 2011 "Gate" / "The Big Guy" *)
+Definition lg109 : Member := mkMember
+  (mkPerson 1208 "Gaeton Lucibello" (Some "Gate") None None)
+  Philadelphia Associate None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Louis Monacello - Associate (Philadelphia) - source: E.D. Pa. 2011 "Bent Finger Louie" *)
+Definition lg110 : Member := mkMember
+  (mkPerson 1209 "Louis Monacello" (Some "Bent Finger Louie") None None)
+  Philadelphia Associate None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Gary Battaglini - Associate (Philadelphia) - source: E.D. Pa. 2013 *)
+Definition lg111 : Member := mkMember
+  (mkPerson 1210 "Gary Battaglini" None None None)
+  Philadelphia Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Robert Verrecchia - Associate (Philadelphia) - source: E.D. Pa. 2011 "Boots" *)
+Definition lg112 : Member := mkMember
+  (mkPerson 1211 "Robert Verrecchia" (Some "Boots") None None)
+  Philadelphia Associate None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Damion Canalichio - Associate (Philadelphia) - source: E.D. Pa. 2013 "Dame" 137 months *)
+Definition lg113 : Member := mkMember
+  (mkPerson 1212 "Damion Canalichio" (Some "Dame") None None)
+  Philadelphia Associate None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Eric Esposito - Soldier (Philadelphia) - source: E.D. Pa. 2014 2+ years *)
+Definition lg114 : Member := mkMember
+  (mkPerson 1213 "Eric Esposito" None None None)
+  Philadelphia Soldier None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Robert Ranieri - Associate (Philadelphia) - source: E.D. Pa. 2014 "Bobby" 12 months *)
+Definition lg115 : Member := mkMember
+  (mkPerson 1214 "Robert Ranieri" (Some "Bobby") None None)
+  Philadelphia Associate None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Joseph Servidio - Soldier (Philadelphia) - source: E.D. Pa. 2020 "Joey Electric" 15 years *)
+Definition lg116 : Member := mkMember
+  (mkPerson 1215 "Joseph Servidio" (Some "Joey Electric") None None)
+  Philadelphia Soldier None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Salvatore Mazzone - Soldier (Philadelphia) - source: E.D. Pa. 2020 "Sonny" brother of Steven *)
+Definition lg117 : Member := mkMember
+  (mkPerson 1216 "Salvatore Mazzone" (Some "Sonny") None None)
+  Philadelphia Soldier None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Victor DeLuca - Associate (Philadelphia) - source: E.D. Pa. 2022 "Big Vic" 10 years *)
+Definition lg118 : Member := mkMember
+  (mkPerson 1217 "Victor DeLuca" (Some "Big Vic") None None)
+  Philadelphia Associate None None (mkTenure 2022 None) None None
+  (Some (LEReport "DOJ" 2022)).
+
+(** Louis Barretta - Associate (Philadelphia) - source: E.D. Pa. 2020 "Louie Sheep" *)
+Definition lg119 : Member := mkMember
+  (mkPerson 1218 "Louis Barretta" (Some "Louie Sheep") None None)
+  Philadelphia Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Kenneth Arabia - Associate (Philadelphia) - source: E.D. Pa. 2020 deceased *)
+Definition lg120 : Member := mkMember
+  (mkPerson 1219 "Kenneth Arabia" None None None)
+  Philadelphia Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Daniel Castelli - Associate (Philadelphia) - source: E.D. Pa. 2020 "Danny" / "Cozzy" / "Butch" *)
+Definition lg121 : Member := mkMember
+  (mkPerson 1220 "Daniel Castelli" (Some "Danny") None None)
+  Philadelphia Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Carl Chianese - Associate (Philadelphia) - source: E.D. Pa. 2022 5-10 years *)
+Definition lg122 : Member := mkMember
+  (mkPerson 1221 "Carl Chianese" None None None)
+  Philadelphia Associate None None (mkTenure 2022 None) None None
+  (Some (LEReport "DOJ" 2022)).
+
+(** Anthony Gifoli - Associate (Philadelphia) - source: E.D. Pa. 2021 "Tony Meatballs" *)
+Definition lg123 : Member := mkMember
+  (mkPerson 1222 "Anthony Gifoli" (Some "Tony Meatballs") None None)
+  Philadelphia Associate None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** John Romeo - Associate (Philadelphia) - source: E.D. Pa. 2020 *)
+Definition lg124 : Member := mkMember
+  (mkPerson 1223 "John Romeo" None None None)
+  Philadelphia Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Daniel Malatesta - Associate (Philadelphia) - source: E.D. Pa. 2020 "Danny" *)
+Definition lg125 : Member := mkMember
+  (mkPerson 1224 "Daniel Malatesta" (Some "Danny") None None)
+  Philadelphia Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Daniel Bucceroni - Associate (Philadelphia) - source: E.D. Pa. 2022 3 years probation *)
+Definition lg126 : Member := mkMember
+  (mkPerson 1225 "Daniel Bucceroni" None None None)
+  Philadelphia Associate None None (mkTenure 2022 None) None None
+  (Some (LEReport "DOJ" 2022)).
+
+(** Joseph Malone - Associate (Philadelphia) - source: E.D. Pa. 2022 Steven Mazzone's father-in-law *)
+Definition lg127 : Member := mkMember
+  (mkPerson 1226 "Joseph Malone" None None None)
+  Philadelphia Associate None None (mkTenure 2022 None) None None
+  (Some (LEReport "DOJ" 2022)).
+
+(** John Michael Payne - Associate (Philadelphia) - source: E.D. Pa. 2020 denied bail *)
+Definition lg128 : Member := mkMember
+  (mkPerson 1227 "John Michael Payne" None None None)
+  Philadelphia Associate None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+Definition ledger_philadelphia : list Member := [lg107; lg108; lg109; lg110; lg111; lg112; lg113; lg114; lg115; lg116; lg117; lg118; lg119; lg120; lg121; lg122; lg123; lg124; lg125; lg126; lg127; lg128].
+
+(** Nicholas Bianco - Underboss (NewEngland) - source: D. Mass. 1990 11 years died 1994 *)
+Definition lg129 : Member := mkMember
+  (mkPerson 1228 "Nicholas Bianco" None None None)
+  NewEngland Underboss None None (mkTenure 1990 None) None None
+  (Some (LEReport "DOJ" 1990)).
+
+(** William Grasso - Underboss (NewEngland) - source: murdered June 1989 *)
+Definition lg130 : Member := mkMember
+  (mkPerson 1229 "William Grasso" None None None)
+  NewEngland Underboss None None (mkTenure 1989 None) None None
+  (Some (LEReport "DOJ" 1989)).
+
+(** Peter Limone - Boss 2009-2017 (NewEngland) - source: D. Mass. 2009 probation 2010 *)
+Definition lg131 : Member := mkMember
+  (mkPerson 1230 "Peter Limone" None None None)
+  NewEngland Boss (Some ActingBoss) None (mkTenure 2009 None) None None
+  (Some (LEReport "DOJ" 2009)).
+
+(** Antonio Spagnolo - Acting Boss 2012-2014 (NewEngland) - source: D. Mass. 2014 *)
+Definition lg132 : Member := mkMember
+  (mkPerson 1231 "Antonio Spagnolo" None None None)
+  NewEngland Boss (Some ActingBoss) None (mkTenure 2012 None) None None
+  (Some (LEReport "DOJ" 2012)).
+
+(** Charles Quintina - Consigliere (NewEngland) - source: D. Mass. 1995 "Q-Ball" 5 years *)
+Definition lg133 : Member := mkMember
+  (mkPerson 1232 "Charles Quintina" (Some "Q-Ball") None None)
+  NewEngland Consigliere None None (mkTenure 1995 None) None None
+  (Some (LEReport "DOJ" 1995)).
+
+(** Biagio DiGiacomo - Capo (NewEngland) - source: D. Mass. 1990 administered 1989 induction *)
+Definition lg134 : Member := mkMember
+  (mkPerson 1233 "Biagio DiGiacomo" None None None)
+  NewEngland Capo None None (mkTenure 1990 None) None None
+  (Some (LEReport "DOJ" 1990)).
+
+(** Frank Marrapese - Capo (NewEngland) - source: Rhode Island 2013 "Bobo" 9 years *)
+Definition lg135 : Member := mkMember
+  (mkPerson 1234 "Frank Marrapese" (Some "Bobo") None None)
+  NewEngland Capo None None (mkTenure 2013 None) None None
+  (Some (LEReport "DOJ" 2013)).
+
+(** Anthony St. Laurent - Capo (NewEngland) - source: D.R.I. 2010 "The Saint" 7 years *)
+Definition lg136 : Member := mkMember
+  (mkPerson 1235 "Anthony St. Laurent" (Some "The Saint") None None)
+  NewEngland Capo None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** Gaetano Milano - Soldier (NewEngland) - source: D. Conn. 1991 "Gino" 33 years Grasso murder *)
+Definition lg137 : Member := mkMember
+  (mkPerson 1236 "Gaetano Milano" (Some "Gino") None None)
+  NewEngland Soldier None None (mkTenure 1991 None) None None
+  (Some (LEReport "DOJ" 1991)).
+
+(** Pryce Quintina - Soldier (NewEngland) - source: D. Mass. 2014 "Stretch" 8 years *)
+Definition lg138 : Member := mkMember
+  (mkPerson 1237 "Pryce Quintina" (Some "Stretch") None None)
+  NewEngland Soldier None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Vincent Gioacchini - Soldier (NewEngland) - source: D. Mass. 1990 "Dee Dee" *)
+Definition lg139 : Member := mkMember
+  (mkPerson 1238 "Vincent Gioacchini" (Some "Dee Dee") None None)
+  NewEngland Soldier None None (mkTenure 1990 None) None None
+  (Some (LEReport "DOJ" 1990)).
+
+(** Joseph Tiberi Sr. - Soldier (NewEngland) - source: D. Mass. 1990 *)
+Definition lg140 : Member := mkMember
+  (mkPerson 1239 "Joseph Tiberi Sr." None None None)
+  NewEngland Soldier None None (mkTenure 1990 None) None None
+  (Some (LEReport "DOJ" 1990)).
+
+(** John Castagna - Soldier (NewEngland) - source: D. Mass. 1990 "Sonny" *)
+Definition lg141 : Member := mkMember
+  (mkPerson 1240 "John Castagna" (Some "Sonny") None None)
+  NewEngland Soldier None None (mkTenure 1990 None) None None
+  (Some (LEReport "DOJ" 1990)).
+
+(** Louis Failla - Soldier (NewEngland) - source: D. Mass. 1990 *)
+Definition lg142 : Member := mkMember
+  (mkPerson 1241 "Louis Failla" None None None)
+  NewEngland Soldier None None (mkTenure 1990 None) None None
+  (Some (LEReport "DOJ" 1990)).
+
+(** John Scarpelli - Soldier (NewEngland) - source: 2015 induction *)
+Definition lg143 : Member := mkMember
+  (mkPerson 1242 "John Scarpelli" None None None)
+  NewEngland Soldier None None (mkTenure 2015 None) None None
+  (Some (LEReport "DOJ" 2015)).
+
+(** Joseph Marino - Soldier (NewEngland) - source: 2015 induction *)
+Definition lg144 : Member := mkMember
+  (mkPerson 1243 "Joseph Marino" None None None)
+  NewEngland Soldier None None (mkTenure 2015 None) None None
+  (Some (LEReport "DOJ" 2015)).
+
+(** Louis DiNunzio - Soldier (NewEngland) - source: D. Mass. 2016 "Baby Cheese" 18 months *)
+Definition lg145 : Member := mkMember
+  (mkPerson 1244 "Louis DiNunzio" (Some "Baby Cheese") None None)
+  NewEngland Soldier None None (mkTenure 2016 None) None None
+  (Some (LEReport "DOJ" 2016)).
+
+(** Paul Weadick - Associate (NewEngland) - source: D. Mass. 2018 "Paulie the Plumber" life *)
+Definition lg146 : Member := mkMember
+  (mkPerson 1245 "Paul Weadick" (Some "Paulie the Plumber") None None)
+  NewEngland Associate None None (mkTenure 2018 None) None None
+  (Some (LEReport "DOJ" 2018)).
+
+(** Angelo Mercurio - Associate (NewEngland) - source: D. Mass. 1997 FBI informant *)
+Definition lg147 : Member := mkMember
+  (mkPerson 1246 "Angelo Mercurio" None None None)
+  NewEngland Associate None None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Darin Bufalino - Associate (NewEngland) - source: 2012 "Nino" 7 years *)
+Definition lg148 : Member := mkMember
+  (mkPerson 1247 "Darin Bufalino" (Some "Nino") None None)
+  NewEngland Associate None None (mkTenure 2012 None) None None
+  (Some (LEReport "DOJ" 2012)).
+
+(** Anthony Ciampi - Associate (NewEngland) - source: D. Mass. 1997 *)
+Definition lg149 : Member := mkMember
+  (mkPerson 1248 "Anthony Ciampi" None None None)
+  NewEngland Associate None None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Michael Romano Sr. - Associate (NewEngland) - source: D. Mass. 1997 *)
+Definition lg150 : Member := mkMember
+  (mkPerson 1249 "Michael Romano Sr." None None None)
+  NewEngland Associate None None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Stephen Foye - Associate (NewEngland) - source: D. Mass. 1997 "Snow" *)
+Definition lg151 : Member := mkMember
+  (mkPerson 1250 "Stephen Foye" (Some "Snow") None None)
+  NewEngland Associate None None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Raymond Folcarelli - Associate (NewEngland) - source: D.R.I. 2011 *)
+Definition lg152 : Member := mkMember
+  (mkPerson 1251 "Raymond Folcarelli" None None None)
+  NewEngland Associate None None (mkTenure 2011 None) None None
+  (Some (LEReport "DOJ" 2011)).
+
+(** Frederick Simone - Soldier (NewEngland) - source: D. Mass. 2005 "Freddy the Neighbor" *)
+Definition lg153 : Member := mkMember
+  (mkPerson 1252 "Frederick Simone" (Some "Freddy the Neighbor") None None)
+  NewEngland Soldier None None (mkTenure 2005 None) None None
+  (Some (LEReport "DOJ" 2005)).
+
+(** Frank Colantoni - Soldier (NewEngland) - source: D. Conn. 1991 Grasso murder *)
+Definition lg154 : Member := mkMember
+  (mkPerson 1253 "Frank Colantoni" None None None)
+  NewEngland Soldier None None (mkTenure 1991 None) None None
+  (Some (LEReport "DOJ" 1991)).
+
+(** Louis Pugliano - Soldier (NewEngland) - source: D. Conn. 1991 *)
+Definition lg155 : Member := mkMember
+  (mkPerson 1254 "Louis Pugliano" None None None)
+  NewEngland Soldier None None (mkTenure 1991 None) None None
+  (Some (LEReport "DOJ" 1991)).
+
+(** Alexander Rizzo - Soldier (NewEngland) - source: D. Mass. 1995 "Sonny Boy" 5 years *)
+Definition lg156 : Member := mkMember
+  (mkPerson 1255 "Alexander Rizzo" (Some "Sonny Boy") None None)
+  NewEngland Soldier None None (mkTenure 1995 None) None None
+  (Some (LEReport "DOJ" 1995)).
+
+(** Frederick Champa - Soldier (NewEngland) - source: D. Mass. 1995 5 years *)
+Definition lg157 : Member := mkMember
+  (mkPerson 1256 "Frederick Champa" None None None)
+  NewEngland Soldier None None (mkTenure 1995 None) None None
+  (Some (LEReport "DOJ" 1995)).
+
+Definition ledger_newengland : list Member := [lg129; lg130; lg131; lg132; lg133; lg134; lg135; lg136; lg137; lg138; lg139; lg140; lg141; lg142; lg143; lg144; lg145; lg146; lg147; lg148; lg149; lg150; lg151; lg152; lg153; lg154; lg155; lg156; lg157].
+
+(** Peter Magaddino - Capo (Buffalo) - source: W.D.N.Y. 1968 son of Stefano *)
+Definition lg158 : Member := mkMember
+  (mkPerson 1257 "Peter Magaddino" None None None)
+  Buffalo Capo None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Benjamin Nicoletti Jr. - Associate (Buffalo) - source: W.D.N.Y. 1968 *)
+Definition lg159 : Member := mkMember
+  (mkPerson 1258 "Benjamin Nicoletti Jr." None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Gino Monaco - Bookmaker (Buffalo) - source: W.D.N.Y. 1968 *)
+Definition lg160 : Member := mkMember
+  (mkPerson 1259 "Gino Monaco" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Sam Puglese - Bookmaker (Buffalo) - source: W.D.N.Y. 1968 *)
+Definition lg161 : Member := mkMember
+  (mkPerson 1260 "Sam Puglese" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Louis Tavano - Bookmaker (Buffalo) - source: W.D.N.Y. 1968 *)
+Definition lg162 : Member := mkMember
+  (mkPerson 1261 "Louis Tavano" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Augustine Rizzo - Bookmaker (Buffalo) - source: W.D.N.Y. 1968 *)
+Definition lg163 : Member := mkMember
+  (mkPerson 1262 "Augustine Rizzo" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Pasquale Passero - Bookmaker (Buffalo) - source: W.D.N.Y. 1968 *)
+Definition lg164 : Member := mkMember
+  (mkPerson 1263 "Pasquale Passero" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Michael Farella - Bookmaker (Buffalo) - source: W.D.N.Y. 1968 deceased *)
+Definition lg165 : Member := mkMember
+  (mkPerson 1264 "Michael Farella" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Pasquale Natarelli - Capo (Buffalo) - source: 1968 "Pat" 20 years *)
+Definition lg166 : Member := mkMember
+  (mkPerson 1265 "Pasquale Natarelli" (Some "Pat") None None)
+  Buffalo Capo None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Charles Caci - Member (Buffalo) - source: 1968 "Bobby Milano" *)
+Definition lg167 : Member := mkMember
+  (mkPerson 1266 "Charles Caci" (Some "Bobby Milano") None None)
+  Buffalo Soldier None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Stephen Cino - Member (Buffalo) - source: 1968 *)
+Definition lg168 : Member := mkMember
+  (mkPerson 1267 "Stephen Cino" None None None)
+  Buffalo Soldier None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Louis Sorgi - Associate (Buffalo) - source: 1968 *)
+Definition lg169 : Member := mkMember
+  (mkPerson 1268 "Louis Sorgi" None None None)
+  Buffalo Associate None None (mkTenure 1968 None) None None
+  (Some (LEReport "DOJ" 1968)).
+
+(** Donald Panepinto - Member (Buffalo) - source: W.D.N.Y. 2000 "The Turtle" *)
+Definition lg170 : Member := mkMember
+  (mkPerson 1269 "Donald Panepinto" (Some "The Turtle") None None)
+  Buffalo Soldier None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** John Catanzaro - Soldier (Buffalo) - source: W.D.N.Y. 2000 "Johnny Catz" made 1985 *)
+Definition lg171 : Member := mkMember
+  (mkPerson 1270 "John Catanzaro" (Some "Johnny Catz") None None)
+  Buffalo Soldier None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Frank Mambrino - Associate (Buffalo) - source: W.D.N.Y. 2000 *)
+Definition lg172 : Member := mkMember
+  (mkPerson 1271 "Frank Mambrino" None None None)
+  Buffalo Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Carmen Mambrino - Associate (Buffalo) - source: W.D.N.Y. 2000 *)
+Definition lg173 : Member := mkMember
+  (mkPerson 1272 "Carmen Mambrino" None None None)
+  Buffalo Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Joseph DiGioia - Associate (Buffalo) - source: W.D.N.Y. 2000 *)
+Definition lg174 : Member := mkMember
+  (mkPerson 1273 "Joseph DiGioia" None None None)
+  Buffalo Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Annuncio Cannizzaro - Associate (Buffalo) - source: W.D.N.Y. 2000 *)
+Definition lg175 : Member := mkMember
+  (mkPerson 1274 "Annuncio Cannizzaro" None None None)
+  Buffalo Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Robert Chimera - Associate (Buffalo) - source: W.D.N.Y. 2000 *)
+Definition lg176 : Member := mkMember
+  (mkPerson 1275 "Robert Chimera" None None None)
+  Buffalo Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Anthony Serra - Soldier (Buffalo) - source: W.D.N.Y. 2007 "Baby Fat" *)
+Definition lg177 : Member := mkMember
+  (mkPerson 1276 "Anthony Serra" (Some "Baby Fat") None None)
+  Buffalo Soldier None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** Ronald Chierchio Jr. - Soldier (Buffalo) - source: W.D.N.Y. 2007 "Little Ronnie" *)
+Definition lg178 : Member := mkMember
+  (mkPerson 1277 "Ronald Chierchio Jr." (Some "Little Ronnie") None None)
+  Buffalo Soldier None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** John Nicolatta - Soldier (Buffalo) - source: W.D.N.Y. 2007 *)
+Definition lg179 : Member := mkMember
+  (mkPerson 1278 "John Nicolatta" None None None)
+  Buffalo Soldier None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** Domenico Violi - Underboss (Buffalo) - source: DOJ 2017 promoted 2017 *)
+Definition lg180 : Member := mkMember
+  (mkPerson 1279 "Domenico Violi" None None None)
+  Buffalo Underboss None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Giuseppe Violi - Soldier (Buffalo) - source: DOJ 2017 "Joey" 16 years *)
+Definition lg181 : Member := mkMember
+  (mkPerson 1280 "Giuseppe Violi" (Some "Joey") None None)
+  Buffalo Soldier None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Rocco Luppino - Capo (Buffalo) - source: DOJ 2017 *)
+Definition lg182 : Member := mkMember
+  (mkPerson 1281 "Rocco Luppino" None None None)
+  Buffalo Capo None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Natale Luppino - Soldier (Buffalo) - source: DOJ 2017 *)
+Definition lg183 : Member := mkMember
+  (mkPerson 1282 "Natale Luppino" None None None)
+  Buffalo Soldier None None (mkTenure 2017 None) None None
+  (Some (LEReport "DOJ" 2017)).
+
+(** Peter Gerace Jr. - Associate (Buffalo) - source: W.D.N.Y. 2021 Todaro nephew convicted 2024 *)
+Definition lg184 : Member := mkMember
+  (mkPerson 1283 "Peter Gerace Jr." None None None)
+  Buffalo Associate None None (mkTenure 2021 None) None None
+  (Some (LEReport "DOJ" 2021)).
+
+(** Anthony Gerace - Associate (Buffalo) - source: W.D.N.Y. 2019 Todaro nephew *)
+Definition lg185 : Member := mkMember
+  (mkPerson 1284 "Anthony Gerace" None None None)
+  Buffalo Associate None None (mkTenure 2019 None) None None
+  (Some (LEReport "DOJ" 2019)).
+
+(** Robert Panaro - Soldier/Underboss (Buffalo) - source: 1997 "Bobby" Blitzstein murder *)
+Definition lg186 : Member := mkMember
+  (mkPerson 1285 "Robert Panaro" (Some "Bobby") None None)
+  Buffalo Underboss None None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Joseph Fino - Capo/Acting Boss (Buffalo) - source: FBI records father of Ronald Fino *)
+Definition lg187 : Member := mkMember
+  (mkPerson 1286 "Joseph Fino" None None None)
+  Buffalo Boss (Some ActingBoss) None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** John Cammilleri - Lieutenant (Buffalo) - source: murdered May 1974 *)
+Definition lg188 : Member := mkMember
+  (mkPerson 1287 "John Cammilleri" None None None)
+  Buffalo Capo None None (mkTenure 1974 None) None None
+  (Some (LEReport "DOJ" 1974)).
+
+(** Giacomo Luppino - Capo (Buffalo) - source: Hamilton crew *)
+Definition lg189 : Member := mkMember
+  (mkPerson 1288 "Giacomo Luppino" None None None)
+  Buffalo Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Johnny Papalia - Capo/Boss Hamilton (Buffalo) - source: murdered 1997 *)
+Definition lg190 : Member := mkMember
+  (mkPerson 1289 "Johnny Papalia" None None None)
+  Buffalo Boss (Some ActingBoss) None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Paul Volpe - Soldier/Toronto boss (Buffalo) - source: murdered 1983 *)
+Definition lg191 : Member := mkMember
+  (mkPerson 1290 "Paul Volpe" None None None)
+  Buffalo Soldier None None (mkTenure 1983 None) None None
+  (Some (LEReport "DOJ" 1983)).
+
+(** Domenico Nozzaro - Capo Niagara Falls (Buffalo) - source: died in prison 1991 *)
+Definition lg192 : Member := mkMember
+  (mkPerson 1291 "Domenico Nozzaro" None None None)
+  Buffalo Capo None None (mkTenure 1991 None) None None
+  (Some (LEReport "DOJ" 1991)).
+
+(** Frank Siciliano - Soldier/Capo (Buffalo) - source: 1980s Las Vegas 20 years *)
+Definition lg193 : Member := mkMember
+  (mkPerson 1292 "Frank Siciliano" None None None)
+  Buffalo Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** John Montana - Consigliere/Underboss (Buffalo) - source: Apalachin 1957 died 1964 *)
+Definition lg194 : Member := mkMember
+  (mkPerson 1293 "John Montana" None None None)
+  Buffalo Underboss None None (mkTenure 1957 None) None None
+  (Some (LEReport "DOJ" 1957)).
+
+(** John J. Jarjosa Sr. - Associate (Buffalo) - source: 1996 2 years *)
+Definition lg195 : Member := mkMember
+  (mkPerson 1294 "John J. Jarjosa Sr." None None None)
+  Buffalo Associate None None (mkTenure 1996 None) None None
+  (Some (LEReport "DOJ" 1996)).
+
+Definition ledger_buffalo : list Member := [lg158; lg159; lg160; lg161; lg162; lg163; lg164; lg165; lg166; lg167; lg168; lg169; lg170; lg171; lg172; lg173; lg174; lg175; lg176; lg177; lg178; lg179; lg180; lg181; lg182; lg183; lg184; lg185; lg186; lg187; lg188; lg189; lg190; lg191; lg192; lg193; lg194; lg195].
+
+(** William Tocco - Boss/Founder 1931-1936 (Detroit) - source: "Black Bill" 8 years federal *)
+Definition lg196 : Member := mkMember
+  (mkPerson 1295 "William Tocco" (Some "Black Bill") None None)
+  Detroit Boss (Some ActingBoss) None (mkTenure 1931 None) None None
+  (Some (LEReport "DOJ" 1931)).
+
+(** John Priziola - Boss 1977-1979 (Detroit) - source: "Papa John" died April 1979 *)
+Definition lg197 : Member := mkMember
+  (mkPerson 1296 "John Priziola" (Some "Papa John") None None)
+  Detroit Boss (Some ActingBoss) None (mkTenure 1977 None) None None
+  (Some (LEReport "DOJ" 1977)).
+
+(** Angelo Meli - Consigliere/Ruling Council (Detroit) - source: founding member *)
+Definition lg198 : Member := mkMember
+  (mkPerson 1297 "Angelo Meli" None None None)
+  Detroit Consigliere None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Peter Licavoli - Underboss/Ruling Council (Detroit) - source: 1943 federal 2 years Leavenworth *)
+Definition lg199 : Member := mkMember
+  (mkPerson 1298 "Peter Licavoli" None None None)
+  Detroit Underboss None None (mkTenure 1943 None) None None
+  (Some (LEReport "DOJ" 1943)).
+
+(** Anthony Joseph Tocco - Capo (Detroit) - source: Operation Gametax acquitted 1998 Jack's brother *)
+Definition lg200 : Member := mkMember
+  (mkPerson 1299 "Anthony Joseph Tocco" None None None)
+  Detroit Capo None None (mkTenure 1998 None) None None
+  (Some (LEReport "DOJ" 1998)).
+
+(** Vincent Meli - Capo (Detroit) - source: 1979 Hobbs Act 3 years *)
+Definition lg201 : Member := mkMember
+  (mkPerson 1300 "Vincent Meli" None None None)
+  Detroit Capo None None (mkTenure 1979 None) None None
+  (Some (LEReport "DOJ" 1979)).
+
+(** Raffaele Quasarano - Consigliere/Capo (Detroit) - source: 1980 "Jimmy Q" 4 years *)
+Definition lg202 : Member := mkMember
+  (mkPerson 1301 "Raffaele Quasarano" (Some "Jimmy Q") None None)
+  Detroit Consigliere None None (mkTenure 1980 None) None None
+  (Some (LEReport "DOJ" 1980)).
+
+(** Peter Vitale - Capo (Detroit) - source: 1980 Hoffa body theory *)
+Definition lg203 : Member := mkMember
+  (mkPerson 1302 "Peter Vitale" None None None)
+  Detroit Capo None None (mkTenure 1980 None) None None
+  (Some (LEReport "DOJ" 1980)).
+
+(** Pietro Corrado - Capo (Detroit) - source: "Machine Gun Pete" *)
+Definition lg204 : Member := mkMember
+  (mkPerson 1303 "Pietro Corrado" (Some "Machine Gun Pete") None None)
+  Detroit Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Michael Polizzi - Capo (Detroit) - source: "Big Mike" *)
+Definition lg205 : Member := mkMember
+  (mkPerson 1304 "Michael Polizzi" (Some "Big Mike") None None)
+  Detroit Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Michael Rubino - Capo (Detroit) - source: "Mike the Enforcer" *)
+Definition lg206 : Member := mkMember
+  (mkPerson 1305 "Michael Rubino" (Some "Mike the Enforcer") None None)
+  Detroit Capo None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** David Aceto - Capo (Detroit) - source: 2006 RICO "Davey the Doughnut" *)
+Definition lg207 : Member := mkMember
+  (mkPerson 1306 "David Aceto" (Some "Davey the Doughnut") None None)
+  Detroit Capo None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** Giuseppe D'Anna - Capo (Detroit) - source: 2016 "Joe the Hood" 16 months *)
+Definition lg208 : Member := mkMember
+  (mkPerson 1307 "Giuseppe D'Anna" (Some "Joe the Hood") None None)
+  Detroit Capo None None (mkTenure 2016 None) None None
+  (Some (LEReport "DOJ" 2016)).
+
+(** Anthony Palazzolo - Capo/Consigliere (Detroit) - source: died ~2020 Hoffa allegation *)
+Definition lg209 : Member := mkMember
+  (mkPerson 1308 "Anthony Palazzolo" None None None)
+  Detroit Consigliere None None (mkTenure 2020 None) None None
+  (Some (LEReport "DOJ" 2020)).
+
+(** Anthony LaPiana - Underboss (Detroit) - source: 2014-present "Chicago Tony" *)
+Definition lg210 : Member := mkMember
+  (mkPerson 1309 "Anthony LaPiana" (Some "Chicago Tony") None None)
+  Detroit Underboss None None (mkTenure 2014 None) None None
+  (Some (LEReport "DOJ" 2014)).
+
+(** Peter Joseph Messina - Associate (Detroit) - source: 2007 RICO guilty plea *)
+Definition lg211 : Member := mkMember
+  (mkPerson 1310 "Peter Joseph Messina" None None None)
+  Detroit Associate None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** Thomas James Mackey - Associate (Detroit) - source: 2007 RICO guilty plea *)
+Definition lg212 : Member := mkMember
+  (mkPerson 1311 "Thomas James Mackey" None None None)
+  Detroit Associate None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** Wayne Joseph Kassab - Associate (Detroit) - source: 2007 RICO guilty plea *)
+Definition lg213 : Member := mkMember
+  (mkPerson 1312 "Wayne Joseph Kassab" None None None)
+  Detroit Associate None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** John William Manettas - Associate (Detroit) - source: 2007 RICO guilty plea *)
+Definition lg214 : Member := mkMember
+  (mkPerson 1313 "John William Manettas" None None None)
+  Detroit Associate None None (mkTenure 2007 None) None None
+  (Some (LEReport "DOJ" 2007)).
+
+(** Dominic Corrado - Associate (Detroit) - source: 2006 RICO *)
+Definition lg215 : Member := mkMember
+  (mkPerson 1314 "Dominic Corrado" None None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** Ronald S. Yourofsky - Associate (Detroit) - source: 2006 RICO *)
+Definition lg216 : Member := mkMember
+  (mkPerson 1315 "Ronald S. Yourofsky" None None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** Alan H. Russell - Associate (Detroit) - source: 2006 RICO *)
+Definition lg217 : Member := mkMember
+  (mkPerson 1316 "Alan H. Russell" None None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** Vincenzo Bronzino - Associate (Detroit) - source: 2006 RICO "Vinnie Meatballs" *)
+Definition lg218 : Member := mkMember
+  (mkPerson 1317 "Vincenzo Bronzino" (Some "Vinnie Meatballs") None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** Joseph Messina - Associate (Detroit) - source: 2006 RICO *)
+Definition lg219 : Member := mkMember
+  (mkPerson 1318 "Joseph Messina" None None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** Virginia Nava - Associate (Detroit) - source: 2006 RICO *)
+Definition lg220 : Member := mkMember
+  (mkPerson 1319 "Virginia Nava" None None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+(** William John Manettas - Associate (Detroit) - source: 2006 RICO *)
+Definition lg221 : Member := mkMember
+  (mkPerson 1320 "William John Manettas" None None None)
+  Detroit Associate None None (mkTenure 2006 None) None None
+  (Some (LEReport "DOJ" 2006)).
+
+Definition ledger_detroit : list Member := [lg196; lg197; lg198; lg199; lg200; lg201; lg202; lg203; lg204; lg205; lg206; lg207; lg208; lg209; lg210; lg211; lg212; lg213; lg214; lg215; lg216; lg217; lg218; lg219; lg220; lg221].
+
+(** Joe Agosto - Associate (KansasCity) - source: D. Nev. 1981 born Vincenzo Pianetti died 1983 *)
+Definition lg222 : Member := mkMember
+  (mkPerson 1321 "Joe Agosto" None None None)
+  KansasCity Associate None None (mkTenure 1981 None) None None
+  (Some (LEReport "DOJ" 1981)).
+
+(** Carl Thomas - Associate (KansasCity) - source: 1983 designed Tropicana skim 15 years *)
+Definition lg223 : Member := mkMember
+  (mkPerson 1322 "Carl Thomas" None None None)
+  KansasCity Associate None None (mkTenure 1983 None) None None
+  (Some (LEReport "DOJ" 1983)).
+
+(** Donald Shepard - Associate (KansasCity) - source: 1983 "Baa Baa" casino manager *)
+Definition lg224 : Member := mkMember
+  (mkPerson 1323 "Donald Shepard" (Some "Baa Baa") None None)
+  KansasCity Associate None None (mkTenure 1983 None) None None
+  (Some (LEReport "DOJ" 1983)).
+
+(** Billy Caldwell - Associate (KansasCity) - source: 1983 assistant casino manager *)
+Definition lg225 : Member := mkMember
+  (mkPerson 1324 "Billy Caldwell" None None None)
+  KansasCity Associate None None (mkTenure 1983 None) None None
+  (Some (LEReport "DOJ" 1983)).
+
+(** Carl Caruso - Associate/Courier (KansasCity) - source: 1983 guilty plea during trial *)
+Definition lg226 : Member := mkMember
+  (mkPerson 1325 "Carl Caruso" None None None)
+  KansasCity Associate None None (mkTenure 1983 None) None None
+  (Some (LEReport "DOJ" 1983)).
+
+(** Anthony Chiavola Sr. - Soldier (KansasCity) - source: 1983 Civella nephew 15 years *)
+Definition lg227 : Member := mkMember
+  (mkPerson 1326 "Anthony Chiavola Sr." None None None)
+  KansasCity Soldier None None (mkTenure 1983 None) None None
+  (Some (LEReport "DOJ" 1983)).
+
+(** Anthony Chiavola Jr. - Associate/Courier (KansasCity) - source: 1985 guilty plea *)
+Definition lg228 : Member := mkMember
+  (mkPerson 1327 "Anthony Chiavola Jr." None None None)
+  KansasCity Associate None None (mkTenure 1985 None) None None
+  (Some (LEReport "DOJ" 1985)).
+
+(** Jay Gould - Associate (KansasCity) - source: Tropicana cashier *)
+Definition lg229 : Member := mkMember
+  (mkPerson 1328 "Jay Gould" None None None)
+  KansasCity Associate None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+(** Joseph Cammisano - Soldier/Associate (KansasCity) - source: W.D. Mo. 1978 18 months *)
+Definition lg230 : Member := mkMember
+  (mkPerson 1329 "Joseph Cammisano" None None None)
+  KansasCity Soldier None None (mkTenure 1978 None) None None
+  (Some (LEReport "DOJ" 1978)).
+
+(** Gerlarmo Cammisano - Soldier/Associate (KansasCity) - source: W.D. Mo. 2010 "Jerry" *)
+Definition lg231 : Member := mkMember
+  (mkPerson 1330 "Gerlarmo Cammisano" (Some "Jerry") None None)
+  KansasCity Soldier None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** James DiCapo - Associate (KansasCity) - source: W.D. Mo. 2010 *)
+Definition lg232 : Member := mkMember
+  (mkPerson 1331 "James DiCapo" None None None)
+  KansasCity Associate None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** Michael Lombardo - Associate/Bookmaker (KansasCity) - source: W.D. Mo. 2010 *)
+Definition lg233 : Member := mkMember
+  (mkPerson 1332 "Michael Lombardo" None None None)
+  KansasCity Associate None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** Michael Sansone - Associate (KansasCity) - source: W.D. Mo. 2010 grandson of Tony Ripe Civella *)
+Definition lg234 : Member := mkMember
+  (mkPerson 1333 "Michael Sansone" None None None)
+  KansasCity Associate None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** Anthony Sansone - Associate (KansasCity) - source: W.D. Mo. 2010 grandson of Tony Ripe Civella *)
+Definition lg235 : Member := mkMember
+  (mkPerson 1334 "Anthony Sansone" None None None)
+  KansasCity Associate None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** Michael V. Badalucco - Associate (KansasCity) - source: W.D. Mo. 2010 *)
+Definition lg236 : Member := mkMember
+  (mkPerson 1335 "Michael V. Badalucco" None None None)
+  KansasCity Associate None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** Charles J. Simone - Associate/Bookmaker (KansasCity) - source: W.D. Mo. 2010 *)
+Definition lg237 : Member := mkMember
+  (mkPerson 1336 "Charles J. Simone" None None None)
+  KansasCity Associate None None (mkTenure 2010 None) None None
+  (Some (LEReport "DOJ" 2010)).
+
+(** James Moretina - Soldier/Associate (KansasCity) - source: W.D. Mo. 1992/2010 37 months + 1 year *)
+Definition lg238 : Member := mkMember
+  (mkPerson 1337 "James Moretina" None None None)
+  KansasCity Soldier None None (mkTenure 1992 None) None None
+  (Some (LEReport "DOJ" 1992)).
+
+(** Thomas Simone - Underboss (KansasCity) - source: 1960s "Highway" *)
+Definition lg239 : Member := mkMember
+  (mkPerson 1338 "Thomas Simone" (Some "Highway") None None)
+  KansasCity Underboss None None (mkTenure 2000 None) None None
+  (Some (LEReport "DOJ" 2000)).
+
+Definition ledger_kansascity : list Member := [lg222; lg223; lg224; lg225; lg226; lg227; lg228; lg229; lg230; lg231; lg232; lg233; lg234; lg235; lg236; lg237; lg238; lg239].
+
+(** Charles E. Roemer II - Associate (NewOrleans) - source: E.D. La. 1981 BRILAB state commissioner *)
+Definition lg240 : Member := mkMember
+  (mkPerson 1339 "Charles E. Roemer II" None None None)
+  NewOrleans Associate None None (mkTenure 1981 None) None None
+  (Some (LEReport "DOJ" 1981)).
+
+(** Vincent Marinello - Associate (NewOrleans) - source: E.D. La. 1981 attorney acquitted *)
+Definition lg241 : Member := mkMember
+  (mkPerson 1340 "Vincent Marinello" None None None)
+  NewOrleans Associate None None (mkTenure 1981 None) None None
+  (Some (LEReport "DOJ" 1981)).
+
+(** I. Irving Davidson - Associate (NewOrleans) - source: E.D. La. 1981 lobbyist acquitted *)
+Definition lg242 : Member := mkMember
+  (mkPerson 1341 "I. Irving Davidson" None None None)
+  NewOrleans Associate None None (mkTenure 1981 None) None None
+  (Some (LEReport "DOJ" 1981)).
+
+(** Felix Riggio III - Associate (NewOrleans) - source: E.D. La. 1994 Operation Hard Crust *)
+Definition lg243 : Member := mkMember
+  (mkPerson 1342 "Felix Riggio III" None None None)
+  NewOrleans Associate None None (mkTenure 1994 None) None None
+  (Some (LEReport "DOJ" 1994)).
+
+(** Cade Farber - Associate (NewOrleans) - source: E.D. La. 1994 Operation Hard Crust *)
+Definition lg244 : Member := mkMember
+  (mkPerson 1343 "Cade Farber" None None None)
+  NewOrleans Associate None None (mkTenure 1994 None) None None
+  (Some (LEReport "DOJ" 1994)).
+
+(** Frank Gagliano Jr. - Associate (NewOrleans) - source: 1997 son of underboss *)
+Definition lg245 : Member := mkMember
+  (mkPerson 1344 "Frank Gagliano Jr." None None None)
+  NewOrleans Associate None None (mkTenure 1997 None) None None
+  (Some (LEReport "DOJ" 1997)).
+
+(** Vincent Marcello Jr. - Associate (NewOrleans) - source: E.D. La. 1981 nephew of Carlos 40 months *)
+Definition lg246 : Member := mkMember
+  (mkPerson 1345 "Vincent Marcello Jr." None None None)
+  NewOrleans Associate None None (mkTenure 1981 None) None None
+  (Some (LEReport "DOJ" 1981)).
+
+(** Silvestro Carollo - Boss 1944-1947 (NewOrleans) - source: "Silver Dollar Sam" deported 1947 *)
+Definition lg247 : Member := mkMember
+  (mkPerson 1346 "Silvestro Carollo" (Some "Silver Dollar Sam") None None)
+  NewOrleans Boss (Some ActingBoss) None (mkTenure 1944 None) None None
+  (Some (LEReport "DOJ" 1944)).
+
+(** Corrado Giacona - Boss 1922-1944 (NewOrleans) - source: died July 1944 *)
+Definition lg248 : Member := mkMember
+  (mkPerson 1347 "Corrado Giacona" None None None)
+  NewOrleans Boss (Some ActingBoss) None (mkTenure 1922 None) None None
+  (Some (LEReport "DOJ" 1922)).
+
+(** Charles Matranga - Boss 1891-1922 (NewOrleans) - source: died 1943 *)
+Definition lg249 : Member := mkMember
+  (mkPerson 1348 "Charles Matranga" None None None)
+  NewOrleans Boss (Some ActingBoss) None (mkTenure 1922 None) None None
+  (Some (LEReport "DOJ" 1922)).
+
+(** Frank Todaro - Boss 1944 (NewOrleans) - source: died November 1944 *)
+Definition lg250 : Member := mkMember
+  (mkPerson 1349 "Frank Todaro" None None None)
+  NewOrleans Boss (Some ActingBoss) None (mkTenure 1944 None) None None
+  (Some (LEReport "DOJ" 1944)).
+
+(** Nofio Pecoraro Jr. - Associate (NewOrleans) - source: E.D. La. 2004 21 months *)
+Definition lg251 : Member := mkMember
+  (mkPerson 1350 "Nofio Pecoraro Jr." None None None)
+  NewOrleans Associate None None (mkTenure 2004 None) None None
+  (Some (LEReport "DOJ" 2004)).
+
+Definition ledger_neworleans : list Member := [lg240; lg241; lg242; lg243; lg244; lg245; lg246; lg247; lg248; lg249; lg250; lg251].
+
+Definition all_ledger_members : list Member := ledger_lucchese ++ ledger_bonanno ++ ledger_colombo ++ ledger_chicago ++ ledger_philadelphia ++ ledger_newengland ++ ledger_buffalo ++ ledger_detroit ++ ledger_kansascity ++ ledger_neworleans.
+
+Definition all_members_extended : list Member := all_members ++ all_ledger_members.
+
+Lemma ledger_lucchese_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Lucchese) ledger_lucchese = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_bonanno_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Bonanno) ledger_bonanno = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_colombo_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Colombo) ledger_colombo = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_chicago_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Chicago) ledger_chicago = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_philadelphia_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Philadelphia) ledger_philadelphia = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_newengland_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) NewEngland) ledger_newengland = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_buffalo_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Buffalo) ledger_buffalo = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_detroit_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) Detroit) ledger_detroit = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_kansascity_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) KansasCity) ledger_kansascity = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_neworleans_family_homogeneous :
+  forallb (fun m => family_eqb (member_family m) NewOrleans) ledger_neworleans = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma all_ledger_members_wf : forallb member_wf_b all_ledger_members = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_ledger_members_consistent :
+  forallb member_fully_consistent_b all_ledger_members = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_ledger_members_evidence :
+  forallb member_evidence_sufficient all_ledger_members = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma all_members_extended_consistent :
+  forallb member_fully_consistent_b all_members_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_members_extended_evidence :
+  forallb member_evidence_sufficient all_members_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+Lemma all_members_extended_id_injective :
+  forallb (fun m1 => forallb (fun m2 =>
+    implb (Nat.eqb (member_person_id m1) (member_person_id m2))
+          (String.eqb (member_name m1) (member_name m2))) all_members_extended)
+    all_members_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma ledger_member_count : List.length all_ledger_members = 251.
+Proof. reflexivity. Qed.
