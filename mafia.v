@@ -13485,3 +13485,161 @@ Lemma nyc_coverage_or_gap :
   forallb (fun y => nyc_has_boss_year y
                     || existsb (Nat.eqb y) coverage_gap_years) all_years = true.
 Proof. vm_compute. reflexivity. Qed.
+
+Definition is_nyc_family (f : Family) : bool :=
+  match f with
+  | Genovese | Gambino | Lucchese | Bonanno | Colombo => true
+  | _ => false
+  end.
+
+(** Front/acting/street bosses shield an actual boss. For every NYC front-,
+    acting-, or street-boss active in a year, that family either has an
+    ActualBoss that year or the year is a documented coverage gap. *)
+Definition front_or_acting (m : Member) : bool :=
+  match member_rank m, member_boss_kind m with
+  | Boss, Some FrontBoss => true
+  | Boss, Some ActingBoss => true
+  | Boss, Some StreetBoss => true
+  | _, _ => false
+  end.
+
+Definition front_actual_or_gap_b (m : Member) (y : year) : bool :=
+  if andb (andb (front_or_acting m) (is_nyc_family (member_family m)))
+          (active_in_year (member_tenure m) y)
+  then orb (Nat.leb 1 (count_actual_bosses all_bosses (member_family m) y))
+           (existsb (Nat.eqb y) coverage_gap_years)
+  else true.
+
+Lemma frontboss_actual_or_gap :
+  forallb (fun m => forallb (front_actual_or_gap_b m) all_years) all_bosses = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Documented Commission seat holders, with proof each was an active boss in
+    the year of membership (1957 Apalachin-era seats; 1986 Commission Trial). *)
+Record CommissionSeatHolder := mkSeatHolder {
+  csh_seat : CommissionSeat;
+  csh_person_id : nat;
+  csh_year : year
+}.
+
+Definition commission_seat_holders : list CommissionSeatHolder :=
+  [ mkSeatHolder NYC_Genovese 7 1957; mkSeatHolder NYC_Gambino 24 1957;
+    mkSeatHolder NYC_Lucchese 41 1957; mkSeatHolder NYC_Bonanno 4 1957;
+    mkSeatHolder NYC_Colombo 5 1957; mkSeatHolder Seat_Buffalo 102 1957;
+    mkSeatHolder NYC_Genovese 9 1986; mkSeatHolder NYC_Gambino 26 1986;
+    mkSeatHolder NYC_Lucchese 43 1986; mkSeatHolder NYC_Colombo 71 1986;
+    mkSeatHolder NYC_Bonanno 58 1986 ].
+
+Definition seat_holder_valid_b (h : CommissionSeatHolder) : bool :=
+  existsb (fun m => andb (andb (Nat.eqb (member_person_id m) (csh_person_id h))
+                               (rank_eqb (member_rank m) Boss))
+                         (active_in_year (member_tenure m) (csh_year h))) all_members.
+
+Lemma commission_seat_holders_valid :
+  forallb seat_holder_valid_b commission_seat_holders = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** Leadership coverage: for each documented year, all_leadership contains a boss
+    for every NYC family (so the leadership roster is exhaustive of family heads
+    across those years). *)
+Definition documented_coverage_years : list year := [1935; 1945; 1955; 1965; 1985; 1995; 2000].
+
+Lemma all_leadership_covers_nyc :
+  forallb (fun y => forallb (fun f =>
+    existsb (fun m => andb (andb (family_eqb (member_family m) f)
+                                 (rank_eqb (member_rank m) Boss))
+                           (active_in_year (member_tenure m) y)) all_leadership) nyc_families)
+    documented_coverage_years = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** ====================================================================== *)
+(** Typed Party References                                                 *)
+(** ====================================================================== *)
+
+(** Resolve a named party (a murder's orderer/perpetrator, a relation member) to
+    a typed reference: a made member by person_id, the Commission, or another
+    party kept by label. This gives murders and relations typed person_id links
+    in place of bare strings, while still modelling non-person orderers such as
+    the Commission. *)
+Inductive ResolvedParty : Type :=
+  | RPMember (pid : nat)
+  | RPCommission
+  | RPOther (label : string).
+
+Definition resolve_party (name : string) : ResolvedParty :=
+  if orb (String.eqb name "Commission") (String.eqb name "The Commission")
+  then RPCommission
+  else match List.find (fun m => String.eqb (member_name m) name) all_members_extended with
+       | Some m => RPMember (member_person_id m)
+       | None => RPOther name
+       end.
+
+(** A resolved made-member reference always points at a real member. *)
+Lemma resolve_party_member_resolves : forall name pid,
+  resolve_party name = RPMember pid ->
+  exists m, In m all_members_extended /\ member_person_id m = pid.
+Proof.
+  intros name pid H. unfold resolve_party in H.
+  destruct (orb (String.eqb name "Commission") (String.eqb name "The Commission")).
+  - discriminate.
+  - destruct (List.find (fun m => String.eqb (member_name m) name) all_members_extended)
+      as [m|] eqn:Hf; [| discriminate].
+    injection H as H. subst pid.
+    apply List.find_some in Hf. destruct Hf as [Hin _].
+    exists m. split; [exact Hin | reflexivity].
+Qed.
+
+Definition murder_ordering_party (mu : Murder) : option ResolvedParty :=
+  match murder_ordered_by mu with None => None | Some n => Some (resolve_party n) end.
+
+Definition murder_perpetrators (mu : Murder) : list ResolvedParty :=
+  match murder_carried_out_by mu with None => [] | Some ns => List.map resolve_party ns end.
+
+(** Typed view of cross-family-relation members as person references. *)
+Definition cfr_member_refs (r : CrossFamilyRelation) : list ResolvedParty :=
+  List.map RPMember (cfr_members r).
+
+(** ====================================================================== *)
+(** Additional Documented Blood Relations                                  *)
+(** ====================================================================== *)
+
+(** Further documented kinship among members already in the database. *)
+Definition gotti_gene_brothers : BloodRelation := mkBloodRelation gotti gene_gotti Brothers.
+Definition gotti_richard_brothers : BloodRelation := mkBloodRelation gotti richard_gotti Brothers.
+Definition gotti_jr_fatherson : BloodRelation := mkBloodRelation gotti gotti_jr FatherSon.
+Definition persico_jr_fatherson : BloodRelation := mkBloodRelation persico alphonse_persico_jr FatherSon.
+Definition persico_teddy_uncle : BloodRelation := mkBloodRelation persico theodore_persico Uncle_Nephew.
+Definition todaro_fatherson : BloodRelation := mkBloodRelation todaro_sr todaro_jr FatherSon.
+Definition civella_brothers : BloodRelation := mkBloodRelation civella carl_civella Brothers.
+Definition gambino_thomas_fatherson : BloodRelation := mkBloodRelation carlo_gambino thomas_gambino FatherSon.
+Definition gambino_brothers : BloodRelation := mkBloodRelation thomas_gambino joseph_gambino Brothers.
+Definition spilotro_brothers : BloodRelation := mkBloodRelation spilotro michael_spilotro Brothers.
+Definition calabrese_brothers : BloodRelation := mkBloodRelation frank_calabrese nicholas_calabrese Brothers.
+Definition patriarca_fatherson : BloodRelation := mkBloodRelation patriarca_sr patriarca_jr FatherSon.
+Definition zerilli_fatherson : BloodRelation := mkBloodRelation zerilli anthony_zerilli FatherSon.
+Definition testa_fatherson : BloodRelation := mkBloodRelation testa salvatore_testa FatherSon.
+Definition cutolo_fatherson : BloodRelation := mkBloodRelation cutolo william_cutolo_jr FatherSon.
+Definition franzese_fatherson : BloodRelation := mkBloodRelation franzese john_franzese_jr FatherSon.
+
+Definition additional_blood_relations : list BloodRelation :=
+  [gotti_gene_brothers; gotti_richard_brothers; gotti_jr_fatherson;
+   persico_jr_fatherson; persico_teddy_uncle; todaro_fatherson; civella_brothers;
+   gambino_thomas_fatherson; gambino_brothers; spilotro_brothers;
+   calabrese_brothers; patriarca_fatherson; zerilli_fatherson; testa_fatherson;
+   cutolo_fatherson; franzese_fatherson].
+
+Definition all_blood_relations_extended : list BloodRelation :=
+  all_blood_relations ++ additional_blood_relations.
+
+Lemma all_blood_relations_extended_count :
+  List.length all_blood_relations_extended = 19.
+Proof. reflexivity. Qed.
+
+(** Every blood-relation endpoint resolves to a member in the database. *)
+Definition member_in_db (m : Member) : bool :=
+  existsb (fun x => Nat.eqb (member_person_id x) (member_person_id m)) all_members_extended.
+
+Lemma blood_relations_endpoints_in_db :
+  forallb (fun r => andb (member_in_db (relation_member1 r))
+                         (member_in_db (relation_member2 r))) all_blood_relations_extended = true.
+Proof. vm_compute. reflexivity. Qed.
