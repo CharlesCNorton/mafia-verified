@@ -13392,3 +13392,81 @@ Definition documented_crews : list Crew := [bergin_crew; springfield_crew].
 
 Lemma documented_crews_wf : forallb crew_wf_b documented_crews = true.
 Proof. vm_compute. reflexivity. Qed.
+
+(** ====================================================================== *)
+(** EvidenceLink Layer                                                     *)
+(** ====================================================================== *)
+
+(** Rather than store an EvidenceLink in every Member record (a destructive
+    change to ~840 records), derive one on demand from the member's existing
+    evidence. Court evidence yields a specific CourtCite (court, docket, year);
+    press/LE evidence yields a PressCite; everything else yields a labelled
+    GenericCite. Each derived link carries a verification status. *)
+
+Definition evidence_to_citation (e : Evidence) : Citation :=
+  match e with
+  | Conviction court docket yr _ => CourtCite (mkCourtCitation court docket yr None)
+  | GuiltyPlea court docket yr    => CourtCite (mkCourtCitation court docket yr None)
+  | Indictment court docket yr    => CourtCite (mkCourtCitation court docket yr None)
+  | DOJPress rid yr  => PressCite (mkPressReleaseCitation "DOJ" (Some rid) (Some yr) None None None)
+  | FBIChart did yr  => PressCite (mkPressReleaseCitation "FBI" (Some did) (Some yr) None None None)
+  | LEReport ag yr   => PressCite (mkPressReleaseCitation ag None (Some yr) None None None)
+  | ForeignCourt _ court yr => CourtCite (mkCourtCitation court "" yr None)
+  | CooperatorSelf w _ _  => GenericCite w
+  | CooperatorNamed w _ _ => GenericCite w
+  | Wiretap c _ => GenericCite c
+  | MultipleCooperators _ => GenericCite "multiple cooperators"
+  | MurderVictimRecord p _ => GenericCite p
+  | SingleCooperator w => GenericCite w
+  | Journalism works => match works with
+                        | [] => GenericCite "journalistic source"
+                        | w :: _ => GenericCite w
+                        end
+  | SingleSource w => GenericCite w
+  | Inferred b => GenericCite b
+  end.
+
+(** Specific book/page citations for figures with documented Raab page ranges. *)
+Definition specific_citation (pid : nat) : option Citation :=
+  match pid with
+  | 1  => Some (BookCite raab_luciano_founding)
+  | 23 => Some (BookCite raab_anastasia_murder)
+  | 25 => Some (BookCite raab_castellano_murder)
+  | 26 => Some (BookCite raab_gotti_rise)
+  | _  => None
+  end.
+
+Definition member_evidence_link (m : Member) : option EvidenceLink :=
+  match member_evidence m with
+  | None => None
+  | Some e =>
+    let base := evidence_to_citation e in
+    let cites := match specific_citation (member_person_id m) with
+                 | Some c => [c; base]
+                 | None => [base]
+                 end in
+    Some (mkEvidenceLink e cites [] (Some "pending"))
+  end.
+
+(** A member's derived link, when present, is its own evidence with a
+    non-empty citation list and a verification status. *)
+Definition member_link_documented_b (m : Member) : bool :=
+  match member_evidence_link m with
+  | None => false
+  | Some el => andb (has_citation el)
+                    (match el_verification_status el with Some _ => true | None => false end)
+  end.
+
+(** Every member yields an EvidenceLink that has a citation and a status. *)
+Lemma all_members_extended_links_documented :
+  forallb member_link_documented_b all_members_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** The derived link preserves the member's evidence (so tiers are unchanged). *)
+Lemma member_evidence_link_preserves : forall m e,
+  member_evidence m = Some e ->
+  exists el, member_evidence_link m = Some el /\ el_evidence el = e.
+Proof.
+  intros m e H. unfold member_evidence_link. rewrite H.
+  eexists. split; reflexivity.
+Qed.
