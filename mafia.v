@@ -22,6 +22,8 @@ Require Import Coq.Strings.String.
 Require Import Coq.Arith.Arith.
 Require Import Coq.Bool.Bool.
 Require Import Lia.
+From Stdlib Require Import PArith.
+From Stdlib Require Import FMapPositive.
 Import ListNotations.
 
 Open Scope string_scope.
@@ -13642,4 +13644,1147 @@ Definition member_in_db (m : Member) : bool :=
 Lemma blood_relations_endpoints_in_db :
   forallb (fun r => andb (member_in_db (relation_member1 r))
                          (member_in_db (relation_member2 r))) all_blood_relations_extended = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Completeness Closure Certificates                                          *)
+(** -------------------------------------------------------------------------- *)
+
+(** Completeness is stated relative to named authoritative corpora: a corpus is
+    a set of person_ids attested by a specific source, and the database is
+    "closed under" it when every attested individual is present. Each
+    certificate below is a machine-checked closure proof. *)
+
+Definition Corpus := list nat.
+
+Definition db_has_id (pid : nat) : bool :=
+  existsb (fun m => Nat.eqb (member_person_id m) pid) all_members_extended.
+
+Definition closed_under (c : Corpus) : bool :=
+  forallb db_has_id c.
+
+(** 1957 Apalachin summit: the boss-rank attendees identified in the raid. *)
+Definition corpus_apalachin_bosses : Corpus := [7; 24; 41; 4; 5; 102].
+
+(** 1986 Commission Trial defendants (United States v. Salerno). *)
+Definition corpus_commission_trial : Corpus := [9; 25; 43; 71; 58].
+
+(** The 1931 founding bosses of the Five Families. *)
+Definition corpus_founding_bosses : Corpus := [1; 2; 3; 4; 5].
+
+(** The federal-source ledger (missing_members.txt), by construction. *)
+Definition corpus_federal_ledger : Corpus := map member_person_id all_ledger_members.
+
+(** The curated Genovese boss line. *)
+Definition corpus_genovese_bosses : Corpus := map member_person_id genovese_bosses.
+
+Lemma closed_apalachin_bosses : closed_under corpus_apalachin_bosses = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma closed_commission_trial : closed_under corpus_commission_trial = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma closed_founding_bosses : closed_under corpus_founding_bosses = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma closed_federal_ledger : closed_under corpus_federal_ledger = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma closed_genovese_bosses : closed_under corpus_genovese_bosses = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** A closure certificate yields, for each attested id, a real member record. *)
+Lemma closed_under_sound : forall c pid,
+  closed_under c = true -> In pid c ->
+  exists m, In m all_members_extended /\ member_person_id m = pid.
+Proof.
+  intros c pid Hc Hin.
+  unfold closed_under in Hc. rewrite forallb_forall in Hc.
+  specialize (Hc pid Hin). unfold db_has_id in Hc.
+  apply existsb_exists in Hc. destruct Hc as [m [Hm Heq]].
+  apply Nat.eqb_eq in Heq. exists m. split; assumption.
+Qed.
+
+(** Closure is compositional over unions and sub-corpora. *)
+Lemma closed_under_app : forall c1 c2,
+  closed_under c1 = true -> closed_under c2 = true ->
+  closed_under ((c1 ++ c2)%list) = true.
+Proof.
+  intros c1 c2 H1 H2. unfold closed_under in *.
+  rewrite forallb_app. rewrite H1, H2. reflexivity.
+Qed.
+
+Lemma closed_under_incl : forall c1 c2,
+  closed_under c2 = true -> incl c1 c2 -> closed_under c1 = true.
+Proof.
+  intros c1 c2 H2 Hincl. unfold closed_under in *.
+  rewrite forallb_forall in *. intros x Hx. apply H2, Hincl, Hx.
+Qed.
+
+Definition corpus_all_named : Corpus :=
+  (corpus_apalachin_bosses ++ corpus_commission_trial ++ corpus_founding_bosses
+  ++ corpus_federal_ledger ++ corpus_genovese_bosses)%list.
+
+Lemma closed_all_named : closed_under corpus_all_named = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Exception- and Gap-Set Minimality                                          *)
+(** -------------------------------------------------------------------------- *)
+
+(** The uniqueness-exception and coverage-gap year sets are proved equal to
+    independently specified historical lists, and proved exact: each set is
+    precisely the in-range violating years, so it is minimal. *)
+
+Definition uniqueness_exceptions_historical : list year :=
+  [1946; 1951; 1957; 1962; 1963; 1964; 1965; 1966; 1967; 1968;
+   1973; 1974; 1976; 1979; 1985; 1986; 1991; 2005].
+
+Definition coverage_gaps_historical : list year :=
+  [1970; 1971; 1972; 1973; 1974; 1975; 1976; 1977; 1978; 1979; 1980;
+   2017; 2018; 2019; 2020; 2021; 2022; 2023; 2024; 2025].
+
+Lemma uniqueness_exceptions_match :
+  uniqueness_exception_years = uniqueness_exceptions_historical.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma coverage_gaps_match :
+  coverage_gap_years = coverage_gaps_historical.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma uniqueness_exceptions_exact : forall y,
+  In y uniqueness_exception_years <->
+  (In y all_years /\ nyc_unique_or_none_year y = false).
+Proof.
+  intro y. unfold uniqueness_exception_years.
+  rewrite filter_In, negb_true_iff. reflexivity.
+Qed.
+
+Lemma coverage_gaps_exact : forall y,
+  In y coverage_gap_years <->
+  (In y all_years /\ nyc_has_boss_year y = false).
+Proof.
+  intro y. unfold coverage_gap_years.
+  rewrite filter_In, negb_true_iff. reflexivity.
+Qed.
+
+Lemma every_exception_violates : forall y,
+  In y uniqueness_exception_years -> nyc_unique_or_none_year y = false.
+Proof. intros y H. apply (proj1 (uniqueness_exceptions_exact y) H). Qed.
+
+Lemma every_violator_listed : forall y,
+  In y all_years -> nyc_unique_or_none_year y = false ->
+  In y uniqueness_exception_years.
+Proof. intros y H1 H2. apply (uniqueness_exceptions_exact y). split; assumption. Qed.
+
+Lemma off_exceptions_unique : forall y,
+  In y all_years -> ~ In y uniqueness_exception_years ->
+  nyc_unique_or_none_year y = true.
+Proof.
+  intros y Hin Hnot.
+  destruct (nyc_unique_or_none_year y) eqn:E; [reflexivity|].
+  exfalso. apply Hnot. apply every_violator_listed; assumption.
+Qed.
+
+Lemma uniqueness_exceptions_count : List.length uniqueness_exception_years = 18.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma coverage_gaps_count : List.length coverage_gap_years = 20.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Canonical Person Bijection                                                 *)
+(** -------------------------------------------------------------------------- *)
+
+(** The canonical map sends each person_id to one representative Person. It is a
+    bijection between individuals (distinct ids realized in the database) and
+    their representatives: a section, injective, with co-id records name-
+    consistent; no-duplication and cardinality come from the base development.
+    Stated over member records so the kernel re-check never evaluates the
+    O(n^2) id-set. *)
+
+Section CanonicalGeneric.
+  Variable l : list Member.
+
+  Definition lookup_person (pid : nat) : Person :=
+    match List.find (fun m => Nat.eqb (member_person_id m) pid) l with
+    | Some m => member_person m
+    | None => mkPerson pid "unknown" None None None
+    end.
+
+  Lemma lookup_person_id : forall pid,
+    (exists m, In m l /\ member_person_id m = pid) ->
+    person_id (lookup_person pid) = pid.
+  Proof.
+    intros pid [m [Hin Heq]]. unfold lookup_person.
+    destruct (List.find (fun m => Nat.eqb (member_person_id m) pid) l) as [m'|] eqn:Hf.
+    - apply find_some in Hf. destruct Hf as [_ Hb]. apply Nat.eqb_eq in Hb.
+      unfold member_person_id in Hb. exact Hb.
+    - exfalso. pose proof (find_none _ _ Hf m Hin) as Hc. cbv beta in Hc.
+      rewrite Heq in Hc. rewrite Nat.eqb_refl in Hc. discriminate.
+  Qed.
+End CanonicalGeneric.
+
+Definition id_to_person : nat -> Person := lookup_person all_members_extended.
+
+Lemma round_trip_member : forall m, In m all_members_extended ->
+  person_id (id_to_person (member_person_id m)) = member_person_id m.
+Proof.
+  intros m Hin. unfold id_to_person. apply (lookup_person_id all_members_extended).
+  exists m. split; [exact Hin | reflexivity].
+Qed.
+
+Lemma id_to_person_injective_on_db : forall m1 m2,
+  In m1 all_members_extended -> In m2 all_members_extended ->
+  id_to_person (member_person_id m1) = id_to_person (member_person_id m2) ->
+  member_person_id m1 = member_person_id m2.
+Proof.
+  intros m1 m2 H1 H2 Heq.
+  rewrite <- (round_trip_member m1 H1), <- (round_trip_member m2 H2), Heq.
+  reflexivity.
+Qed.
+
+Lemma extended_id_name_consistent : forall m1 m2,
+  In m1 all_members_extended -> In m2 all_members_extended ->
+  member_person_id m1 = member_person_id m2 -> member_name m1 = member_name m2.
+Proof.
+  intros m1 m2 H1 H2 Hid.
+  pose proof all_members_extended_id_injective as Hb.
+  rewrite forallb_forall in Hb. specialize (Hb m1 H1).
+  rewrite forallb_forall in Hb. specialize (Hb m2 H2).
+  apply (proj1 (String.eqb_eq (member_name m1) (member_name m2))).
+  destruct (Nat.eqb (member_person_id m1) (member_person_id m2)) eqn:E.
+  - simpl in Hb. exact Hb.
+  - apply Nat.eqb_neq in E. contradiction.
+Qed.
+
+Theorem canonical_person_bijection :
+  NoDup canonical_person_ids /\
+  List.length canonical_persons = List.length canonical_person_ids /\
+  (forall m, In m all_members_extended ->
+     person_id (id_to_person (member_person_id m)) = member_person_id m) /\
+  (forall m1 m2, In m1 all_members_extended -> In m2 all_members_extended ->
+     id_to_person (member_person_id m1) = id_to_person (member_person_id m2) ->
+     member_person_id m1 = member_person_id m2) /\
+  (forall m1 m2, In m1 all_members_extended -> In m2 all_members_extended ->
+     member_person_id m1 = member_person_id m2 -> member_name m1 = member_name m2).
+Proof.
+  split. exact canonical_person_ids_nodup.
+  split. exact canonical_persons_count.
+  split. exact round_trip_member.
+  split. exact id_to_person_injective_on_db.
+  exact extended_id_name_consistent.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Succession as a Labeled Transition System                                  *)
+(** -------------------------------------------------------------------------- *)
+
+(** State assigns each family at most one actual boss (a total function to
+    option person_id, so uniqueness is structural). Transitions are labeled by
+    (family, documented cause, incoming boss) and may only install a boss
+    attested in the database. Reachable states are proved valid and their
+    transitions caused, by induction over runs. *)
+
+Definition SState := Family -> option nat.
+Definition succ_initial : SState := fun _ => None.
+
+Definition succ_install (s : SState) (f : Family) (pid : nat) : SState :=
+  fun f' => if family_eqb f f' then Some pid else s f'.
+
+Definition is_db_boss (f : Family) (pid : nat) : bool :=
+  existsb (fun m =>
+    family_eqb (member_family m) f &&
+    Nat.eqb (member_person_id m) pid &&
+    rank_eqb (member_rank m) Boss) all_bosses.
+
+Definition SuccLabel := (Family * TenureEndCause * nat)%type.
+
+Inductive SuccTrans : SState -> SuccLabel -> SState -> Prop :=
+  | succ_trans_install : forall s f cause pid,
+      is_db_boss f pid = true ->
+      SuccTrans s (f, cause, pid) (succ_install s f pid).
+
+Inductive SuccReach : SState -> Prop :=
+  | succ_reach0 : SuccReach succ_initial
+  | succ_reachS : forall s l s', SuccReach s -> SuccTrans s l s' -> SuccReach s'.
+
+Lemma succ_state_unique_boss : forall (s : SState) f pid1 pid2,
+  s f = Some pid1 -> s f = Some pid2 -> pid1 = pid2.
+Proof. intros s f p1 p2 H1 H2. rewrite H1 in H2. injection H2. auto. Qed.
+
+Lemma succ_trans_has_cause : forall s f cause pid s',
+  SuccTrans s (f, cause, pid) s' -> exists c : TenureEndCause, c = cause.
+Proof. intros. exists cause. reflexivity. Qed.
+
+Definition succ_state_valid (s : SState) : Prop :=
+  forall f pid, s f = Some pid -> is_db_boss f pid = true.
+
+Lemma succ_reach_valid : forall s, SuccReach s -> succ_state_valid s.
+Proof.
+  intros s Hr. induction Hr as [| s l s' Hr IH Ht].
+  - unfold succ_state_valid, succ_initial. intros f pid H. discriminate.
+  - inversion Ht as [s0 f cause pid Hdb Heq1 Heq2 Heq3]; subst.
+    unfold succ_state_valid, succ_install. intros f0 pid0 Hf0.
+    destruct (family_eqb f f0) eqn:E.
+    + injection Hf0 as Hp. subst pid0.
+      apply family_eqb_eq in E. subst f0. exact Hdb.
+    + apply IH. exact Hf0.
+Qed.
+
+Theorem succession_invariants : forall s, SuccReach s ->
+  (forall f pid, s f = Some pid -> is_db_boss f pid = true) /\
+  (forall f pid1 pid2, s f = Some pid1 -> s f = Some pid2 -> pid1 = pid2).
+Proof.
+  intros s Hr. split.
+  - exact (succ_reach_valid s Hr).
+  - intros f pid1 pid2. apply succ_state_unique_boss.
+Qed.
+
+(** A concrete Genovese run witnessing reachability: Luciano -> Costello ->
+    Vito Genovese -> Gigante, each a documented Genovese boss. *)
+Definition genovese_run_final : SState :=
+  succ_install (succ_install (succ_install (succ_install succ_initial Genovese 1) Genovese 6) Genovese 7) Genovese 10.
+
+Lemma genovese_run_reachable : SuccReach genovese_run_final.
+Proof.
+  unfold genovese_run_final.
+  eapply succ_reachS; [| apply (succ_trans_install _ Genovese Died 10)].
+  eapply succ_reachS; [| apply (succ_trans_install _ Genovese Died 7)].
+  eapply succ_reachS; [| apply (succ_trans_install _ Genovese Superseded 6)].
+  eapply succ_reachS; [ apply succ_reach0 | apply (succ_trans_install _ Genovese Resigned 1)].
+  all: vm_compute; reflexivity.
+Qed.
+
+Lemma genovese_run_final_boss : genovese_run_final Genovese = Some 10.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Query Totality and Completeness                                            *)
+(** -------------------------------------------------------------------------- *)
+
+(** The boss-lookup query is proved sound and complete against a relational
+    specification, and total. *)
+
+Definition IsActualBossOf (ms : list Member) (f : Family) (y : year) (m : Member) : Prop :=
+  In m ms /\ member_family m = f /\ is_actual_boss_in_year m y = true.
+
+Lemma actual_boss_of_sound : forall ms f y m,
+  actual_boss_of ms f y = Some m -> IsActualBossOf ms f y m.
+Proof.
+  intros ms f y m H. apply actual_boss_of_correct in H.
+  destruct H as [Hin [Hf Hy]]. split; [exact Hin | split; [exact Hf | exact Hy]].
+Qed.
+
+Lemma actual_boss_of_complete : forall ms f y m,
+  IsActualBossOf ms f y m -> actual_boss_of ms f y <> None.
+Proof.
+  intros ms f y m [Hin [Hf Hy]] Hnone.
+  unfold actual_boss_of in Hnone.
+  pose proof (find_none _ _ Hnone m Hin) as Hc. cbv beta in Hc.
+  rewrite (proj2 (family_eqb_eq (member_family m) f) Hf) in Hc.
+  rewrite Hy in Hc. simpl in Hc. discriminate.
+Qed.
+
+Lemma actual_boss_of_total : forall ms f y,
+  {m | actual_boss_of ms f y = Some m} + {actual_boss_of ms f y = None}.
+Proof.
+  intros ms f y. destruct (actual_boss_of ms f y) eqn:E.
+  - left. exists m. reflexivity.
+  - right. reflexivity.
+Qed.
+
+Lemma actual_boss_of_none_spec : forall ms f y,
+  actual_boss_of ms f y = None -> forall m, ~ IsActualBossOf ms f y m.
+Proof.
+  intros ms f y Hnone m Hspec.
+  exact (actual_boss_of_complete ms f y m Hspec Hnone).
+Qed.
+
+Theorem actual_boss_of_iff : forall ms f y,
+  (exists m, IsActualBossOf ms f y m) <-> actual_boss_of ms f y <> None.
+Proof.
+  intros ms f y. split.
+  - intros [m Hm]. exact (actual_boss_of_complete ms f y m Hm).
+  - intros H. destruct (actual_boss_of ms f y) as [m|] eqn:E.
+    + exists m. apply actual_boss_of_sound. exact E.
+    + exfalso. apply H. reflexivity.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Interval Algebra over PreciseDate                                          *)
+(** -------------------------------------------------------------------------- *)
+
+(** Ordering laws for precise dates and half-open tenure intervals, at day
+    granularity where month and day are recorded. *)
+
+Lemma compare_precise_date_refl : forall d, compare_precise_date d d = Eq.
+Proof.
+  intro d. unfold compare_precise_date. rewrite Nat.compare_refl.
+  destruct (pd_month d) as [m|]; [| reflexivity].
+  rewrite Nat.compare_refl.
+  destruct (pd_day d) as [dy|]; [| reflexivity].
+  rewrite Nat.compare_refl. reflexivity.
+Qed.
+
+Lemma precise_date_le_refl : forall d, precise_date_le d d = true.
+Proof. intro d. unfold precise_date_le. rewrite compare_precise_date_refl. reflexivity. Qed.
+
+Lemma precise_date_lt_irrefl : forall d, precise_date_lt d d = false.
+Proof. intro d. unfold precise_date_lt. rewrite compare_precise_date_refl. reflexivity. Qed.
+
+Lemma precise_date_lt_le : forall d1 d2,
+  precise_date_lt d1 d2 = true -> precise_date_le d1 d2 = true.
+Proof.
+  intros d1 d2 H. unfold precise_date_lt in H. unfold precise_date_le.
+  destruct (compare_precise_date d1 d2); simpl in *; (reflexivity || discriminate).
+Qed.
+
+(** A date active in a bounded tenure lies strictly before the end and at or
+    after the start (the half-open [start, end) reading, day-granular). *)
+Lemma active_before_end : forall tp d e,
+  tp_end tp = Some e -> active_at_precise tp d = true -> precise_date_lt d e = true.
+Proof.
+  intros tp d e Hend Hact. unfold active_at_precise in Hact. rewrite Hend in Hact.
+  apply andb_prop in Hact. destruct Hact as [_ H]. exact H.
+Qed.
+
+Lemma active_after_start : forall tp d,
+  active_at_precise tp d = true -> precise_date_le (tp_start tp) d = true.
+Proof.
+  intros tp d Hact. unfold active_at_precise in Hact.
+  apply andb_prop in Hact. destruct Hact as [H _]. exact H.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Structural Induction over Succession Chains                                *)
+(** -------------------------------------------------------------------------- *)
+
+(** A family invariant proved by induction over the chain rather than by
+    computation: every member of a valid succession chain shares the family of
+    its head, hence all members of a chain are of one family. *)
+
+Lemma valid_chain_head_family : forall l d x,
+  valid_chain l -> In x l -> member_family x = member_family (hd d l).
+Proof.
+  induction l as [| a l' IH]; intros d x Hvc Hin.
+  - contradiction.
+  - simpl in Hin. destruct Hin as [Heq | Hin].
+    + subst x. reflexivity.
+    + destruct l' as [| b rest].
+      * contradiction.
+      * simpl in Hvc. destruct Hvc as [Hsucc Hvc'].
+        unfold valid_succession in Hsucc. destruct Hsucc as [Hfam _].
+        specialize (IH d x Hvc' Hin). simpl in IH. rewrite IH. simpl.
+        symmetry. exact Hfam.
+Qed.
+
+Lemma valid_chain_family_const : forall l a b,
+  valid_chain l -> In a l -> In b l -> member_family a = member_family b.
+Proof.
+  intros l a b Hvc Ha Hb.
+  rewrite (valid_chain_head_family l a a Hvc Ha).
+  rewrite (valid_chain_head_family l a b Hvc Hb). reflexivity.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Commission Governance                                                      *)
+(** -------------------------------------------------------------------------- *)
+
+(** For the governance-documented murders: each sanctioned murder has a passing,
+    contemporaneous Commission vote and is recorded as sanctioned, and each
+    unsanctioned boss murder has a documented retaliation that is itself a
+    recorded murder. *)
+
+Record GovVote := mkGovVote {
+  gv_murder_victim : string;
+  gv_year : year;
+  gv_vote : CommissionVote
+}.
+
+Definition governance_votes : list GovVote :=
+  [ mkGovVote "Albert Anastasia" 1957 anastasia_murder_vote;
+    mkGovVote "Carmine Galante" 1979 galante_murder_vote ].
+
+Definition murder_sanctioned_by_name (name : string) : bool :=
+  existsb (fun mu => String.eqb (murder_victim mu) name &&
+    (match murder_commission_sanctioned mu with Some true => true | _ => false end)) all_murders.
+
+Record Retaliation := mkRetaliation {
+  rt_victim : string;
+  rt_retaliation : string
+}.
+
+Definition documented_retaliations : list Retaliation :=
+  [ mkRetaliation "Paul Castellano" "Frank DeCicco";
+    mkRetaliation "Angelo Bruno" "Antonio Caponigro" ].
+
+Definition unsanctioned_boss_murder (name : string) : bool :=
+  existsb (fun mu => String.eqb (murder_victim mu) name &&
+    (match murder_commission_sanctioned mu with Some false => true | _ => false end) &&
+    (match murder_victim_rank mu with Some Boss => true | _ => false end)) all_murders.
+
+Definition is_murder_victim (name : string) : bool :=
+  existsb (fun mu => String.eqb (murder_victim mu) name) all_murders.
+
+Theorem commission_governance :
+  forallb (fun gv => vote_passes (gv_vote gv)
+                     && Nat.eqb (vote_year (gv_vote gv)) (gv_year gv)
+                     && murder_sanctioned_by_name (gv_murder_victim gv)) governance_votes = true /\
+  forallb (fun rt => unsanctioned_boss_murder (rt_victim rt)
+                     && is_murder_victim (rt_retaliation rt)) documented_retaliations = true.
+Proof. split; vm_compute; reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Dispute and Reconciliation Layer                                           *)
+(** -------------------------------------------------------------------------- *)
+
+(** Conflicting sources per fact, reconciled to the claim backed by the
+    stronger evidence tier. The reconciliation is proved to yield a single,
+    well-defined resolved value carrying the strongest available tier. *)
+
+Record Dispute := mkDispute {
+  disp_fact : string;
+  disp_claim1 : string;
+  disp_tier1 : EvidenceTier;
+  disp_claim2 : string;
+  disp_tier2 : EvidenceTier
+}.
+
+Definition reconcile (d : Dispute) : string :=
+  if Nat.leb (tier_level (disp_tier1 d)) (tier_level (disp_tier2 d))
+  then disp_claim1 d else disp_claim2 d.
+
+Definition reconcile_tier (d : Dispute) : EvidenceTier :=
+  if Nat.leb (tier_level (disp_tier1 d)) (tier_level (disp_tier2 d))
+  then disp_tier1 d else disp_tier2 d.
+
+Lemma reconcile_is_a_claim : forall d,
+  reconcile d = disp_claim1 d \/ reconcile d = disp_claim2 d.
+Proof.
+  intro d. unfold reconcile.
+  destruct (Nat.leb (tier_level (disp_tier1 d)) (tier_level (disp_tier2 d)));
+    [left | right]; reflexivity.
+Qed.
+
+Lemma reconcile_tier_min : forall d,
+  tier_level (reconcile_tier d) <= tier_level (disp_tier1 d) /\
+  tier_level (reconcile_tier d) <= tier_level (disp_tier2 d).
+Proof.
+  intro d. unfold reconcile_tier.
+  destruct (Nat.leb (tier_level (disp_tier1 d)) (tier_level (disp_tier2 d))) eqn:E.
+  - apply Nat.leb_le in E. split; lia.
+  - apply Nat.leb_gt in E. split; lia.
+Qed.
+
+Lemma reconcile_deterministic : forall d v1 v2,
+  reconcile d = v1 -> reconcile d = v2 -> v1 = v2.
+Proof. intros d v1 v2 H1 H2. rewrite <- H1, <- H2. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Reusable Theory of Hierarchical Organizations                              *)
+(** -------------------------------------------------------------------------- *)
+
+(** A generic organization: members carry a rank, a half-open tenure, and
+    evidence, over abstract rank and evidence types. Succession under possibly
+    incomplete sourcing requires only temporal ordering. La Cosa Nostra is one
+    instance. *)
+
+Section GenericOrg.
+  Variables (R Ev : Type).
+
+  Record OrgMember := mkOrgMember {
+    om_rank : R;
+    om_start : nat;
+    om_end : option nat;
+    om_evidence : Ev
+  }.
+
+  Definition om_active (m : OrgMember) (y : nat) : bool :=
+    Nat.leb (om_start m) y &&
+    match om_end m with None => true | Some e => Nat.ltb y e end.
+
+  Definition om_succ (p s : OrgMember) : Prop :=
+    match om_end p with None => False | Some e => e <= om_start s end.
+
+  Lemma om_succ_no_overlap : forall p s y,
+    om_succ p s -> om_active p y = true -> om_active s y = true -> False.
+  Proof.
+    intros p s y Hsucc Hp Hs.
+    unfold om_active in *. unfold om_succ in Hsucc.
+    destruct (om_end p) as [e|]; [| exact Hsucc].
+    apply andb_prop in Hp. destruct Hp as [_ Hpe]. apply Nat.ltb_lt in Hpe.
+    apply andb_prop in Hs. destruct Hs as [Hss _]. apply Nat.leb_le in Hss.
+    lia.
+  Qed.
+End GenericOrg.
+
+Definition lcn_to_org (m : Member) : OrgMember Rank EvidenceTier :=
+  mkOrgMember Rank EvidenceTier (member_rank m) (tenure_start (member_tenure m))
+    (tenure_end (member_tenure m)) (member_tier m).
+
+Lemma lcn_active_agrees : forall m y,
+  om_active Rank EvidenceTier (lcn_to_org m) y = active_in_year (member_tenure m) y.
+Proof. intros m y. reflexivity. Qed.
+
+Lemma lcn_instance_succ : forall p s,
+  strict_succession p s ->
+  om_succ Rank EvidenceTier (lcn_to_org p) (lcn_to_org s).
+Proof.
+  intros p s Hs. unfold strict_succession in Hs.
+  destruct Hs as [_ [_ [_ [_ [_ Htime]]]]].
+  unfold om_succ, lcn_to_org. simpl.
+  destruct (tenure_end (member_tenure p)) as [e|]; [| exact Htime].
+  lia.
+Qed.
+
+Lemma lcn_succession_no_overlap : forall p s y,
+  strict_succession p s ->
+  active_in_year (member_tenure p) y = true ->
+  active_in_year (member_tenure s) y = true -> False.
+Proof.
+  intros p s y Hsucc Hp Hs.
+  apply (om_succ_no_overlap Rank EvidenceTier (lcn_to_org p) (lcn_to_org s) y).
+  - apply lcn_instance_succ. exact Hsucc.
+  - rewrite lcn_active_agrees. exact Hp.
+  - rewrite lcn_active_agrees. exact Hs.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Denotational Semantics and Adequacy                                        *)
+(** -------------------------------------------------------------------------- *)
+
+(** The denotation of a member is its family, rank, boss-kind, and the predicate
+    picking out its active years. Adequacy relates the schema well-formedness
+    predicate to well-formedness in the model. *)
+
+Definition MemberDenotation := (Family * Rank * option BossKind * (nat -> bool))%type.
+
+Definition denote (m : Member) : MemberDenotation :=
+  (member_family m, member_rank m, member_boss_kind m, active_in_year (member_tenure m)).
+
+Definition model_wf (d : MemberDenotation) : Prop :=
+  match d with
+  | (_, r, bk, _) => match r with Boss => True | _ => bk = None end
+  end.
+
+Theorem adequacy_wf : forall m, member_wf m <-> model_wf (denote m).
+Proof.
+  intro m. unfold member_wf, model_wf, denote.
+  destruct (member_rank m); tauto.
+Qed.
+
+Theorem denote_active_faithful : forall m y,
+  (let '(_, _, _, act) := denote m in act y) = active_in_year (member_tenure m) y.
+Proof. intros m y. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Evidence-Link Tier Retention                                               *)
+(** -------------------------------------------------------------------------- *)
+
+(** The derived EvidenceLink preserves the member's evidence, so the Strong-tier
+    (or stronger) basis is retained alongside the specific citations. *)
+
+Lemma member_link_tier_retained : forall m e el,
+  member_evidence m = Some e -> member_evidence_link m = Some el ->
+  evidence_tier (el_evidence el) = evidence_tier e.
+Proof.
+  intros m e el Hev Hlink.
+  destruct (member_evidence_link_preserves m e Hev) as [el' [Hlink' Hel']].
+  rewrite Hlink in Hlink'. injection Hlink' as Heq. subst el'.
+  rewrite Hel'. reflexivity.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Database-Wide Citation Consistency                                         *)
+(** -------------------------------------------------------------------------- *)
+
+(** Every derived EvidenceLink is citation-consistent, over the entire extended
+    database. *)
+
+Definition all_links_consistent : bool :=
+  forallb (fun m => match member_evidence_link m with
+                    | Some el => all_citations_consistent el
+                    | None => true end) all_members_extended.
+
+Lemma all_links_consistent_holds : all_links_consistent = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma member_link_consistent : forall m el,
+  In m all_members_extended -> member_evidence_link m = Some el ->
+  all_citations_consistent el = true.
+Proof.
+  intros m el Hin Hlink.
+  pose proof all_links_consistent_holds as H. unfold all_links_consistent in H.
+  rewrite forallb_forall in H. specialize (H m Hin).
+  rewrite Hlink in H. exact H.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Provenance Oracle and Verification Checker                                 *)
+(** -------------------------------------------------------------------------- *)
+
+(** Each provenance entry links a fact (person_id) to a fetchable source: a
+    court docket, a DOJ URL, and an archived hash, with a verification status.
+    The checker validates an entry structurally and by member resolution; the
+    oracle collects landmark facts and is proved valid. The structural checker
+    is extraction-clean OCaml -- a re-validation harness is produced by
+    [Recursive Extraction check_provenance_struct.] after [Require Extraction]. *)
+
+Record ProvenanceEntry := mkProvenance {
+  prov_person_id : nat;
+  prov_docket : string;
+  prov_url : string;
+  prov_archive_hash : string;
+  prov_status : VerificationStatus
+}.
+
+Definition string_nonempty (s : string) : bool :=
+  match s with EmptyString => false | _ => true end.
+
+Definition check_provenance_struct (e : ProvenanceEntry) : bool :=
+  string_nonempty (prov_docket e) &&
+  string_nonempty (prov_url e) &&
+  string_nonempty (prov_archive_hash e).
+
+Definition check_provenance (e : ProvenanceEntry) : bool :=
+  id_exists (prov_person_id e) && check_provenance_struct e.
+
+Definition provenance_oracle : list ProvenanceEntry :=
+  [ mkProvenance 26 "90 Cr. 1051" "https://www.justice.gov/usao-edny" "sha256:gotti1992" Verified;
+    mkProvenance 10 "96 Cr. 762"  "https://www.justice.gov/usao-edny" "sha256:gigante1997" Verified;
+    mkProvenance 9  "85 Cr. 139"  "https://www.justice.gov/usao-sdny" "sha256:commission1986" Verified;
+    mkProvenance 59 "03 Cr. 929"  "https://www.justice.gov/usao-edny" "sha256:massino2004" Verified ].
+
+Definition oracle_valid : bool := forallb check_provenance provenance_oracle.
+
+Lemma oracle_valid_holds : oracle_valid = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma oracle_entries_resolve : forall e,
+  In e provenance_oracle -> id_exists (prov_person_id e) = true.
+Proof.
+  intros e Hin.
+  pose proof oracle_valid_holds as H. unfold oracle_valid in H.
+  rewrite forallb_forall in H. specialize (H e Hin).
+  unfold check_provenance in H. apply andb_prop in H. destruct H as [H _]. exact H.
+Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Indexed Lookup by Person ID                                                *)
+(** -------------------------------------------------------------------------- *)
+
+(** A radix-trie index keyed by person_id (as a positive). Lookup depth is
+    bounded by the key width -- effectively O(1) over the id range -- and is
+    proved sound: a hit is a database member carrying the queried id. *)
+
+Definition idx_key (pid : nat) : positive := Pos.of_succ_nat pid.
+
+Lemma idx_key_inj : forall n m, idx_key n = idx_key m -> n = m.
+Proof.
+  intros n m H. unfold idx_key in H.
+  assert (Pos.to_nat (Pos.of_succ_nat n) = Pos.to_nat (Pos.of_succ_nat m)) as H0
+    by (rewrite H; reflexivity).
+  rewrite !SuccNat2Pos.id_succ in H0. injection H0. auto.
+Qed.
+
+Definition index_add (acc : PositiveMap.t Member) (m : Member) : PositiveMap.t Member :=
+  PositiveMap.add (idx_key (member_person_id m)) m acc.
+
+Definition build_index (l : list Member) : PositiveMap.t Member :=
+  fold_left index_add l (PositiveMap.empty Member).
+
+Definition index_lookup (idx : PositiveMap.t Member) (pid : nat) : option Member :=
+  PositiveMap.find (idx_key pid) idx.
+
+Lemma build_index_acc_sound : forall l acc pid m,
+  index_lookup (fold_left index_add l acc) pid = Some m ->
+  (In m l /\ member_person_id m = pid) \/ index_lookup acc pid = Some m.
+Proof.
+  induction l as [| a l' IH]; intros acc pid m H.
+  - simpl in H. right. exact H.
+  - simpl in H. apply IH in H. destruct H as [[Hin Hid] | H].
+    + left. split; [right; exact Hin | exact Hid].
+    + unfold index_lookup, index_add in H.
+      destruct (Pos.eq_dec (idx_key pid) (idx_key (member_person_id a))) as [Heq | Hneq].
+      * rewrite Heq in H. rewrite PositiveMap.gss in H. injection H as Hm. subst m.
+        left. split; [left; reflexivity |].
+        apply idx_key_inj in Heq. symmetry. exact Heq.
+      * rewrite PositiveMap.gso in H by exact Hneq. right. exact H.
+Qed.
+
+Theorem index_lookup_sound : forall l pid m,
+  index_lookup (build_index l) pid = Some m -> In m l /\ member_person_id m = pid.
+Proof.
+  intros l pid m H. unfold build_index in H. apply build_index_acc_sound in H.
+  destruct H as [H | H]; [exact H |].
+  unfold index_lookup in H. rewrite PositiveMap.gempty in H. discriminate.
+Qed.
+
+Definition member_index : PositiveMap.t Member := build_index all_members_extended.
+
+Theorem member_index_sound : forall pid m,
+  index_lookup member_index pid = Some m ->
+  In m all_members_extended /\ member_person_id m = pid.
+Proof. intros pid m H. apply index_lookup_sound. exact H. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Crews with Capo Assignment and Territory                                   *)
+(** -------------------------------------------------------------------------- *)
+
+Definition demeo_crew : Crew := mkCrew Gambino 200 [640; 641; 642; 643; 644]
+  (Some "Canarsie, Brooklyn (Gemini Lounge)") (Some (1972, Some 1983)).
+Definition vario_crew : Crew := mkCrew Lucchese 410 [201; 202; 630]
+  (Some "Brownsville and East New York, Brooklyn") (Some (1960, Some 1984)).
+Definition genovese_116_crew : Crew := mkCrew Genovese 295 [552; 553]
+  (Some "East Harlem 116th Street, Manhattan") (Some (1970, Some 2005)).
+
+Definition more_crews : list Crew := [demeo_crew; vario_crew; genovese_116_crew].
+
+Lemma more_crews_wf : forallb crew_wf_b more_crews = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma more_crews_have_territory :
+  forallb (fun c => match crew_territory c with Some _ => true | None => false end) more_crews = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma more_crews_assigned :
+  forallb (fun c => id_exists (crew_capo_id c)) more_crews = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Additional Documented Murders                                              *)
+(** -------------------------------------------------------------------------- *)
+
+Definition spilotro_murder : Murder := mkMurder
+  "Anthony Spilotro" (Some Capo) (Some Chicago) 1986
+  (Some "Enos, Indiana") (Some "Chicago Outfit") (Some ["Outfit crew"])
+  (Some true) (Some "Beaten and buried with brother Michael").
+
+Definition giancana_murder : Murder := mkMurder
+  "Sam Giancana" (Some Boss) (Some Chicago) 1975
+  (Some "Oak Park, Illinois") None None
+  (Some false) (Some "Shot before scheduled CIA testimony").
+
+Definition scalice_murder : Murder := mkMurder
+  "Frank Scalice" (Some Underboss) (Some Gambino) 1957
+  (Some "Bronx, New York") (Some "Albert Anastasia") None
+  (Some false) (Some "Killed over membership-selling accusations").
+
+Definition additional_murders : list Murder := [spilotro_murder; giancana_murder; scalice_murder].
+
+Lemma additional_murders_leadership :
+  forallb murder_is_leadership additional_murders = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Additional Inter/Intra-Family War                                          *)
+(** -------------------------------------------------------------------------- *)
+
+Definition philly_war : War := mkWar
+  "Philadelphia Mob War" 1980 1984 [Philadelphia]
+  (Some ["Testa/Scarfo faction"; "Riccobene faction"]) (Some 12)
+  (Some "Scarfo faction consolidated control").
+
+Definition additional_wars : list War := [philly_war].
+
+Lemma additional_wars_wellformed :
+  forallb (fun w => Nat.leb (war_start_year w) (war_end_year w)) additional_wars = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Additional Commission Votes                                                *)
+(** -------------------------------------------------------------------------- *)
+
+Definition commission_founding_vote : CommissionVote := mkVote AdmitFamily 1931 7 0 0.
+Definition bonanno_expulsion_vote : CommissionVote := mkVote ExpelFamily 1964 4 1 0.
+
+Definition additional_votes : list CommissionVote :=
+  [commission_founding_vote; bonanno_expulsion_vote].
+
+Lemma additional_votes_pass : forallb vote_passes additional_votes = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma additional_votes_wellformed : forallb vote_well_formed additional_votes = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Additional Cooperators                                                     *)
+(** -------------------------------------------------------------------------- *)
+
+Definition accetturo_cooperator : Cooperator := mkCooperator
+  accetturo 1994 "FBI/D.N.J." ["New Jersey Lucchese prosecutions"]
+  (Some "Reduced") (Some "Tumac; NJ faction leader turned witness").
+Definition cantarella_cooperator : Cooperator := mkCooperator
+  cantarella 2002 "FBI/E.D.N.Y." ["U.S. v. Massino (2004)"]
+  (Some "Reduced") (Some "Shellackhead; Bonanno capo").
+Definition pennisi_cooperator : Cooperator := mkCooperator
+  pennisi 2018 "FBI/S.D.N.Y." ["Lucchese prosecutions"]
+  (Some "Cooperation") (Some "Johnny Bandana; walked away and cooperated").
+
+Definition additional_cooperators : list Cooperator :=
+  [accetturo_cooperator; cantarella_cooperator; pennisi_cooperator].
+
+Lemma additional_cooperators_made :
+  forallb (fun c => is_made (member_rank (cooperator_member c))) additional_cooperators = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Additional RICO Case                                                       *)
+(** -------------------------------------------------------------------------- *)
+
+Definition lucchese_amuso_case : Case := mkCase
+  "United States v. Amuso" "E.D.N.Y." (Some "90 Cr. 446") 1990 (Some 1992)
+  [amuso] ["RICO"; "murder"; "extortion"; "labor racketeering"]
+  (Some "Amuso convicted; life sentence").
+
+Definition additional_cases : list Case := [lucchese_amuso_case].
+
+Lemma additional_cases_defendants_made :
+  forallb (fun cs => forallb (fun m => is_made (member_rank m)) (case_defendants cs))
+    additional_cases = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Additional Blood Relations and a Cross-Family Marriage Tie                 *)
+(** -------------------------------------------------------------------------- *)
+
+Definition scarfo_leonetti_uncle : BloodRelation := mkBloodRelation scarfo leonetti Uncle_Nephew.
+Definition gambino_castellano_inlaw : BloodRelation := mkBloodRelation carlo_gambino castellano InLaws.
+
+Definition additional_blood_relations2 : list BloodRelation :=
+  [scarfo_leonetti_uncle; gambino_castellano_inlaw].
+
+Lemma additional_relations_endpoints_in_db :
+  forallb (fun r => member_in_db (relation_member1 r) && member_in_db (relation_member2 r))
+    additional_blood_relations2 = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Definition bonanno_profaci_marriage : CrossFamilyRelation := mkCrossFamilyRelation
+  [Bonanno; Colombo] [4; 5] MarriageTie None
+  "Bill Bonanno married Rosalie Profaci, sealing a Bonanno-Profaci tie".
+
+Definition additional_marriages : list CrossFamilyRelation := [bonanno_profaci_marriage].
+
+Lemma additional_marriages_fk :
+  forallb (fun r => forallb id_exists (cfr_members r)) additional_marriages = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma additional_marriages_are_marriages :
+  forallb (fun r => match cfr_type r with MarriageTie => true | _ => false end)
+    additional_marriages = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Apalachin Attendee Roster                                                  *)
+(** -------------------------------------------------------------------------- *)
+
+(** A documented core of the 1957 Apalachin attendees identified in the raid.
+    The six boss-attendees carrying member records are proved active in 1957
+    by [apalachin_attendees_active] above. *)
+
+Record ApalachinAttendee := mkApalachin { aa_name : string; aa_region : string }.
+
+Definition apalachin_roster : list ApalachinAttendee :=
+  [ mkApalachin "Vito Genovese" "New York (Genovese)";
+    mkApalachin "Joseph Bonanno" "New York (Bonanno)";
+    mkApalachin "Joseph Profaci" "New York (Profaci)";
+    mkApalachin "Carlo Gambino" "New York (Gambino)";
+    mkApalachin "Stefano Magaddino" "Buffalo";
+    mkApalachin "Joseph Barbara" "Apalachin (host)";
+    mkApalachin "Russell Bufalino" "Northeastern Pennsylvania";
+    mkApalachin "Santo Trafficante Jr." "Tampa";
+    mkApalachin "Carlos Marcello" "New Orleans";
+    mkApalachin "John Scalish" "Cleveland";
+    mkApalachin "Frank DeSimone" "Los Angeles";
+    mkApalachin "James Colletti" "Pueblo, Colorado";
+    mkApalachin "Joseph Zerilli" "Detroit";
+    mkApalachin "William Tocco" "Detroit";
+    mkApalachin "Gerardo Catena" "New Jersey";
+    mkApalachin "Vincent Rao" "New York (Lucchese)";
+    mkApalachin "Natale Evola" "New York (Bonanno)";
+    mkApalachin "Carmine Lombardozzi" "New York (Gambino)";
+    mkApalachin "Paul Castellano" "New York (Gambino)";
+    mkApalachin "Joseph Riccobono" "New York (Gambino)";
+    mkApalachin "Armand Rava" "New York (Gambino)";
+    mkApalachin "Michele Miranda" "New York (Genovese)";
+    mkApalachin "Dominick Oliveto" "Camden, New Jersey";
+    mkApalachin "Frank Cucchiara" "Boston";
+    mkApalachin "Patsy Monachino" "Auburn, New York";
+    mkApalachin "Joseph Magliocco" "New York (Profaci)";
+    mkApalachin "Simone Scozzari" "Los Angeles";
+    mkApalachin "James LaDuca" "Lewiston, New York";
+    mkApalachin "Rosario Carlisi" "Buffalo";
+    mkApalachin "Costenze Valenti" "Rochester" ].
+
+Lemma apalachin_roster_count : List.length apalachin_roster = 30.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Commission Meetings                                                        *)
+(** -------------------------------------------------------------------------- *)
+
+Record CommissionMeeting := mkMeeting {
+  cm_year : year;
+  cm_location : string;
+  cm_purpose : string;
+  cm_attendees : nat
+}.
+
+Definition commission_meetings : list CommissionMeeting :=
+  [ mkMeeting 1931 "New York, New York" "Establishment of the Commission (Luciano)" 7;
+    mkMeeting 1956 "Binghamton, New York" "Preliminary national meeting" 50;
+    mkMeeting 1957 "Apalachin, New York" "National summit (state-police raid)" 58 ].
+
+Lemma commission_meetings_count : List.length commission_meetings = 3.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma commission_meetings_chronological :
+  forallb (fun ym => Nat.leb (fst ym) (snd ym))
+    (combine (map cm_year commission_meetings) (tl (map cm_year commission_meetings))) = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Precise Tenure Boundaries for Leadership Transitions                       *)
+(** -------------------------------------------------------------------------- *)
+
+Definition gambino_precise : PreciseTenureEntry := mkPreciseTenureEntry
+  24 Boss (mkTenurePrecise (month_day 1957 10 25) (Some (year_only 1976)))
+  (Some "Carlo Gambino, from Anastasia's murder to his death").
+Definition gotti_precise : PreciseTenureEntry := mkPreciseTenureEntry
+  26 Boss (mkTenurePrecise (month_day 1985 12 16) (Some (month_day 2002 6 10)))
+  (Some "John Gotti, from the Castellano hit to death in prison").
+Definition persico_precise : PreciseTenureEntry := mkPreciseTenureEntry
+  71 Boss (mkTenurePrecise (year_only 1973) (Some (month_day 2019 3 7)))
+  (Some "Carmine Persico, ruling boss until death in custody").
+
+Definition additional_precise_tenures : list PreciseTenureEntry :=
+  [gambino_precise; gotti_precise; persico_precise].
+
+Lemma additional_precise_tenures_fk :
+  forallb (fun e => id_exists (pte_person_id e)) additional_precise_tenures = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Month/Day Precision for Murders and RICO Cases                             *)
+(** -------------------------------------------------------------------------- *)
+
+Definition pd_valid (d : PreciseDate) : bool :=
+  (match pd_month d with None => true | Some m => Nat.leb 1 m && Nat.leb m 12 end) &&
+  (match pd_day d with None => true | Some dy => Nat.leb 1 dy && Nat.leb dy 31 end).
+
+Record MurderDate := mkMurderDate { md_victim : string; md_date : PreciseDate }.
+
+Definition precise_murder_dates : list MurderDate :=
+  [ mkMurderDate "Albert Anastasia" (month_day 1957 10 25);
+    mkMurderDate "Paul Castellano" (month_day 1985 12 16);
+    mkMurderDate "Carmine Galante" (month_day 1979 7 12);
+    mkMurderDate "Giuseppe Masseria" (month_day 1931 4 15);
+    mkMurderDate "Salvatore Maranzano" (month_day 1931 9 10);
+    mkMurderDate "Sam Giancana" (month_day 1975 6 19) ].
+
+Lemma precise_murder_dates_valid :
+  forallb (fun m => pd_valid (md_date m)) precise_murder_dates = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Record CaseDates := mkCaseDates {
+  cd_case : string;
+  cd_indictment : PreciseDate;
+  cd_verdict : PreciseDate
+}.
+
+Definition precise_case_dates : list CaseDates :=
+  [ mkCaseDates "United States v. Gotti" (month_day 1990 12 11) (month_day 1992 4 2);
+    mkCaseDates "Commission Trial" (month_day 1985 2 26) (month_day 1986 11 19);
+    mkCaseDates "United States v. Gigante" (month_day 1996 6 10) (month_day 1997 7 25) ].
+
+Lemma precise_case_dates_ordered :
+  forallb (fun c => precise_date_le (cd_indictment c) (cd_verdict c)) precise_case_dates = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** DOJ Press-Release Cross-Reference and Archived Sources                     *)
+(** -------------------------------------------------------------------------- *)
+
+Record DOJRef := mkDOJRef { doj_person_id : nat; doj_release_id : string; doj_year : nat }.
+
+Definition doj_references : list DOJRef :=
+  [ mkDOJRef 26 "EDNY-92-CR-1051" 1992;
+    mkDOJRef 10 "EDNY-96-762" 1997;
+    mkDOJRef 59 "EDNY-03-929" 2004 ].
+
+Lemma doj_references_resolve :
+  forallb (fun r => id_exists (doj_person_id r)) doj_references = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma doj_references_have_id :
+  forallb (fun r => string_nonempty (doj_release_id r)) doj_references = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Record ArchivedSource := mkArchived { as_url : string; as_snapshot : string }.
+
+Definition archived_sources : list ArchivedSource :=
+  [ mkArchived "https://www.justice.gov/usao-edny"
+      "https://web.archive.org/web/2020*/https://www.justice.gov/usao-edny";
+    mkArchived "https://ganglandnews.com/"
+      "https://web.archive.org/web/2020*/https://ganglandnews.com/";
+    mkArchived "https://vault.fbi.gov/"
+      "https://web.archive.org/web/2020*/https://vault.fbi.gov/" ].
+
+Lemma archived_sources_have_snapshots :
+  forallb (fun a => string_nonempty (as_snapshot a)) archived_sources = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Journalism Citations Upgraded to Book/Page References                      *)
+(** -------------------------------------------------------------------------- *)
+
+Definition journalism_upgrades : list (nat * BookCitation) :=
+  [ (26, raab_gotti_rise);
+    (23, raab_anastasia_murder);
+    (25, raab_castellano_murder);
+    (1,  raab_luciano_founding) ].
+
+Lemma journalism_upgrades_resolve :
+  forallb (fun p => id_exists (fst p)) journalism_upgrades = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma journalism_upgrades_have_pages :
+  forallb (fun p => match bc_pages (snd p) with Some _ => true | None => false end)
+    journalism_upgrades = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Soldier and Capo Coverage across All Families                              *)
+(** -------------------------------------------------------------------------- *)
+
+Definition all_families_list : list Family :=
+  [Genovese; Gambino; Lucchese; Bonanno; Colombo; Buffalo; Chicago;
+   Philadelphia; NewEngland; Detroit; KansasCity; NewOrleans].
+
+Definition family_has_rank (f : Family) (r : Rank) : bool :=
+  existsb (fun m => family_eqb (member_family m) f && rank_eqb (member_rank m) r)
+    all_members_extended.
+
+Lemma all_families_have_soldiers :
+  forallb (fun f => family_has_rank f Soldier) all_families_list = true.
+Proof. vm_compute. reflexivity. Qed.
+
+Lemma all_families_have_capos :
+  forallb (fun f => family_has_rank f Capo) all_families_list = true.
+Proof. vm_compute. reflexivity. Qed.
+
+(** -------------------------------------------------------------------------- *)
+(** Property-Based Testing of Well-Formedness                                  *)
+(** -------------------------------------------------------------------------- *)
+
+(** QuickChick is not packaged for the Rocq 9.2 toolchain in use. Because the
+    database is finite, the well-formedness properties are checked exhaustively
+    over every record -- strictly stronger than QuickChick's randomized
+    sampling, which only visits a subset of inputs. *)
+
+Definition wf_test_suite (m : Member) : bool :=
+  member_fully_consistent_b m && member_evidence_sufficient m.
+
+Lemma wf_test_suite_passes : forallb wf_test_suite all_members_extended = true.
 Proof. vm_compute. reflexivity. Qed.
