@@ -48,8 +48,7 @@ the remainder renumbered.
 33. Split the formalization into a multi-file dune project (schema, provenance, per-family data, invariants, queries) with continuous integration
 34. Add a dispute layer admitting conflicting sources per fact, with a reconciliation function proven to yield a consistent resolved view
 35. Add QuickChick property-based testing for the well-formedness predicates
-36. Extend the Family enum to the remaining national families (Tampa, Los Angeles, Dallas, Cleveland, Pittston, DeCavalcante, St. Louis, Pittsburgh)
-37. Build an interval algebra over PreciseDate and prove succession ordering at day granularity
-38. Prove totality and completeness of the query functions against a relational specification
-39. Generalize the development into a reusable theory of hierarchical organizations with succession under contested or incomplete sourcing, with La Cosa Nostra as one instance
-40. Add a CI gate that fails the build if coqchk reports any axiom, type-in-type usage, or unsafe fixpoint
+36. Build an interval algebra over PreciseDate and prove succession ordering at day granularity
+37. Prove totality and completeness of the query functions against a relational specification
+38. Generalize the development into a reusable theory of hierarchical organizations with succession under contested or incomplete sourcing, with La Cosa Nostra as one instance
+49. Add a CI gate that fails the build if coqchk reports any axiom, type-in-type usage, or unsafe fixpoint
